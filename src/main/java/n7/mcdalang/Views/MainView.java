@@ -17,9 +17,6 @@ public class MainView extends JPanel {
     private JButton runButton;
     private JButton optionsButton;
 
-    private JLabel originLabel;
-    private JLabel[] languagesLabel;
-
     private CodeTextArea originTextArea;
     private CodeTextArea[] codeTextArea;
 
@@ -31,19 +28,12 @@ public class MainView extends JPanel {
         languageIndex = languages.length;
         autoRun = false;
 
-        originLabel = new JLabel("Origin");
-        languagesLabel = new JLabel[languageIndex];
-        for (int i = 0; i < languageIndex; i++) {
-            languagesLabel[i] = new JLabel(languages[i]);
-        }
-
-        originTextArea = new CodeTextArea(this, true);
+        originTextArea = new CodeTextArea(this, "Origin",true);
 
         codeTextArea = new CodeTextArea[languageIndex];
         for (int i = 0; i < languageIndex; i++) {
-            codeTextArea[i] = new CodeTextArea(this, false);
+            codeTextArea[i] = new CodeTextArea(this, languages[i], true);
         }
-
 
         runButton = new JButton("Run");
         switchButton = new JButton("Switch");
@@ -61,12 +51,6 @@ public class MainView extends JPanel {
         // topGUI components
         topGUI = new JPanel(new MigLayout("fillx"));
 
-        topGUI.add(originLabel, "cell 0 0, center");
-        for (int i = 0; i < languageIndex; i++) {
-            topGUI.add(languagesLabel[i], "cell " + (i + 2) + " 0, center");
-        }
-
-
         // bodyGUI components
         bodyGUI = new JPanel(new MigLayout("fillx"));
 
@@ -74,7 +58,6 @@ public class MainView extends JPanel {
         for (int i = 0; i < languageIndex; i++) {
             bodyGUI.add(codeTextArea[i], "cell " + (i + 1) + " 0, grow, push");
         }
-
 
         // bottomGUI components
         bottomGUI = new JPanel(new MigLayout("wrap, fillx"));
@@ -95,14 +78,6 @@ public class MainView extends JPanel {
         for (CodeTextArea textArea : codeTextArea) {
             textArea.setCode(originTextArea.getCode());
         }
-    }
-
-    public JLabel getOriginLabel() {
-        return originLabel;
-    }
-
-    public JLabel[] getLanguagesLabel() {
-        return languagesLabel;
     }
 
     public CodeTextArea getOriginTextArea() {

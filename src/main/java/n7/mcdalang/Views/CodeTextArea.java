@@ -8,16 +8,17 @@ import java.awt.*;
 public class CodeTextArea extends JPanel {
 
     private MainView mainView;
-
+    private String name;
     private JTextArea codeArea;
     private JTextArea lineNumbers;
-
+    private JLabel nameLabel;
     private JPanel contentPane;
-
     private JScrollPane scrollPane;
 
-    public CodeTextArea(MainView mainView, boolean editable) {
+    public CodeTextArea(MainView mainView, String name, boolean editable) {
         this.mainView = mainView;
+        this.name = name;
+
         // Add content pane
         contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
@@ -34,10 +35,17 @@ public class CodeTextArea extends JPanel {
         codeArea.addKeyListener(new CodeZoneKeyListener(this));
         codeArea.setEditable(editable);
 
+        // Add label
+        nameLabel = new JLabel(name, SwingConstants.CENTER); // Centrer le texte du JLabel
+
+        JPanel labelPanel = new JPanel(new BorderLayout());
+        labelPanel.add(nameLabel, BorderLayout.CENTER);
+
         contentPane.add(codeArea, BorderLayout.CENTER);
 
         scrollPane = new JScrollPane(contentPane);
         this.setLayout(new BorderLayout());
+        this.add(labelPanel, BorderLayout.NORTH); // Ajouter le panneau du label au nord
         this.add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -58,7 +66,7 @@ public class CodeTextArea extends JPanel {
         mainView.triggerAutoRun();
     }
 
-    public void updateLineNumbers(){
+    public void updateLineNumbers() {
         int lines = codeArea.getLineCount();
         StringBuilder lineNumbersText = new StringBuilder();
         for (int i = 1; i <= lines; i++) {
@@ -67,5 +75,3 @@ public class CodeTextArea extends JPanel {
         lineNumbers.setText(lineNumbersText.toString());
     }
 }
-
-

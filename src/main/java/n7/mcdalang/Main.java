@@ -21,5 +21,7 @@ public class Main {
         f.setVisible(true);
         f.setSize(800, 600);
 
+        m.getOriginTextArea().focusCode();
+
     }
 }
