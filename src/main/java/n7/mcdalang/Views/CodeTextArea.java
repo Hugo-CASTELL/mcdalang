@@ -1,6 +1,6 @@
 package n7.mcdalang.Views;
 
-import n7.mcdalang.Controllers.CodeZoneKeyListener;
+import n7.mcdalang.Controllers.CodeKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,11 +32,11 @@ public class CodeTextArea extends JPanel {
 
         // Add code zone
         codeArea = new JTextArea();
-        codeArea.addKeyListener(new CodeZoneKeyListener(this));
+        codeArea.addKeyListener(new CodeKeyListener(this));
         codeArea.setEditable(editable);
 
         // Add label
-        nameLabel = new JLabel(name, SwingConstants.CENTER); // Centrer le texte du JLabel
+        nameLabel = new JLabel(name, SwingConstants.CENTER);
 
         JPanel labelPanel = new JPanel(new BorderLayout());
         labelPanel.add(nameLabel, BorderLayout.CENTER);
@@ -74,4 +74,10 @@ public class CodeTextArea extends JPanel {
         }
         lineNumbers.setText(lineNumbersText.toString());
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
 }

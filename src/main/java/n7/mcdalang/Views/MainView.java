@@ -42,7 +42,7 @@ public class MainView extends JPanel {
         runButton.addActionListener(
                 new RunActionListener(this, originTextArea, codeTextArea));
         switchButton.addActionListener(new SwitchActionListener(autoRun));
-        optionsButton.addActionListener(new OptionActionListener(autoRun, this));
+        optionsButton.addActionListener(new OptionActionListener(this, autoRun));
 
         this.addComponents();
     }

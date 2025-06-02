@@ -4,11 +4,11 @@ import n7.mcdalang.Views.CodeTextArea;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class CodeZoneKeyListener implements KeyListener {
+public class CodeKeyListener implements KeyListener {
 
     private CodeTextArea codeTextArea;
 
-    public CodeZoneKeyListener(CodeTextArea codeTextArea) {
+    public CodeKeyListener(CodeTextArea codeTextArea) {
         this.codeTextArea = codeTextArea;
     }
 
