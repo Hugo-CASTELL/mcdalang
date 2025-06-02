@@ -1,6 +1,6 @@
-package Controler;
+package n7.mcdalang.Controllers;
 
-import View.CodeTextArea;
+import n7.mcdalang.Views.CodeTextArea;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

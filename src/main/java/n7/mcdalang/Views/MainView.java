@@ -1,8 +1,8 @@
-package View;
+package n7.mcdalang.Views;
 
-import Controler.OptionActionListener;
-import Controler.RunActionListener;
-import Controler.SwitchActionListener;
+import n7.mcdalang.Controllers.OptionActionListener;
+import n7.mcdalang.Controllers.RunActionListener;
+import n7.mcdalang.Controllers.SwitchActionListener;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;

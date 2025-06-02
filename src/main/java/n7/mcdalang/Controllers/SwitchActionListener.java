@@ -1,4 +1,4 @@
-package Controler;
+package n7.mcdalang.Controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

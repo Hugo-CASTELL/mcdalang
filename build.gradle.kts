@@ -26,6 +26,8 @@ dependencies {
     implementation("org.antlr:antlr4:4.13.2")
     implementation("org.antlr:antlr4-runtime:4.13.2")
 
+    implementation("com.miglayout:miglayout-swing:11.0")
+
 }
 java {
     toolchain {

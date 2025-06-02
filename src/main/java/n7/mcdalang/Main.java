@@ -1,4 +1,6 @@
-import View.MainView;
+package n7.mcdalang;
+
+import n7.mcdalang.Views.MainView;
 
 import javax.swing.*;
 

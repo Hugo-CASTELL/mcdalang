@@ -1,6 +1,6 @@
-package View;
+package n7.mcdalang.Views;
 
-import Controler.CodeZoneKeyListener;
+import n7.mcdalang.Controllers.CodeZoneKeyListener;
 
 import javax.swing.*;
 import java.awt.*;

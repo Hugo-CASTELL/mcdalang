@@ -1,4 +1,4 @@
-package Controler;
+package n7.mcdalang.Controllers;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

@@ -1,10 +1,8 @@
-package Controler;
+package n7.mcdalang.Controllers;
 
-import View.CodeTextArea;
-import View.MainView;
-import com.sun.tools.javac.Main;
+import n7.mcdalang.Views.CodeTextArea;
+import n7.mcdalang.Views.MainView;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

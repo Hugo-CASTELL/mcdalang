@@ -1,6 +1,6 @@
-package Controler;
+package n7.mcdalang.Controllers;
 
-import View.MainView;
+import n7.mcdalang.Views.MainView;
 
 import javax.swing.*;
 import java.awt.*;
