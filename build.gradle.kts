@@ -25,8 +25,8 @@ dependencies {
 
     implementation("org.antlr:antlr4:4.13.2")
     implementation("org.antlr:antlr4-runtime:4.13.2")
-}
 
+}
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
