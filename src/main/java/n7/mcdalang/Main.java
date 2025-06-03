@@ -1,5 +1,7 @@
 package n7.mcdalang;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import n7.mcdalang.Views.MainView;
 
 import javax.swing.*;
@@ -9,7 +11,7 @@ public class Main {
         String[] st = new String[2];
         st[0] = "Python";
         st[1] = "Java";
-        MainView m = new MainView(st);
+        MainView m = new MainView(st, "light");
 
         m.setVisible(true);
 
@@ -22,6 +24,5 @@ public class Main {
         f.setSize(800, 600);
 
         m.getOriginTextArea().focusCode();
-
     }
 }

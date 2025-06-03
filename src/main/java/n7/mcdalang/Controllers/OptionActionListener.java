@@ -63,16 +63,15 @@ public class OptionActionListener implements ActionListener {
 
         if (result == JOptionPane.OK_OPTION) {
             if (checkBoxes[0].isSelected()) {
-                if (autoRun) {
-                    autoRun = false;
-                    mainView.setAutoRun(true);
-                } else {
-                    autoRun = true;
-                    mainView.setAutoRun(true);
-                }
+                autoRun = true;
+                mainView.setAutoRun(true);
+
+            } else if (!(checkBoxes[0].isSelected())) {
+                autoRun = false;
+                mainView.setAutoRun(false);
             }
         } else {
-            JOptionPane.showMessageDialog(frame, "You have cancelled.");
+            //JOptionPane.showMessageDialog(frame, "You have cancelled.");
         }
     }
 

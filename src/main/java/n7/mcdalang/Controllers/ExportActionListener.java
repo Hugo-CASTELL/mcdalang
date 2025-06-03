@@ -9,12 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ExportActionListener implements ActionListener {
-    CodeTextArea originTextArea;
-    CodeTextArea[] codeTextArea;
+    private CodeTextArea originTextArea;
+    private CodeTextArea[] codeTextArea;
+
     public ExportActionListener(CodeTextArea originTextArea, CodeTextArea[] codeTextArea) {
         this.originTextArea = originTextArea;
         this.codeTextArea = codeTextArea;
     }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         createFile(originTextArea);

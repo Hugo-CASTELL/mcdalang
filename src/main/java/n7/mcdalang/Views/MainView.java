@@ -1,5 +1,9 @@
 package n7.mcdalang.Views;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import n7.mcdalang.Controllers.OptionActionListener;
 import n7.mcdalang.Controllers.RunActionListener;
 import n7.mcdalang.Controllers.SwitchActionListener;
@@ -24,9 +28,11 @@ public class MainView extends JPanel {
 
     private boolean autoRun;
 
-    public MainView(String[] languages) {
+    public MainView(String[] languages, String theme) {
         languageIndex = languages.length;
         autoRun = false;
+
+        this.setTheme(theme);
 
         originTextArea = new CodeTextArea(this, "Origin",true);
 
@@ -102,6 +108,30 @@ public class MainView extends JPanel {
 
     public void triggerAutoRun() {
         autoRun();
+    }
+
+    public void setTheme(String theme) {
+        try {
+            switch (theme.toLowerCase()) {
+                case "light":
+                    UIManager.setLookAndFeel(new FlatLightLaf());
+                    break;
+                case "dark":
+                    UIManager.setLookAndFeel(new FlatDarkLaf());
+                    break;
+                case "intellij":
+                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                    break;
+                case "darcula":
+                    UIManager.setLookAndFeel(new FlatDarculaLaf());
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception ex) {
+            new JOptionPane("Failed to initialize Look and Feel");
+            ex.printStackTrace();
+        }
     }
 
     private void autoRun() {

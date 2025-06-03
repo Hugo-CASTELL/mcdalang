@@ -28,6 +28,8 @@ dependencies {
 
     implementation("com.miglayout:miglayout-swing:11.0")
 
+    implementation("com.formdev:flatlaf:3.1.1")
+
 }
 java {
     toolchain {

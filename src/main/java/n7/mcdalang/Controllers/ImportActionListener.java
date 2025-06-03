@@ -5,6 +5,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ public class ImportActionListener implements ActionListener {
     private JFileChooser fileChooser;
     private FileNameExtensionFilter filter;
 
-    OptionActionListener optionActionListener;
+    private OptionActionListener optionActionListener;
 
     ImportActionListener(OptionActionListener optionActionListener) {
         this.optionActionListener = optionActionListener;
@@ -36,25 +37,29 @@ public class ImportActionListener implements ActionListener {
         int returnValue = fileChooser.showOpenDialog(frame);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            java.io.File selectedFile = fileChooser.getSelectedFile();
+            File selectedFile = fileChooser.getSelectedFile();
             JOptionPane.showMessageDialog(null, "File selected : " + selectedFile.getAbsolutePath());
 
-            // Read file
-            try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
-                String line;
-                StringBuilder content = new StringBuilder();
-                while ((line = br.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
+            optionActionListener.setOriginTextArea(readFile(selectedFile));
 
-                optionActionListener.setOriginTextArea(content.toString());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(frame, "Error reading file : " + e.getMessage());
-            }
         } else {
             JOptionPane.showMessageDialog(null, "No file selected");
         }
+    }
+
+    private String readFile(File file) {
+        StringBuilder content = new StringBuilder();
+
+        // Read file
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Error reading file : " + e.getMessage());
+        }
+        return content.toString();
     }
 }
