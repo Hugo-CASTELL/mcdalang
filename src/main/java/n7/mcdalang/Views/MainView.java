@@ -10,10 +10,11 @@ import n7.mcdalang.Controllers.SwitchActionListener;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MainView extends JPanel {
 
-    private JPanel topGUI;
+    //private JPanel topGUI;
     private JPanel bodyGUI;
     private JPanel bottomGUI;
 
@@ -23,6 +24,8 @@ public class MainView extends JPanel {
 
     private CodeTextArea originTextArea;
     private CodeTextArea[] codeTextArea;
+
+    private TabPanel tabPanel;
 
     private int languageIndex;
 
@@ -34,12 +37,13 @@ public class MainView extends JPanel {
 
         this.setTheme(theme);
 
-        originTextArea = new CodeTextArea(this, "Origin",true);
+        originTextArea = new CodeTextArea(this, "MacdaLang",true);
 
         codeTextArea = new CodeTextArea[languageIndex];
         for (int i = 0; i < languageIndex; i++) {
-            codeTextArea[i] = new CodeTextArea(this, languages[i], true);
+            codeTextArea[i] = new CodeTextArea(this, languages[i], false);
         }
+        tabPanel = new TabPanel(codeTextArea);
 
         runButton = new JButton("Run");
         switchButton = new JButton("Switch");
@@ -55,15 +59,13 @@ public class MainView extends JPanel {
 
     protected void addComponents() {
         // topGUI components
-        topGUI = new JPanel(new MigLayout("fillx"));
+        // topGUI = new JPanel(new MigLayout("fillx"));
 
         // bodyGUI components
-        bodyGUI = new JPanel(new MigLayout("fillx"));
+        bodyGUI = new JPanel(new MigLayout("fill, ins 0", "[50%][50%]"));
 
         bodyGUI.add(originTextArea, "cell 0 0, grow, push");
-        for (int i = 0; i < languageIndex; i++) {
-            bodyGUI.add(codeTextArea[i], "cell " + (i + 1) + " 0, grow, push");
-        }
+        bodyGUI.add(tabPanel, "cell 1 0, grow, push");
 
         // bottomGUI components
         bottomGUI = new JPanel(new MigLayout("wrap, fillx"));
@@ -74,16 +76,21 @@ public class MainView extends JPanel {
 
 
         // add all components
-        setLayout(new MigLayout("fill, ins 10", "[grow]", "[][grow][]"));
-        add(topGUI, "cell 0 0, growx");
-        add(bodyGUI, "cell 0 1, grow, wrap");
-        add(bottomGUI, "cell 0 2, growx");
+        this.setLayout(new MigLayout("fill, ins 0, gap 0", "[grow]", "[grow][shrink]"));
+        // add(topGUI, "cell 0 0, growx");
+        this.add(bodyGUI, "cell 0 0, grow, push");
+        this.add(bottomGUI, "cell 0 1, grow, push");
     }
 
     public void run() {
-        for (CodeTextArea textArea : codeTextArea) {
-            textArea.setCode(originTextArea.getCode());
+        try {
+            for (CodeTextArea textArea : codeTextArea) {
+                textArea.setCode(originTextArea.getCode());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.fillInStackTrace(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     public CodeTextArea getOriginTextArea() {

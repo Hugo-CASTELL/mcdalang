@@ -1,6 +1,7 @@
 package n7.mcdalang.Views;
 
 import n7.mcdalang.Controllers.CodeKeyListener;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,7 @@ public class CodeTextArea extends JPanel {
     private JLabel nameLabel;
     private JPanel contentPane;
     private JScrollPane scrollPane;
+    private JPanel labelPanel;
 
     public CodeTextArea(MainView mainView, String name, boolean editable) {
         this.mainView = mainView;
@@ -38,15 +40,15 @@ public class CodeTextArea extends JPanel {
         // Add label
         nameLabel = new JLabel(name, SwingConstants.CENTER);
 
-        JPanel labelPanel = new JPanel(new BorderLayout());
+        labelPanel = new JPanel(new BorderLayout());
         labelPanel.add(nameLabel, BorderLayout.CENTER);
 
         contentPane.add(codeArea, BorderLayout.CENTER);
 
         scrollPane = new JScrollPane(contentPane);
-        this.setLayout(new BorderLayout());
-        this.add(labelPanel, BorderLayout.NORTH); // Ajouter le panneau du label au nord
-        this.add(scrollPane, BorderLayout.CENTER);
+        this.setLayout(new MigLayout("", "[100%]", "[5%][95%]"));
+        this.add(labelPanel, "cell 0 0,grow");
+        this.add(scrollPane, "cell 0 1,grow");
     }
 
     public void focusCode() {

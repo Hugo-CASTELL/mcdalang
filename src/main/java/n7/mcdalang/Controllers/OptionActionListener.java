@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 
 public class OptionActionListener implements ActionListener {
 
-    MainView mainView;
+    private MainView mainView;
 
     private JFrame frame;
     private JPanel panel;
