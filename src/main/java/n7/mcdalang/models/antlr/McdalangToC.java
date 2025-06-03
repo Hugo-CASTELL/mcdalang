@@ -1,6 +1,11 @@
-import java.util.*;
+package n7.mcdalang.models.antlr;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class McdalangToC extends McdalangBaseListener {
 

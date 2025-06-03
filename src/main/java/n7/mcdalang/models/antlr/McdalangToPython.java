@@ -1,4 +1,6 @@
-import org.antlr.v4.runtime.*;
+package n7.mcdalang.models.antlr;
+
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.*;
 import java.util.*;
 
@@ -203,14 +205,20 @@ public class McdalangToPython extends McdalangBaseListener {
 
     @Override
     public void exitPowExpr(McdalangParser.PowExprContext ctx) {
-        if (ctx.atom().size() == 1) {
-            values.put(ctx, values.get(ctx.atom(0)));
+        String atomVal = values.get(ctx.atom());
+
+        if (ctx.getChildCount() == 2) {
+            String op = ctx.getChild(1).getText();
+            if (op.equals("++")) {
+                values.put(ctx, atomVal + " + 1");
+            } else if (op.equals("--")) {
+                values.put(ctx, atomVal + " - 1");
+            }
         } else {
-            String left = values.get(ctx.atom(0));
-            String right = values.get(ctx.atom(1));
-            values.put(ctx, left + " ** " + right);
+            values.put(ctx, atomVal);
         }
     }
+
 
     @Override
     public void exitIncrStmt(McdalangParser.IncrStmtContext ctx) {
@@ -239,21 +247,8 @@ public class McdalangToPython extends McdalangBaseListener {
         else if (ctx.getStart().getText().equals("false")) values.put(ctx, "False");
     }
 
-    public static void main(String[] args) throws Exception {
-        CharStream input = CharStreams.fromFileName("test.mc");
-        McdalangLexer lexer = new McdalangLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        McdalangParser parser = new McdalangParser(tokens);
-        ParseTree tree = parser.prog();
-
-        ParseTreeWalker walker = new ParseTreeWalker();
-        McdalangToPython listener = new McdalangToPython();
-        walker.walk(listener, tree);
-
-        System.out.println("Original Mcdalang Code:");
-        System.out.println(input.toString());
-        
-        System.out.println("Generated Python Code:");
-        System.out.println(listener.output.toString());
+    public String getPythonCode() {
+        return output.toString(); // ✅ clean Python code output
     }
+
 }
