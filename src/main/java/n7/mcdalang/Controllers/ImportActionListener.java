@@ -16,13 +16,13 @@ public class ImportActionListener implements ActionListener {
 
     private OptionActionListener optionActionListener;
 
-    ImportActionListener(OptionActionListener optionActionListener) {
+    public ImportActionListener(OptionActionListener optionActionListener) {
         this.optionActionListener = optionActionListener;
 
         // Create JFrame windows
         frame = new JFrame("File Import");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(600, 300);
 
         // Create JFileChooser
         fileChooser = new JFileChooser();
@@ -43,7 +43,7 @@ public class ImportActionListener implements ActionListener {
             optionActionListener.setOriginTextArea(readFile(selectedFile));
 
         } else {
-            JOptionPane.showMessageDialog(null, "No file selected");
+            JOptionPane.showMessageDialog(null, "No file selected", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -58,7 +58,7 @@ public class ImportActionListener implements ActionListener {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Error reading file : " + e.getMessage());
+            JOptionPane.showMessageDialog(frame, "Error reading file : " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return content.toString();
     }
