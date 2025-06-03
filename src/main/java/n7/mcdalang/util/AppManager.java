@@ -23,9 +23,8 @@ public class AppManager {
     }
 
     private void showGif() {
-        Image gif = loadAndRescaleGif(0.9);
-
-        displaySplashscreen(gif);
+        displaySplashscreen(AppConfig.SPLASH_GIF_PATH);
+        AudioPlayer.play(AppConfig.SPLASH_AUDIO_PATH);
 
         preventVisualGlitches();
     }
@@ -46,11 +45,11 @@ public class AppManager {
         m.getOriginTextArea().focusCode();
     }
 
-    private void displaySplashscreen(Image gif) {
+    private void displaySplashscreen(String gifPath) {
         mainFrame.setResizable(false);
         mainFrame.getContentPane().setLayout(new BorderLayout());
         mainFrame.getContentPane().setBackground(Color.WHITE);
-        mainFrame.getContentPane().add(new JLabel(new ImageIcon(gif)), BorderLayout.CENTER);
+        mainFrame.getContentPane().add(new JLabel(new ImageIcon(gifPath)), BorderLayout.CENTER);
     }
 
     private void displayMainView(MainView mainView) {
@@ -65,11 +64,6 @@ public class AppManager {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.revalidate();
         mainFrame.repaint();
-    }
-
-    private Image loadAndRescaleGif(double scaleFactor) {
-        ImageIcon originalGif = new ImageIcon(AppConfig.SPLASH_GIF_PATH);
-        return originalGif.getImage().getScaledInstance((int) (AppConfig.DEFAULT_SIZE.width * scaleFactor), (int) (AppConfig.DEFAULT_SIZE.height * scaleFactor), Image.SCALE_DEFAULT);
     }
 
     public void scheduleTask(Runnable runnable, int delay) {
