@@ -1,9 +1,11 @@
 package n7.mcdalang.util;
 
-import n7.mcdalang.Views.MainView;
+import n7.mcdalang.views.MainView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AppManager {
 
@@ -71,6 +73,14 @@ public class AppManager {
     }
 
     public void scheduleTask(Runnable runnable, int delay) {
-        new Timer(delay, e -> runnable.run()).start();
+        new Timer().schedule(
+            new TimerTask() {
+                @Override
+                public void run() {
+                    runnable.run();
+                }
+            },
+            delay
+        );
     }
 }

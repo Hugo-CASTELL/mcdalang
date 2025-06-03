@@ -1,16 +1,15 @@
-package n7.mcdalang.Views;
+package n7.mcdalang.views;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import n7.mcdalang.Controllers.OptionActionListener;
-import n7.mcdalang.Controllers.RunActionListener;
-import n7.mcdalang.Controllers.SwitchActionListener;
+import n7.mcdalang.controllers.OptionActionListener;
+import n7.mcdalang.controllers.RunActionListener;
+import n7.mcdalang.controllers.SwitchActionListener;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MainView extends JPanel {
 

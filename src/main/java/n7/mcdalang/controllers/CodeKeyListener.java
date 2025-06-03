@@ -1,6 +1,8 @@
-package n7.mcdalang.Controllers;
+package n7.mcdalang.controllers;
 
-import n7.mcdalang.Views.CodeTextArea;
+import n7.mcdalang.views.CodeTextArea;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -21,8 +23,10 @@ public class CodeKeyListener implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
-        codeTextArea.triggerAutoRun();
-        codeTextArea.updateLineNumbers();
+        SwingUtilities.invokeLater(() -> {
+            codeTextArea.triggerAutoRun();
+            codeTextArea.updateLineNumbers();
+        });
     }
 
     /**
