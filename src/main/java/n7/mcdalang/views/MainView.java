@@ -4,14 +4,15 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import n7.mcdalang.controllers.OptionActionListener;
-import n7.mcdalang.controllers.RunActionListener;
-import n7.mcdalang.controllers.SwitchActionListener;
+import n7.mcdalang.input.OptionActionListener;
+import n7.mcdalang.input.RunActionListener;
+import n7.mcdalang.input.SwitchActionListener;
+import n7.mcdalang.util.GlobalInstances;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 
-public class MainView extends JPanel {
+public class MainView extends JPanel implements View {
 
     //private JPanel topGUI;
     private JPanel bodyGUI;
@@ -30,11 +31,12 @@ public class MainView extends JPanel {
 
     private boolean autoRun;
 
-    public MainView(String[] languages, String theme) {
+    public MainView() {
+        String[] languages = GlobalInstances.getAppSettings().getCurrentLanguages().toArray(new String[0]);
         languageIndex = languages.length;
         autoRun = false;
 
-        this.setTheme(theme);
+        this.setTheme(GlobalInstances.getAppSettings().getCurrentTheme());
 
         originTextArea = new CodeTextArea(this, "MacdaLang",true);
 
@@ -98,14 +100,6 @@ public class MainView extends JPanel {
 
     public CodeTextArea[] getCodeTextArea() {
         return codeTextArea;
-    }
-
-    public JButton getRunButton() {
-        return runButton;
-    }
-
-    public boolean getAutoRun() {
-        return autoRun;
     }
 
     public void setAutoRun(boolean autoRun) {

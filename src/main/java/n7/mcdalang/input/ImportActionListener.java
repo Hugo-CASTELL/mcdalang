@@ -1,4 +1,4 @@
-package n7.mcdalang.controllers;
+package n7.mcdalang.input;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

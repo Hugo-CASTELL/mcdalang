@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 
 public final class AudioPlayer {
 
+    private AudioPlayer() {}
+
     public static void play(String filePath) {
         try {
             File soundFile = new File(filePath);
@@ -22,10 +24,8 @@ public final class AudioPlayer {
             clip.start();
 
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
+            Logger.getLogger(AudioPlayer.class.getName()).log(Level.SEVERE, e.getMessage());
         }
     }
-
-    private AudioPlayer() {}
 
 }

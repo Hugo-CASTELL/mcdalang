@@ -1,4 +1,4 @@
-package n7.mcdalang.controllers;
+package n7.mcdalang.input;
 
 import n7.mcdalang.views.MainView;
 import net.miginfocom.swing.MigLayout;

@@ -1,6 +1,6 @@
 package n7.mcdalang.views;
 
-import n7.mcdalang.controllers.CodeKeyListener;
+import n7.mcdalang.input.CodeKeyListener;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
