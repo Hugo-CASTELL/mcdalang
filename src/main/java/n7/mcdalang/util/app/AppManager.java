@@ -1,7 +1,8 @@
-package n7.mcdalang.util;
+package n7.mcdalang.util.app;
 
 import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.controllers.SplashController;
+import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.SplashView;
 import n7.mcdalang.views.View;
@@ -23,10 +24,13 @@ public class AppManager {
         new SplashController(new SplashView()).showView();
 
         // Display the main view after a delay
-        scheduleTask(() -> new MainController(new MainView()).showView(), AppConfig.SPLASH_DURATION_MS);
+        schedule(() -> new MainController(new MainView()).showView(), AppConfig.SPLASH_DURATION_MS);
+
+        // Initialize default settings
+        GlobalInstances.getAppSettings().initializeDefaultSettings();
     }
 
-    public void createMainFrame() {
+    private void createMainFrame() {
         mainFrame = new JFrame(AppConfig.APP_TITLE);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
@@ -34,15 +38,7 @@ public class AppManager {
         mainFrame.setLocationRelativeTo(null);
     }
 
-    public void display(View view) {
-        mainFrame.getContentPane().removeAll();
-        mainFrame.add((Component) view);
-        mainFrame.setVisible(true);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
-    public void scheduleTask(Runnable runnable, int delay) {
+    private void schedule(Runnable runnable, int delay) {
         new Timer().schedule(
             new TimerTask() {
                 @Override
@@ -52,5 +48,13 @@ public class AppManager {
             },
             delay
         );
+    }
+
+    public void display(View view) {
+        mainFrame.getContentPane().removeAll();
+        mainFrame.add((Component) view);
+        mainFrame.setVisible(true);
+        mainFrame.revalidate();
+        mainFrame.repaint();
     }
 }

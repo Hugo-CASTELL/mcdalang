@@ -1,6 +1,6 @@
 package n7.mcdalang.views;
 
-import n7.mcdalang.util.AppConfig;
+import n7.mcdalang.util.app.AppConfig;
 
 import javax.swing.*;
 import java.awt.*;

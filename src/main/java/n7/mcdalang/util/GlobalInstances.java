@@ -1,5 +1,8 @@
 package n7.mcdalang.util;
 
+import n7.mcdalang.util.app.AppManager;
+import n7.mcdalang.util.app.AppSettings;
+
 public final class GlobalInstances {
 
     private GlobalInstances() {}

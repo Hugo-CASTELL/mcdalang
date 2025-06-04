@@ -1,4 +1,6 @@
-package n7.mcdalang.util;
+package n7.mcdalang.util.app;
+
+import n7.mcdalang.util.theme.Themes;
 
 import java.awt.*;
 import java.util.List;
@@ -14,7 +16,7 @@ public final class AppConfig {
 
     public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
     public static final List<String> DEFAULT_LANGUAGES = List.of("Python", "Java");
-    public static final String DEFAULT_THEME = "light";
+    public static final Themes DEFAULT_THEME = Themes.LIGHT;
 
     private AppConfig() {}
 }

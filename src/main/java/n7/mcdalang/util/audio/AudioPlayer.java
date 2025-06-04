@@ -1,4 +1,4 @@
-package n7.mcdalang.util;
+package n7.mcdalang.util.audio;
 
 import javax.sound.sampled.*;
 import java.io.File;
