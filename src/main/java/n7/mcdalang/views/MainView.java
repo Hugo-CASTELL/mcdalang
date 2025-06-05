@@ -7,7 +7,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 
-public class MainView extends JPanel implements View {
+public class MainView extends View {
 
     //#region Fields
 

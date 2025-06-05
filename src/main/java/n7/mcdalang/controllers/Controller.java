@@ -1,16 +1,15 @@
 package n7.mcdalang.controllers;
 
 import n7.mcdalang.util.GlobalInstances;
-import n7.mcdalang.views.View;
 
-public abstract class Controller<V extends View> {
+public abstract class Controller<V> {
     protected final V view;
 
     protected Controller(V view) {
         this.view = view;
     }
 
-    public void showView() {
+    public void show() {
         updateView();
         registerListeners();
         GlobalInstances.getAppManager().display(view);

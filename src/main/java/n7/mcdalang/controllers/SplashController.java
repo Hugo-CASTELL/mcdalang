@@ -21,8 +21,8 @@ public class SplashController extends Controller<SplashView> {
     }
 
     @Override
-    public void showView() {
-        super.showView();
+    public void show() {
+        super.show();
         AudioPlayer.play(AppConfig.SPLASH_AUDIO_PATH);
     }
 }
