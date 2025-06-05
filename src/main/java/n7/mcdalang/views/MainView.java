@@ -1,46 +1,44 @@
 package n7.mcdalang.views;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import n7.mcdalang.controllers.OptionActionListener;
-import n7.mcdalang.controllers.RunActionListener;
-import n7.mcdalang.controllers.SwitchActionListener;
+import n7.mcdalang.util.GlobalInstances;
+import n7.mcdalang.views.components.CodeTextArea;
+import n7.mcdalang.views.components.TabPanel;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 
-public class MainView extends JPanel {
+public class MainView extends JPanel implements View {
+
+    //#region Fields
 
     //private JPanel topGUI;
-    private JPanel bodyGUI;
-    private JPanel bottomGUI;
+    private final JPanel bodyGUI;
+    private final JPanel bottomGUI;
 
-    private JButton switchButton;
-    private JButton runButton;
-    private JButton optionsButton;
+    private final JButton switchButton;
+    private final JButton runButton;
+    private final JButton optionsButton;
 
-    private CodeTextArea originTextArea;
-    private CodeTextArea[] codeTextArea;
+    private final CodeTextArea originTextArea;
+    private final CodeTextArea[] codeTextArea;
 
-    private TabPanel tabPanel;
+    private final TabPanel tabPanel;
 
-    private int languageIndex;
+    private final int languageIndex;
 
-    private boolean autoRun;
+    //#endregion Fields
 
-    public MainView(String[] languages, String theme) {
+    //#region Constructor
+
+    public MainView() {
+        String[] languages = GlobalInstances.getAppSettings().getLanguages().toArray(new String[0]);
         languageIndex = languages.length;
-        autoRun = false;
 
-        this.setTheme(theme);
-
-        originTextArea = new CodeTextArea(this, "MacdaLang",true);
+        originTextArea = new CodeTextArea("McDaLang",true);
 
         codeTextArea = new CodeTextArea[languageIndex];
         for (int i = 0; i < languageIndex; i++) {
-            codeTextArea[i] = new CodeTextArea(this, languages[i], false);
+            codeTextArea[i] = new CodeTextArea(languages[i], false);
         }
         tabPanel = new TabPanel(codeTextArea);
 
@@ -48,15 +46,6 @@ public class MainView extends JPanel {
         switchButton = new JButton("Switch");
         optionsButton = new JButton("Options");
 
-        runButton.addActionListener(
-                new RunActionListener(this, originTextArea, codeTextArea));
-        switchButton.addActionListener(new SwitchActionListener(autoRun));
-        optionsButton.addActionListener(new OptionActionListener(this, autoRun));
-
-        this.addComponents();
-    }
-
-    protected void addComponents() {
         // topGUI components
         // topGUI = new JPanel(new MigLayout("fillx"));
 
@@ -81,16 +70,9 @@ public class MainView extends JPanel {
         this.add(bottomGUI, "cell 0 1, grow, push");
     }
 
-    public void run() {
-        try {
-            for (CodeTextArea textArea : codeTextArea) {
-                textArea.setCode(originTextArea.getCode());
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.fillInStackTrace(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    //#endregion Constructor
 
-    }
+    //#region Getters and Setters
 
     public CodeTextArea getOriginTextArea() {
         return originTextArea;
@@ -100,49 +82,17 @@ public class MainView extends JPanel {
         return codeTextArea;
     }
 
+    public JButton getSwitchButton() {
+        return switchButton;
+    }
+
     public JButton getRunButton() {
         return runButton;
     }
 
-    public boolean getAutoRun() {
-        return autoRun;
+    public JButton getOptionsButton() {
+        return optionsButton;
     }
 
-    public void setAutoRun(boolean autoRun) {
-        this.autoRun = autoRun;
-    }
-
-    public void triggerAutoRun() {
-        autoRun();
-    }
-
-    public void setTheme(String theme) {
-        try {
-            switch (theme.toLowerCase()) {
-                case "light":
-                    UIManager.setLookAndFeel(new FlatLightLaf());
-                    break;
-                case "dark":
-                    UIManager.setLookAndFeel(new FlatDarkLaf());
-                    break;
-                case "intellij":
-                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
-                    break;
-                case "darcula":
-                    UIManager.setLookAndFeel(new FlatDarculaLaf());
-                    break;
-                default:
-                    break;
-            }
-        } catch (Exception ex) {
-            new JOptionPane("Failed to initialize Look and Feel");
-            ex.printStackTrace();
-        }
-    }
-
-    private void autoRun() {
-        if (autoRun) {
-            run();
-        }
-    }
+    //#endregion Getters and Setters
 }

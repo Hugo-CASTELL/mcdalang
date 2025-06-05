@@ -1,5 +1,6 @@
-package n7.mcdalang.controllers;
+package n7.mcdalang.input;
 
+import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.views.MainView;
 import net.miginfocom.swing.MigLayout;
 
@@ -9,7 +10,7 @@ import java.awt.event.ActionListener;
 
 public class OptionActionListener implements ActionListener {
 
-    private MainView mainView;
+    private MainController mainController;
 
     private JFrame frame;
     private JPanel panel;
@@ -21,9 +22,9 @@ public class OptionActionListener implements ActionListener {
 
     private boolean autoRun;
 
-    public OptionActionListener(MainView mainView, boolean autoRun) {
+    public OptionActionListener(MainController mainController, boolean autoRun) {
 
-        this.mainView = mainView;
+        this.mainController = mainController;
 
         frame = new JFrame();
 
@@ -45,8 +46,8 @@ public class OptionActionListener implements ActionListener {
         panel.add(exportButton, "cell 0 1");
         panel.add(importButton, "cell 2 1");
 
-        exportButton.addActionListener(new ExportActionListener(mainView.getOriginTextArea(), mainView.getCodeTextArea()));
-        importButton.addActionListener(new ImportActionListener(this));
+        // exportButton.addActionListener(new ExportActionListener(mainView.getOriginTextArea(), mainView.getCodeTextArea()));
+        // importButton.addActionListener(new ImportActionListener(this));
 
         this.autoRun = autoRun;
     }
@@ -63,11 +64,11 @@ public class OptionActionListener implements ActionListener {
         if (result == JOptionPane.OK_OPTION) {
             if (checkBoxes[0].isSelected()) {
                 autoRun = true;
-                mainView.setAutoRun(true);
+                mainController.setAutoRun(true);
 
             } else if (!(checkBoxes[0].isSelected())) {
                 autoRun = false;
-                mainView.setAutoRun(false);
+                mainController.setAutoRun(false);
             }
         } else {
             //JOptionPane.showMessageDialog(frame, "You have cancelled.");
@@ -75,7 +76,7 @@ public class OptionActionListener implements ActionListener {
     }
 
     public void setOriginTextArea(String code) {
-        mainView.getOriginTextArea().setCode(code);
+        mainController.setOriginTextAreaCode(code);
     }
 
 }

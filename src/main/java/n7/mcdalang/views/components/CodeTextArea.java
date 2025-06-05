@@ -1,6 +1,6 @@
-package n7.mcdalang.views;
+package n7.mcdalang.views.components;
 
-import n7.mcdalang.controllers.CodeKeyListener;
+import n7.mcdalang.input.CodeKeyListener;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -8,7 +8,6 @@ import java.awt.*;
 
 public class CodeTextArea extends JPanel {
 
-    private MainView mainView;
     private String name;
     private JTextArea codeArea;
     private JTextArea lineNumbers;
@@ -17,8 +16,7 @@ public class CodeTextArea extends JPanel {
     private JScrollPane scrollPane;
     private JPanel labelPanel;
 
-    public CodeTextArea(MainView mainView, String name, boolean editable) {
-        this.mainView = mainView;
+    public CodeTextArea(String name, boolean editable) {
         this.name = name;
 
         // Add content pane
@@ -34,7 +32,6 @@ public class CodeTextArea extends JPanel {
 
         // Add code zone
         codeArea = new JTextArea();
-        codeArea.addKeyListener(new CodeKeyListener(this));
         codeArea.setEditable(editable);
 
         // Add label
@@ -64,10 +61,6 @@ public class CodeTextArea extends JPanel {
         this.updateLineNumbers();
     }
 
-    public void triggerAutoRun() {
-        mainView.triggerAutoRun();
-    }
-
     public void updateLineNumbers() {
         int lines = codeArea.getLineCount();
         StringBuilder lineNumbersText = new StringBuilder();
@@ -80,6 +73,10 @@ public class CodeTextArea extends JPanel {
     @Override
     public String getName() {
         return name;
+    }
+
+    public void registerListener(CodeKeyListener listener) {
+        codeArea.addKeyListener(listener);
     }
 
 }

@@ -1,6 +1,6 @@
-package n7.mcdalang.controllers;
+package n7.mcdalang.input;
 
-import n7.mcdalang.views.CodeTextArea;
+import n7.mcdalang.views.components.CodeTextArea;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
