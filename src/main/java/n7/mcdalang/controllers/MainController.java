@@ -8,6 +8,7 @@ import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.CodeTextArea;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,6 +53,7 @@ public class MainController extends Controller<MainView> {
 
     public void setAutoRun(boolean b) {
         autoRun = b;
+        this.autoRun();
     }
 
     public void setOriginTextAreaCode(String code) {
@@ -71,8 +73,12 @@ public class MainController extends Controller<MainView> {
     public void run() {
         try {
             for (CodeTextArea textArea : view.getCodeTextArea()) {
-                textArea.setCode(translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage()));
-
+                try {
+                    String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
+                    textArea.setCode(code, Color.BLACK);
+                } catch (Exception e) {
+                    textArea.setCode(e.getMessage(), Color.RED);
+                }
             }
         } catch (Exception e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, e.getMessage());
