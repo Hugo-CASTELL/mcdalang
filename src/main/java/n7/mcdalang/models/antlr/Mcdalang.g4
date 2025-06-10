@@ -16,6 +16,7 @@ statement
     | returnStmt NEWLINE
     | printStmt NEWLINE
     | funcCall NEWLINE
+    | expr NEWLINE
     | ifStmt
     | loopStmt
     | block
@@ -35,7 +36,7 @@ methodDecl
 
 // Paramètres d’une méthode
 paramList
-    : ID (',' ID)*
+    : type ID (',' type ID)*
     ;
 
 // Déclaration de variable/constante
@@ -70,7 +71,7 @@ printStmt
 
 // Appel de fonction
 funcCall
-    : ID '(' (expr (',' expr)*)? ')'
+    : (ID '.')* ID '(' (expr (',' expr)*)? ')'
     ;
 
 // Conditions
@@ -117,7 +118,7 @@ mulExpr
     ;
 
 powExpr
-    : atom ( '++' | '--' )?
+    : atom ( '^' atom )*
     ;
 
 atom

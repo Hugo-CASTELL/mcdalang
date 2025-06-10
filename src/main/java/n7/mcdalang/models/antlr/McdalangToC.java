@@ -9,7 +9,6 @@ import java.util.Stack;
 
 public class McdalangToC extends OutputBaseListener {
 
-    StringBuilder output = new StringBuilder();
     Stack<String> currentFunction = new Stack<>();
 
     @Override
@@ -106,7 +105,7 @@ public class McdalangToC extends OutputBaseListener {
 
         if (tree instanceof McdalangParser.FuncCallContext) {
             McdalangParser.FuncCallContext ctx = (McdalangParser.FuncCallContext) tree;
-            String name = ctx.ID().getText();
+            String name = ""; //ctx.ID().getText();
             List<String> args = new ArrayList<>();
             for (McdalangParser.ExprContext e : ctx.expr()) {
                 args.add(exprToString(e));

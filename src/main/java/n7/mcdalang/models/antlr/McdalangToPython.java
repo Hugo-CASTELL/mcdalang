@@ -1,23 +1,27 @@
 package n7.mcdalang.models.antlr;
 
-import org.antlr.v4.runtime.tree.ParseTree;
+import n7.mcdalang.models.antlr.OutputBaseListener;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class McdalangToPython extends OutputBaseListener {
+    public McdalangToPython() {
+        output = new StringBuilder();
+    }
     ParseTreeProperty<String> values = new ParseTreeProperty<>();
-    StringBuilder output = new StringBuilder();
 
     private String indent(String code) {
-        if (code == null) return "";
-        String[] lines = code.split("\n");
-        StringBuilder indented = new StringBuilder();
-        for (String line : lines) {
-            if (!line.isBlank()) {
-                indented.append("    ").append(line).append("\n");
-            }
+        if (code == null || code.isBlank()) {
+            return "";
         }
-        return indented.toString();
+        // Split the code into lines, filter out any blank lines,
+        // prepend the indentation, and then join them back together with newlines.
+        return Arrays.stream(code.split("\n"))
+                .filter(line -> !line.isBlank())
+                .map(line -> "    " + line)
+                .collect(Collectors.joining("\n"));
     }
 
     @Override
@@ -54,7 +58,7 @@ public class McdalangToPython extends OutputBaseListener {
     public void exitAssignment(McdalangParser.AssignmentContext ctx) {
         String id = ctx.ID().getText();
         String expr = values.get(ctx.expr());
-        values.put(ctx, id + " = " + expr + "\n");
+        values.put(ctx, id + " = " + expr);
     }
 
     @Override
@@ -70,12 +74,12 @@ public class McdalangToPython extends OutputBaseListener {
 
         if (ctx.paramList() != null) {
             params = String.join(", ", ctx.paramList().ID().stream()
-                .map(ParseTree::getText)
-                .toList());
+                    .map(ParseTree::getText)
+                    .toList());
         }
 
         String body = values.get(ctx.block());
-        values.put(ctx, "def " + methodName + "(" + params + "):\n" + indent(body) + "\n");
+        values.put(ctx, "def " + methodName + "(" + params + "):\n" + indent(body));
     }
 
     @Override
@@ -86,12 +90,53 @@ public class McdalangToPython extends OutputBaseListener {
 
     @Override
     public void exitFuncCall(McdalangParser.FuncCallContext ctx) {
-        String funcName = ctx.ID().getText();
+        List<String> callers = new ArrayList<>();
         List<String> args = new ArrayList<>();
         for (var arg : ctx.expr()) {
             args.add(values.get(arg));
         }
-        values.put(ctx, funcName + "(" + String.join(", ", args) + ")");
+        for (var caller : ctx.ID()) {
+            callers.add(caller.getText());
+        }
+        values.put(ctx, String.join(".", callers) + "(" + String.join(", ", args) + ")");
+    }
+
+    @Override
+    public void exitIfStmt(McdalangParser.IfStmtContext ctx) {
+        StringBuilder result = new StringBuilder();
+        if (ctx.getText().contains("snsi")) {
+            // si
+            String cond1 = values.get(ctx.expr(0));
+            String block1 = values.get(ctx.block(0));
+            result.append("if ").append(cond1).append(":\n").append(indent(block1));
+
+            // snsi
+            String cond2 = values.get(ctx.expr(1));
+            String block2 = values.get(ctx.block(1));
+            result.append("\nelif ").append(cond2).append(":\n").append(indent(block2));
+
+            // sinon (optionnel)
+            if (ctx.block().size() == 3) {
+                String block3 = values.get(ctx.block(2));
+                result.append("\nelse:\n").append(indent(block3));
+            }
+
+            result.append("\n");
+        } else {
+            // Cas simple : si + (sinon) ?
+            String cond = values.get(ctx.expr(0));
+            String block = values.get(ctx.block(0));
+            result.append("if ").append(cond).append(":\n").append(indent(block));
+
+            if (ctx.block().size() == 2) {
+                String elseBlock = values.get(ctx.block(1));
+                result.append("\nelse:\n").append(indent(elseBlock));
+            }
+
+            result.append("\n");
+        }
+
+        values.put(ctx, result.toString());
     }
 
     @Override
@@ -104,7 +149,7 @@ public class McdalangToPython extends OutputBaseListener {
         } else if (ctx.getStart().getText().equals("faire")) {
             String body = values.get(ctx.block());
             String cond = values.get(ctx.expr());
-            result = "while True:\n" + indent(body) + indent("if not (" + cond + "): break\n") + "\n";
+            result = "while True:\n" + indent(body) + "\n" + indent("if not (" + cond + "): break\n") + "\n";
         } else { // pour
             String init = values.get(ctx.assignment(0)).strip();
             String cond = values.get(ctx.expr()).strip();
@@ -113,7 +158,7 @@ public class McdalangToPython extends OutputBaseListener {
             String[] parts = init.split("=");
             String var = parts[0].strip();
             String start = parts[1].strip();
-            String end = cond.replaceAll(".*[<]=?\\s*", "").strip(); 
+            String end = cond.replaceAll(".*[<]=?\\s*", "").strip();
             boolean inclusive = cond.contains("<=");
 
             if (inclusive) {
@@ -205,20 +250,14 @@ public class McdalangToPython extends OutputBaseListener {
 
     @Override
     public void exitPowExpr(McdalangParser.PowExprContext ctx) {
-        String atomVal = values.get(ctx.atom());
-
-        if (ctx.getChildCount() == 2) {
-            String op = ctx.getChild(1).getText();
-            if (op.equals("++")) {
-                values.put(ctx, atomVal + " + 1");
-            } else if (op.equals("--")) {
-                values.put(ctx, atomVal + " - 1");
-            }
+        if (ctx.atom().size() == 1) {
+            values.put(ctx, values.get(ctx.atom(0)));
         } else {
-            values.put(ctx, atomVal);
+            String left = values.get(ctx.atom(0));
+            String right = values.get(ctx.atom(1));
+            values.put(ctx, left + " ** " + right);
         }
     }
-
 
     @Override
     public void exitIncrStmt(McdalangParser.IncrStmtContext ctx) {
@@ -246,9 +285,4 @@ public class McdalangToPython extends OutputBaseListener {
         else if (ctx.getStart().getText().equals("true")) values.put(ctx, "True");
         else if (ctx.getStart().getText().equals("false")) values.put(ctx, "False");
     }
-
-    public String getPythonCode() {
-        return output.toString(); // ✅ clean Python code output
-    }
-
 }
