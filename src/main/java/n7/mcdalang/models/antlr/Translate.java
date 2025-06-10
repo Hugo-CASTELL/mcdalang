@@ -1,5 +1,6 @@
 package n7.mcdalang.models.antlr;
 
+import n7.mcdalang.util.exception.ParserErrorException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,7 +12,7 @@ import java.io.IOException;
 
 public class Translate {
 
-    public static String translateToOther(String inputText, Languages languages) throws IOException {
+    public static String translateToOther(String inputText, Languages languages) throws ParserErrorException {
         // Utiliser CharStreams au lieu de ANTLRInputStream
         CharStream input = CharStreams.fromString(inputText);
 
@@ -29,8 +30,6 @@ public class Translate {
 
         OutputBaseListener translator = null;
 
-        System.out.println(languages.toString());
-
         switch (languages) {
             case JAVA -> translator = new McdalangToJava();
             case C ->  translator = new McdalangToC();
@@ -46,11 +45,6 @@ public class Translate {
         }
 
         walker.walk(translator, tree);
-
-        System.out.println(translator.getCode());
-
         return translator.getCode();
-
-
     }
 }

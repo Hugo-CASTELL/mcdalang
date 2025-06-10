@@ -1,9 +1,11 @@
 package n7.mcdalang.models.antlr;
 
+import n7.mcdalang.util.exception.ParserErrorException;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,19 +28,7 @@ public class FetchAntlrError extends BaseErrorListener {
         buf.append("line "+line+":"+charPositionInLine+" at "+
                 offendingSymbol+": "+msg);
 
-        /************* A faire par l'équipe UI Swing*************************/
-
-        JDialog dialog = new JDialog();
-        Container contentPane = dialog.getContentPane();
-        contentPane.add(new JLabel(buf.toString()));
-        contentPane.setBackground(Color.white);
-        dialog.setTitle("Syntax error");
-        dialog.pack();
-        dialog.setLocationRelativeTo(null);
-        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        dialog.setVisible(true);
-
-        /***********************************************************************/
+        throw new ParserErrorException(stack, line, charPositionInLine, offendingSymbol);
     }
 }
 

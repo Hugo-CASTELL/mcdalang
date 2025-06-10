@@ -57,10 +57,16 @@ public class CodeTextArea extends JPanel {
         return codeArea.getText();
     }
 
-    public void setCode(String codeZone) {
-        this.codeArea.setText(codeZone);
+    public void setCode(String code) {
+        this.codeArea.setText(code);
         this.updateLineNumbers();
     }
+
+    public void setCode(String code, Color color) {
+        this.codeArea.setForeground(color);
+        this.setCode(code);
+    }
+
 
     public void updateLineNumbers() {
         int lines = codeArea.getLineCount();
