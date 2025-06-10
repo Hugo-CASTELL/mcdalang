@@ -1,5 +1,6 @@
-// Generated from Mcdalang.g4 by ANTLR 4.13.2
+// Generated from ./java/n7/mcdalang/models/antlr/Mcdalang.g4 by ANTLR 4.13.2
 package n7.mcdalang.models.antlr;
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

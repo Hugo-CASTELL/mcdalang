@@ -136,10 +136,6 @@ class TestGrammarToC {
 
 
     private static String superTest(String input) {
-        try {
-            return Translate.translateToOther(input, Languages.C).replace("#include <stdio.h>\n\n", "");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Translate.translateToOther(input, Languages.C).replace("#include <stdio.h>\n\n", "");
     }
 }

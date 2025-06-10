@@ -15,7 +15,7 @@ statement
     | incrStmt NEWLINE
     | returnStmt NEWLINE
     | printStmt NEWLINE
-    | funcCall NEWLINE
+    | funcCall NEWLINE?
     | expr NEWLINE
     | ifStmt
     | loopStmt

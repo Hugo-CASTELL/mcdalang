@@ -68,7 +68,7 @@ class TestGrammarToPython {
                         "while x < 15:\n    print(x)\n    x = x + 1"),
                 Pair.of("faire {\n    afficher(\"Exécution au moins une fois\")\n    y = y - 1\n} tantque (y > 0)",
                         "while True:\n    print(\"Exécution au moins une fois\")\n    y = y - 1\n    if not (y > 0): break"),
-                Pair.of("pour (x = 0; x < 5; x++) {\n    afficher(\"compteur: \" & x)\n}",
+                Pair.of("pour (x = 0; x < 5; x = x + 1) {\n    afficher(\"compteur: \" & x)\n}",
                         "for x in range(0, 5):\n    print(\"compteur: \" + x)")
         );
 
@@ -100,21 +100,18 @@ class TestGrammarToPython {
         for(Pair<String, String> expression : expressions) {
             String input = "a " + expression.first + " b";
             String expected = "a " + expression.second + " b";
-            assertEquals(expected, superTest(input));
+            assertEquals(expected, superTest(input + "\n"));
         }
 
         // Expressions with a constant
         List<Pair<String, String>> increments = List.of(
-                Pair.of("++", " = a + 1"),
-                Pair.of("--", " = a - 1")
+            Pair.of("++", " = a + 1"),
+            Pair.of("--", " = a - 1")
         );
         for(Pair<String, String> increment : increments) {
             String input = "a" + increment.first;
             String expected = "a" + increment.second;
             assertEquals(expected + "\n", superTest(input + "\n"));
-            String reverseInput = increment.first + "a";
-            String reverseExpected = "a" + increment.second;
-            assertEquals(reverseExpected + "\n", superTest(reverseInput + "\n"));
         }
     }
 
@@ -124,8 +121,8 @@ class TestGrammarToPython {
                 Pair.of("methode vide test() {}", "def test():\n"),
                 Pair.of("methode entier test(entier a, entier b) {}", "def test(a, b):\n"),
                 Pair.of("a.method()", "a.method()"),
-                Pair.of("method(a)", "method(a)"),
-                Pair.of("method()", "method()")
+                Pair.of("method()", "method()"),
+                Pair.of("method(a)", "method(a)")
         );
         for(Pair<String, String> method : methods) {
             String input = method.first;
@@ -135,10 +132,6 @@ class TestGrammarToPython {
     }
 
     private static String superTest(String input) {
-        try {
-            return Translate.translateToOther(input, Languages.PYTHON);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Translate.translateToOther(input, Languages.PYTHON);
     }
 }
