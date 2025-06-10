@@ -4,13 +4,14 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.IOException;
 
 public class Translate {
 
-    public static String translateToOther(String inputText) throws IOException {
+    public static String translateToOther(String inputText, Languages languages) throws IOException {
         // Utiliser CharStreams au lieu de ANTLRInputStream
         CharStream input = CharStreams.fromString(inputText);
 
@@ -18,30 +19,38 @@ public class Translate {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         McdalangParser parser = new McdalangParser(tokens);
 
+        parser.addErrorListener(new FetchAntlrError());
+
         // How to incerept error to display it ?
         ParseTree tree = parser.prog();
 
         // Traduction avec listener
         ParseTreeWalker walker = new ParseTreeWalker();
 
+        OutputBaseListener translator = null;
 
-        /* les langages **/
-        McdalangToC translatorToC = new McdalangToC();
-        McdalangToPython translatorToPython = new McdalangToPython();
-        McdalangToRust translatorToRust = new McdalangToRust();
-        McdalangToAda translatorToAda = new McdalangToAda();
-        McdalangToJava translatorToJava = new McdalangToJava();
-        McdalangToGo translatorToGo = new McdalangToGo();
-        McdalangToCPlusPlus translatorToCPlusPlus = new McdalangToCPlusPlus();
-        McdalangToPHP translatorToPHP = new McdalangToPHP();
+        System.out.println(languages.toString());
 
+        switch (languages) {
+            case JAVA -> translator = new McdalangToJava();
+            case C ->  translator = new McdalangToC();
+            case POWERSHELL -> translator = new McdalangToPowershell();
+            case ADA -> translator = new McdalangToAda();
+            case ASSEMBLY ->  translator = new McdalangToAssembly();
+            case PYTHON ->  translator = new McdalangToPython();
+            case RUST ->  translator = new McdalangToRust();
+            case GO ->  translator = new McdalangToGo();
+            case CPlusPlus ->  translator = new McdalangToCPlusPlus();
 
-        walker.walk(translatorToPython, tree);
-        walker.walk(translatorToC, tree);
+            default -> new RuntimeException("Language not supported");
+        }
 
-        // On fera un enum pouur que ce soit au choix
+        walker.walk(translator, tree);
 
-        return translatorToPython.getPythonCode();
+        System.out.println(translator.getCode());
+
+        return translator.getCode();
+
 
     }
 }

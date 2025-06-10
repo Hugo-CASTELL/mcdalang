@@ -1,5 +1,5 @@
 package n7.mcdalang.models.antlr;
 
-public class McdalangToCPlusPlus {
+public class McdalangToCPlusPlus extends OutputBaseListener {
     // A écrire
 }

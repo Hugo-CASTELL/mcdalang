@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.*;
 import java.util.*;
 
-public class McdalangToPython extends McdalangBaseListener {
+public class McdalangToPython extends OutputBaseListener {
     ParseTreeProperty<String> values = new ParseTreeProperty<>();
     StringBuilder output = new StringBuilder();
 

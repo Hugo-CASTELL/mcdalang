@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static n7.mcdalang.models.antlr.Translate.translateToOther;
+
 public class MainController extends Controller<MainView> {
 
     //#region Fields
@@ -69,7 +71,8 @@ public class MainController extends Controller<MainView> {
     public void run() {
         try {
             for (CodeTextArea textArea : view.getCodeTextArea()) {
-                textArea.setCode(view.getOriginTextArea().getCode());
+                textArea.setCode(translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage()));
+
             }
         } catch (Exception e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, e.getMessage());

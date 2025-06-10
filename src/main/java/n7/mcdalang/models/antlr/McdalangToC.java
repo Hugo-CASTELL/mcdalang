@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class McdalangToC extends McdalangBaseListener {
+public class McdalangToC extends OutputBaseListener {
 
     StringBuilder output = new StringBuilder();
     Stack<String> currentFunction = new Stack<>();
@@ -156,7 +156,8 @@ public class McdalangToC extends McdalangBaseListener {
     }
 
     // Retourne le code généré
-    public String getCCode() {
+    @Override
+    public String getCode() {
         return "#include <stdio.h>\n\n" + output.toString();
     }
 }

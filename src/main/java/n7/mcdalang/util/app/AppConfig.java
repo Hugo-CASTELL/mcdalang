@@ -1,5 +1,6 @@
 package n7.mcdalang.util.app;
 
+import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.util.theme.Themes;
 
 import java.awt.*;
@@ -15,7 +16,7 @@ public final class AppConfig {
     public static final int SPLASH_DURATION_MS = 3300;
 
     public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
-    public static final List<String> DEFAULT_LANGUAGES = List.of("Python", "Java");
+    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.C);
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
 
     private AppConfig() {}

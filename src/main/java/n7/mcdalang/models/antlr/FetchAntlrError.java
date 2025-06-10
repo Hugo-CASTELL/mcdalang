@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
-public class FetchError extends BaseErrorListener {
+public class FetchAntlrError extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer,

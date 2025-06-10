@@ -1,6 +1,7 @@
 package n7.mcdalang.views.components;
 
 import n7.mcdalang.input.CodeKeyListener;
+import n7.mcdalang.models.antlr.Languages;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -8,7 +9,7 @@ import java.awt.*;
 
 public class CodeTextArea extends JPanel {
 
-    private String name;
+    private Languages name;
     private JTextArea codeArea;
     private JTextArea lineNumbers;
     private JLabel nameLabel;
@@ -16,7 +17,7 @@ public class CodeTextArea extends JPanel {
     private JScrollPane scrollPane;
     private JPanel labelPanel;
 
-    public CodeTextArea(String name, boolean editable) {
+    public CodeTextArea(Languages name, boolean editable) {
         this.name = name;
 
         // Add content pane
@@ -35,7 +36,7 @@ public class CodeTextArea extends JPanel {
         codeArea.setEditable(editable);
 
         // Add label
-        nameLabel = new JLabel(name, SwingConstants.CENTER);
+        nameLabel = new JLabel(name.toString(), SwingConstants.CENTER);
 
         labelPanel = new JPanel(new BorderLayout());
         labelPanel.add(nameLabel, BorderLayout.CENTER);
@@ -72,6 +73,10 @@ public class CodeTextArea extends JPanel {
 
     @Override
     public String getName() {
+        return name.toString();
+    }
+
+    public Languages getLanguage(){
         return name;
     }
 
