@@ -1,4 +1,6 @@
-package n7.mcdalang.models.antlr;
+package n7.mcdalang.models.antlr.listeners;
+
+import n7.mcdalang.models.antlr.generated.McdalangBaseListener;
 
 public abstract class OutputBaseListener extends McdalangBaseListener {
     protected StringBuilder output;

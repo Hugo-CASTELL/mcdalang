@@ -1,7 +1,6 @@
-package n7.mcdalang.models.antlr;
+package n7.mcdalang.models.antlr.listeners;
 
-import n7.mcdalang.models.antlr.OutputBaseListener;
-import org.antlr.v4.runtime.*;
+import n7.mcdalang.models.antlr.generated.McdalangParser;
 import org.antlr.v4.runtime.tree.*;
 import java.util.*;
 import java.util.stream.Collectors;

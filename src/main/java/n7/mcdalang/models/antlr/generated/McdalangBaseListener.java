@@ -1,5 +1,5 @@
 // Generated from ./java/n7/mcdalang/models/antlr/Mcdalang.g4 by ANTLR 4.13.2
-package n7.mcdalang.models.antlr;
+package n7.mcdalang.models.antlr.generated;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;

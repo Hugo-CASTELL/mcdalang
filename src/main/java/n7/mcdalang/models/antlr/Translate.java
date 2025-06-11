@@ -1,14 +1,14 @@
 package n7.mcdalang.models.antlr;
 
+import n7.mcdalang.models.antlr.generated.McdalangLexer;
+import n7.mcdalang.models.antlr.generated.McdalangParser;
+import n7.mcdalang.models.antlr.listeners.*;
 import n7.mcdalang.util.exception.ParserErrorException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
-import java.io.IOException;
 
 public class Translate {
 
