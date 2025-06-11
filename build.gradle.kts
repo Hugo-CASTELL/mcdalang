@@ -1,10 +1,11 @@
 plugins {
     id("java")
     id("antlr")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "n7.mcdalang"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -35,6 +36,16 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "n7.mcdalang.Main"
+        )
+    }
+    from(sourceSets.main.get().resources)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.test {

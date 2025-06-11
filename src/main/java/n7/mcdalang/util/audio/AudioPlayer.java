@@ -3,6 +3,8 @@ package n7.mcdalang.util.audio;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,15 +12,14 @@ public final class AudioPlayer {
 
     private AudioPlayer() {}
 
-    public static void play(String filePath) {
+    public static void play(URL url) {
         try {
-            File soundFile = new File(filePath);
-            if (!soundFile.exists()) {
-                Logger.getLogger(AudioPlayer.class.getName()).log(Level.WARNING, "Audio file not found : {0} ", filePath);
+            if (url == null) {
+                Logger.getLogger(AudioPlayer.class.getName()).log(Level.WARNING, "Audio file not found : {0} ", url);
                 return;
             }
 
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.start();
