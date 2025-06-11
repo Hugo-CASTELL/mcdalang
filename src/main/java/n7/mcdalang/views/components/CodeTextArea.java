@@ -28,6 +28,7 @@ public class CodeTextArea extends JPanel {
         lineNumbers = new JTextArea("1");
         lineNumbers.setBackground(Color.LIGHT_GRAY);
         lineNumbers.setEditable(false);
+        lineNumbers.setFocusable(false);
 
         contentPane.add(lineNumbers, BorderLayout.WEST);
 
@@ -44,6 +45,7 @@ public class CodeTextArea extends JPanel {
         contentPane.add(codeArea, BorderLayout.CENTER);
 
         scrollPane = new JScrollPane(contentPane);
+
         this.setLayout(new MigLayout("", "[100%]", "[5%][95%]"));
         this.add(labelPanel, "cell 0 0,grow");
         this.add(scrollPane, "cell 0 1,grow");
@@ -67,14 +69,19 @@ public class CodeTextArea extends JPanel {
         this.setCode(code);
     }
 
-
     public void updateLineNumbers() {
+        int scrollPosition = scrollPane.getVerticalScrollBar().getValue();
+
         int lines = codeArea.getLineCount();
         StringBuilder lineNumbersText = new StringBuilder();
         for (int i = 1; i <= lines; i++) {
             lineNumbersText.append(i).append("\n");
         }
         lineNumbers.setText(lineNumbersText.toString());
+
+        SwingUtilities.invokeLater(() -> {
+            scrollPane.getVerticalScrollBar().setValue(scrollPosition);
+        });
     }
 
     @Override
@@ -84,6 +91,14 @@ public class CodeTextArea extends JPanel {
 
     public Languages getLanguage(){
         return name;
+    }
+
+    public void setCaret(int caret){
+        codeArea.setCaretPosition(caret);
+    }
+
+    public int getCaret(){
+        return codeArea.getCaretPosition();
     }
 
     public void registerListener(CodeKeyListener listener) {
