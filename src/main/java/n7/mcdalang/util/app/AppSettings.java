@@ -11,7 +11,9 @@ public class AppSettings {
     //#region Fields
 
     private Themes theme;
-    private List<String> languages;
+    private final List<String> languages;
+
+    private boolean autoRun;
 
     //#endregion Fields
 
@@ -21,6 +23,8 @@ public class AppSettings {
         // see initializeDefaultSettings() method
         theme = null;
         languages = new ArrayList<>();
+        autoRun = false;
+        // see initializeDefaultSettings() method
     }
 
     //#endregion Constructor
@@ -38,6 +42,18 @@ public class AppSettings {
     public void setTheme(Themes theme) {
         this.theme = theme;
         ThemeManager.apply(theme);
+    }
+
+    public Themes getTheme() {
+        return theme;
+    }
+
+    public void setAutoRun(boolean autoRun) {
+        this.autoRun = autoRun;
+    }
+
+    public boolean getAutoRun() {
+        return autoRun;
     }
 
     public void addLanguage(String language) {
@@ -59,6 +75,7 @@ public class AppSettings {
     public void initializeDefaultSettings() {
         this.setTheme(AppConfig.DEFAULT_THEME);
         this.addLanguages(AppConfig.DEFAULT_LANGUAGES);
+        this.setAutoRun(AppConfig.DEFAULT_AUTORUN_MODE);
     }
 
     //#endregion Methods

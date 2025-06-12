@@ -1,34 +1,41 @@
 package n7.mcdalang.views;
 
-import n7.mcdalang.controllers.MainController;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 
-public class OptionsPopupView extends Popup {
+public class OptionsPopupView extends View {
 
-    private MainController mainController;
-
-    private JFrame frame;
-    private JPanel panel;
-
-    private JCheckBox[] checkBoxes;
+    private JCheckBox autoRunCheckBox;
 
     private JButton exportButton;
     private JButton importButton;
 
-    private boolean autoRun;
-
     public OptionsPopupView() {
+        setName("Options");
+        setPopupOptions(JOptionPane.OK_CANCEL_OPTION);
+        setLayout(new MigLayout("fill"));
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new MigLayout("fill"));
+        autoRunCheckBox = new JCheckBox("AutoRun");
+        add(autoRunCheckBox, "cell " + (1) + " 0");
 
-        checkBoxes = new JCheckBox[3];
+        exportButton = new JButton("Export");
+        add(exportButton, "cell 0 1");
 
-        checkBoxes[0] = new JCheckBox("Auto Run");
-        checkBoxes[1] = new JCheckBox("Auto Import");
-        checkBoxes[2] = new JCheckBox("Auto Export");
+        importButton = new JButton("Import");
+        add(importButton, "cell 2 1");
+    }
+
+    public JCheckBox getAutoRunCheckBox() {
+        return autoRunCheckBox;
+    }
+
+    public JButton getExportButton() {
+        return exportButton;
+    }
+
+    public JButton getImportButton() {
+        return importButton;
     }
 
 }

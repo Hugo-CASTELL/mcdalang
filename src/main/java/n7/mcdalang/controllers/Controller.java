@@ -1,8 +1,9 @@
 package n7.mcdalang.controllers;
 
 import n7.mcdalang.util.GlobalInstances;
+import n7.mcdalang.views.View;
 
-public abstract class Controller<V> {
+public abstract class Controller<V extends View> {
     protected final V view;
 
     protected Controller(V view) {
@@ -10,9 +11,18 @@ public abstract class Controller<V> {
     }
 
     public void show() {
+        prepareView();
+        GlobalInstances.getAppManager().display(view);
+    }
+
+    public int showAsPopup() {
+        prepareView();
+        return GlobalInstances.getAppManager().displayPopup(view);
+    }
+
+    private void prepareView() {
         updateView();
         registerListeners();
-        GlobalInstances.getAppManager().display(view);
     }
 
     /**

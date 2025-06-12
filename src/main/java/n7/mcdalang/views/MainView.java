@@ -78,7 +78,7 @@ public class MainView extends View {
         return originTextArea;
     }
 
-    public CodeTextArea[] getCodeTextArea() {
+    public CodeTextArea[] getCodeTextAreas() {
         return codeTextArea;
     }
 

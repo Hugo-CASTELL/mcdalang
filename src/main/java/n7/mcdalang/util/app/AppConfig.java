@@ -17,6 +17,7 @@ public final class AppConfig {
     public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
     public static final List<String> DEFAULT_LANGUAGES = List.of("Python", "Java");
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
+    public static final boolean DEFAULT_AUTORUN_MODE = false;
 
     private AppConfig() {}
 }
