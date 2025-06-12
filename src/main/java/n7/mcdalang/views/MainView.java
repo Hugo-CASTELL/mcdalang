@@ -8,7 +8,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 
-public class MainView extends JPanel implements View {
+public class MainView extends View {
 
     //#region Fields
 
@@ -79,7 +79,7 @@ public class MainView extends JPanel implements View {
         return originTextArea;
     }
 
-    public CodeTextArea[] getCodeTextArea() {
+    public CodeTextArea[] getCodeTextAreas() {
         return codeTextArea;
     }
 

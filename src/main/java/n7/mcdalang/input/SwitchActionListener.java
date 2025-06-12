@@ -4,13 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SwitchActionListener implements ActionListener {
-
-    private boolean autoRun;
-
-    public SwitchActionListener(boolean autoRun) {
-        this.autoRun = autoRun;
-    }
-
     /**
      * Invoked when an action occurs.
      *
@@ -18,6 +11,6 @@ public class SwitchActionListener implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(autoRun);
+        // Nothing to do here
     }
 }
