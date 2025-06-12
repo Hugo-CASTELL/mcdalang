@@ -1,5 +1,6 @@
 package n7.mcdalang.views;
 
+import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.components.CodeTextArea;
 import n7.mcdalang.views.components.TabPanel;
@@ -31,10 +32,10 @@ public class MainView extends View {
     //#region Constructor
 
     public MainView() {
-        String[] languages = GlobalInstances.getAppSettings().getLanguages().toArray(new String[0]);
+        Languages[] languages = GlobalInstances.getAppSettings().getLanguages().toArray(new Languages[0]);
         languageIndex = languages.length;
 
-        originTextArea = new CodeTextArea("McDaLang",true);
+        originTextArea = new CodeTextArea(Languages.MACDALANG,true);
 
         codeTextArea = new CodeTextArea[languageIndex];
         for (int i = 0; i < languageIndex; i++) {

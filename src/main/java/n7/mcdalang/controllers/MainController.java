@@ -8,8 +8,11 @@ import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.CodeTextArea;
 
+import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static n7.mcdalang.models.antlr.Translate.translateToOther;
 
 public class MainController extends Controller<MainView> {
 
@@ -68,8 +71,13 @@ public class MainController extends Controller<MainView> {
 
     public void run() {
         try {
-            for (CodeTextArea textArea : view.getCodeTextAreas()) {
-                textArea.setCode(view.getOriginTextArea().getCode());
+            for (CodeTextArea textArea : view.getCodeTextArea()) {
+                try {
+                    String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
+                    textArea.setCode(code, Color.BLACK);
+                } catch (Exception e) {
+                    textArea.setCode(e.getMessage(), Color.RED);
+                }
             }
         } catch (Exception e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, e.getMessage());
@@ -78,5 +86,6 @@ public class MainController extends Controller<MainView> {
 
     public void enableAutoRun(boolean enabled) {
         GlobalInstances.getAppSettings().setAutoRun(enabled);
+        this.autoRun();
     }
 }

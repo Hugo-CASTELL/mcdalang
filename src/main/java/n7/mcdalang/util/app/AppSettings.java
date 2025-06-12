@@ -1,5 +1,6 @@
 package n7.mcdalang.util.app;
 
+import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.util.theme.ThemeManager;
 import n7.mcdalang.util.theme.Themes;
 
@@ -31,7 +32,7 @@ public class AppSettings {
 
     //#region Getters
 
-    public List<String> getLanguages() {
+    public List<Languages> getLanguages() {
         return languages;
     }
 
@@ -55,15 +56,15 @@ public class AppSettings {
     public boolean getAutoRun() {
         return autoRun;
     }
-
-    public void addLanguage(String language) {
+  
+    public void addLanguage(Languages language) {
         if (!languages.contains(language)) {
             languages.add(language);
         }
     }
 
-    public void addLanguages(List<String> languages) {
-        for (String language : languages) {
+    public void addLanguages(List<Languages> languages) {
+        for (Languages language : languages) {
             addLanguage(language);
         }
     }
