@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# --- Configuration ---
+GRAMMAR_FILE="Mcdalang.g4"
+TARGET_DIR="../generated"
+PACKAGE_DECL="package n7.mcdalang.models.antlr.generated;"
+
+# --- Étape 1 : Génération avec ANTLR ---
+echo "🔄 Génération avec ANTLR..."
+antlr4 "$GRAMMAR_FILE" -o "$TARGET_DIR"
+
+# --- Étape 2 : Ajout du package ---
+echo "📦 Ajout du package dans les fichiers générés..."
+for file in "$TARGET_DIR"/*.java; do
+    if ! grep -q "$PACKAGE_DECL" "$file"; then
+        # Utilise sed pour insérer le package au tout début du fichier
+        sed -i "1i$PACKAGE_DECL\n" "$file"
+    fi
+done
+
+echo "✅ Terminé."

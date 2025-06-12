@@ -1,11 +1,14 @@
-// Generated from ./java/n7/mcdalang/models/antlr/Mcdalang.g4 by ANTLR 4.13.2
 package n7.mcdalang.models.antlr.generated;
 
+// Generated from Mcdalang.g4 by ANTLR 4.13.2
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
 public class McdalangLexer extends Lexer {
