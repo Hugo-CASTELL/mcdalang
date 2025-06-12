@@ -12,7 +12,7 @@ public class AppSettings {
     //#region Fields
 
     private Themes theme;
-    private final List<String> languages;
+    private final List<Languages> languages;
 
     private boolean autoRun;
 

@@ -71,7 +71,7 @@ public class MainController extends Controller<MainView> {
 
     public void run() {
         try {
-            for (CodeTextArea textArea : view.getCodeTextArea()) {
+            for (CodeTextArea textArea : view.getCodeTextAreas()) {
                 try {
                     String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
                     textArea.setCode(code, Color.BLACK);
