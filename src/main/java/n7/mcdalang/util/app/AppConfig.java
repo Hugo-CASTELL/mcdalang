@@ -17,7 +17,7 @@ public final class AppConfig {
     public static final int SPLASH_DURATION_MS = 3300;
 
     public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
-    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C);
+    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST);
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
     public static final boolean DEFAULT_AUTORUN_MODE = false;
 
