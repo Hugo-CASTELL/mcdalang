@@ -36,6 +36,7 @@ public class MainController extends Controller<MainView> {
     @Override
     protected void updateView() {
         // No specific updates needed for the main view at this time.
+        setFontSize(GlobalInstances.getAppSettings().getFontSize());
     }
 
     @Override
@@ -87,5 +88,13 @@ public class MainController extends Controller<MainView> {
     public void enableAutoRun(boolean enabled) {
         GlobalInstances.getAppSettings().setAutoRun(enabled);
         this.autoRun();
+    }
+
+    public void setFontSize(int fontSize) {
+        GlobalInstances.getAppSettings().setFontSize(fontSize);
+        for (CodeTextArea textArea : view.getCodeTextAreas()) {
+            textArea.setSizeFont(fontSize);
+        }
+        view.getOriginTextArea().setSizeFont(fontSize);
     }
 }

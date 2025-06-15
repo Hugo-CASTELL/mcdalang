@@ -35,8 +35,6 @@ public class McdalangToC extends OutputBaseListener {
         };
     }
 
-    public McdalangToC() {output = new StringBuilder();}
-
     @Override
     public void exitProg(McdalangParser.ProgContext ctx) {
         for (var stmt : ctx.statement()) {

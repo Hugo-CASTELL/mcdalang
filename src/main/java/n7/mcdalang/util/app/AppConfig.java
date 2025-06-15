@@ -26,11 +26,16 @@ public final class AppConfig {
     public static final URL FONT_FIRACODE_MEDIUM = Objects.requireNonNull(AppConfig.class.getResource("/fonts/FiraCode-Medium.ttf"));
     public static final URL FONT_FIRACODE_BOLD = Objects.requireNonNull(AppConfig.class.getResource("/fonts/FiraCode-Bold.ttf"));
 
+    public static final URL FONT_CONSOLAS_LIGHT = Objects.requireNonNull(AppConfig.class.getResource("/fonts/ConsolasMono-Light.ttf"));
+    public static final URL FONT_CONSOLAS_BOLD = Objects.requireNonNull(AppConfig.class.getResource("/fonts/ConsolasMono-Bold.ttf"));
+
 
 
     public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
     public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST);
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
+    public static final boolean DEFAULT_AUTORUN_MODE = false;
+    public static final int DEFAULT_FONT_SIZE = 72;
 
     private AppConfig() {}
 }

@@ -16,6 +16,8 @@ public class AppSettings {
 
     private boolean autoRun;
 
+    private int fontSize;
+
     //#endregion Fields
 
     //#region Constructor
@@ -49,6 +51,14 @@ public class AppSettings {
         return theme;
     }
 
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public int getFontSize() {
+        return fontSize;
+    }
+
     public void setAutoRun(boolean autoRun) {
         this.autoRun = autoRun;
     }
@@ -77,6 +87,7 @@ public class AppSettings {
         this.setTheme(AppConfig.DEFAULT_THEME);
         this.addLanguages(AppConfig.DEFAULT_LANGUAGES);
         this.setAutoRun(AppConfig.DEFAULT_AUTORUN_MODE);
+        this.setFontSize(AppConfig.DEFAULT_FONT_SIZE);
     }
 
     //#endregion Methods

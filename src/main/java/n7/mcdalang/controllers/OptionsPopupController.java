@@ -27,6 +27,7 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
     @Override
     protected void updateView() {
         view.getAutoRunCheckBox().setSelected(GlobalInstances.getAppSettings().getAutoRun());
+        view.getFontSizeSpinner().setValue(GlobalInstances.getAppSettings().getFontSize());
     }
 
     @Override
@@ -40,9 +41,11 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
     public boolean hasSelectedAutoRun() {
         return view.getAutoRunCheckBox().isSelected();
     }
+    public int SelectFontSize() {
+        return (Integer) view.getFontSizeSpinner().getValue();
+    }
 
     public void triggerChangeForOriginCode(String code){
         this.mainController.triggerChangeForOriginCode(code);
     }
-
 }
