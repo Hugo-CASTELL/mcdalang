@@ -2,10 +2,12 @@ package n7.mcdalang.views.components;
 
 import n7.mcdalang.input.CodeKeyListener;
 import n7.mcdalang.models.antlr.Languages;
+import n7.mcdalang.util.app.AppConfig;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class CodeTextArea extends JPanel {
 
@@ -16,9 +18,19 @@ public class CodeTextArea extends JPanel {
     private JPanel contentPane;
     private JScrollPane scrollPane;
     private JPanel labelPanel;
+    private Font jetbrainsFont;
+    private Font font;
 
     public CodeTextArea(Languages name, boolean editable) {
         this.name = name;
+
+        // Create font
+        try {
+            jetbrainsFont = Font.createFont(Font.TRUETYPE_FONT, new File(AppConfig.FONT_JETBRAINS_MEDIUM.toURI()));
+            font = jetbrainsFont.deriveFont(Font.PLAIN, 12);
+        } catch (Exception e) {
+            font = new  Font("Arial", Font.PLAIN, 12);
+        }
 
         // Add content pane
         contentPane = new JPanel();
@@ -35,6 +47,8 @@ public class CodeTextArea extends JPanel {
         // Add code zone
         codeArea = new JTextArea();
         codeArea.setEditable(editable);
+
+        this.setFont(0);
 
         // Add label
         nameLabel = new JLabel(name.toString(), SwingConstants.CENTER);
@@ -93,12 +107,9 @@ public class CodeTextArea extends JPanel {
         return name;
     }
 
-    public void setCaret(int caret){
-        codeArea.setCaretPosition(caret);
-    }
-
-    public int getCaret(){
-        return codeArea.getCaretPosition();
+    public void setFont(int fontSize) {
+        codeArea.setFont(font);
+        lineNumbers.setFont(font);
     }
 
     public void registerListener(CodeKeyListener listener) {
