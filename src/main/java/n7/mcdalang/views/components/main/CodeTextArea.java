@@ -1,4 +1,4 @@
-package n7.mcdalang.views.components;
+package n7.mcdalang.views.components.main;
 
 import n7.mcdalang.input.CodeKeyListener;
 import n7.mcdalang.models.antlr.Languages;

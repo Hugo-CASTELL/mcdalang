@@ -17,6 +17,8 @@ public final class AppConfig {
     public static final URL SPLASH_AUDIO = Objects.requireNonNull(AppConfig.class.getResource("/audio/splash.wav"));
     public static final int SPLASH_DURATION_MS = 3300;
 
+    public static final URL MCDABOT_HEAD_PATH = Objects.requireNonNull(AppConfig.class.getResource("/images/mcdala_tete_grand.png"));
+
     public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
     public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST);
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
