@@ -5,7 +5,7 @@ import n7.mcdalang.input.OptionActionListener;
 import n7.mcdalang.input.RunActionListener;
 import n7.mcdalang.input.SwitchActionListener;
 import n7.mcdalang.views.MainView;
-import n7.mcdalang.views.components.CodeTextArea;
+import n7.mcdalang.views.components.main.CodeTextArea;
 
 import java.awt.*;
 import java.util.logging.Level;

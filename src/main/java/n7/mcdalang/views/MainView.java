@@ -2,8 +2,8 @@ package n7.mcdalang.views;
 
 import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.util.GlobalInstances;
-import n7.mcdalang.views.components.CodeTextArea;
-import n7.mcdalang.views.components.TabPanel;
+import n7.mcdalang.views.components.main.CodeTextArea;
+import n7.mcdalang.views.components.main.TabPanel;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -19,6 +19,7 @@ public class MainView extends JPanel implements View {
     private final JButton switchButton;
     private final JButton runButton;
     private final JButton optionsButton;
+    private final JButton mcdaBotButton;
 
     private final CodeTextArea originTextArea;
     private final CodeTextArea[] codeTextArea;
@@ -46,6 +47,7 @@ public class MainView extends JPanel implements View {
         runButton = new JButton("Run");
         switchButton = new JButton("Switch");
         optionsButton = new JButton("Options");
+        mcdaBotButton = new JButton("Mcdabot");
 
         // topGUI components
         // topGUI = new JPanel(new MigLayout("fillx"));
@@ -94,6 +96,8 @@ public class MainView extends JPanel implements View {
     public JButton getOptionsButton() {
         return optionsButton;
     }
+
+    public JButton getMcdaBotButton() {return mcdaBotButton;}
 
     //#endregion Getters and Setters
 }
