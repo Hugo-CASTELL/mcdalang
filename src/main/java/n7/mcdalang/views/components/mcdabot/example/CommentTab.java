@@ -9,7 +9,7 @@ public class CommentTab extends ExampleTab {
         this.explication = "Commentaire :\n" +
                 "Il existe deux types de commentaires :\n" +
                 " - Les commentaires sur une ligne\n" +
-                " - Les commentaires multilignes" +
+                " - Les commentaires multilignes\n" +
                 "Les commentaires sont pour l'instant ignorés par le traducteur.";
 
         this.code = "|| Ceci est un commentaire sur une ligne\n\n" +
