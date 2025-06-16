@@ -10,12 +10,12 @@ import org.antlr.v4.runtime.misc.NotNull;
 import javax.swing.*;
 import java.awt.*;
 
-public class McdaBotMainView extends JPanel implements View {
+public class McdaBotMainView extends View {
     private JPanel menuTab;
     private JPanel exampleTab;
 
     public McdaBotMainView() {
-        super(new BorderLayout());
+        this.setLayout(new BorderLayout());
         menuTab = new MenuTab();
         exampleTab = null;
 
