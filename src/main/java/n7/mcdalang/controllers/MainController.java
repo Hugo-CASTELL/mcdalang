@@ -4,6 +4,7 @@ import n7.mcdalang.input.CodeKeyListener;
 import n7.mcdalang.input.OptionActionListener;
 import n7.mcdalang.input.RunActionListener;
 import n7.mcdalang.input.SwitchActionListener;
+import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.main.CodeTextArea;
 
@@ -16,8 +17,6 @@ import static n7.mcdalang.models.antlr.Translate.translateToOther;
 public class MainController extends Controller<MainView> {
 
     //#region Fields
-
-    private boolean autoRun;
 
     //#endregion Fields
 
@@ -36,27 +35,28 @@ public class MainController extends Controller<MainView> {
 
     @Override
     protected void updateView() {
-
+        // No specific updates needed for the main view at this time.
     }
 
     @Override
     protected void registerListeners() {
         view.getRunButton().addActionListener(new RunActionListener(this));
-        view.getSwitchButton().addActionListener(new SwitchActionListener(autoRun));
-        view.getOptionsButton().addActionListener(new OptionActionListener(this, autoRun));
+        view.getSwitchButton().addActionListener(new SwitchActionListener());
+        view.getOptionsButton().addActionListener(new OptionActionListener(this));
 
         view.getOriginTextArea().registerListener(new CodeKeyListener(this, view.getOriginTextArea()));
     }
 
     //#endregion Implemented Methods
 
-    public void setAutoRun(boolean b) {
-        autoRun = b;
-        this.autoRun();
+    public void triggerChangeForOriginCode(String code) {
+        changeOriginCode(code);
     }
 
-    public void setOriginTextAreaCode(String code) {
-        view.getOriginTextArea().setCode(code);
+    private void changeOriginCode(String newCode){
+        if(newCode != null){
+            view.getOriginTextArea().setCode(newCode);
+        }
     }
 
     public void triggerAutoRun() {
@@ -64,14 +64,14 @@ public class MainController extends Controller<MainView> {
     }
 
     private void autoRun() {
-        if (autoRun) {
+        if (GlobalInstances.getAppSettings().getAutoRun()) {
             run();
         }
     }
 
     public void run() {
         try {
-            for (CodeTextArea textArea : view.getCodeTextArea()) {
+            for (CodeTextArea textArea : view.getCodeTextAreas()) {
                 try {
                     String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
                     textArea.setCode(code, Color.BLACK);
@@ -82,6 +82,10 @@ public class MainController extends Controller<MainView> {
         } catch (Exception e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, e.getMessage());
         }
+    }
 
+    public void enableAutoRun(boolean enabled) {
+        GlobalInstances.getAppSettings().setAutoRun(enabled);
+        this.autoRun();
     }
 }

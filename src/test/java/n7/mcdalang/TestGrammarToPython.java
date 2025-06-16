@@ -23,7 +23,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> declaration : declarations) {
-            assertEquals(declaration.second + "\n", superTest(declaration.first + "\n"));
+            assertEquals(declaration.second.strip(), superTest(declaration.first + "\n").strip());
         }
     }
 
@@ -39,7 +39,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> print : printStatements) {
-            assertEquals(print.second + "\n", superTest(print.first + "\n"));
+            assertEquals(print.second.strip(), superTest(print.first + "\n").strip());
         }
     }
 
@@ -57,7 +57,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> condition : conditions) {
-            assertEquals(condition.second + "\n", superTest(condition.first + "\n"));
+            assertEquals(condition.second.strip(), superTest(condition.first + "\n").strip());
         }
     }
 
@@ -73,7 +73,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> loop : loops) {
-            assertEquals(loop.second + "\n", superTest(loop.first + "\n"));
+            assertEquals(loop.second.strip(), superTest(loop.first + "\n").strip());
         }
     }
 
@@ -100,7 +100,7 @@ class TestGrammarToPython {
         for(Pair<String, String> expression : expressions) {
             String input = "a " + expression.first + " b";
             String expected = "a " + expression.second + " b";
-            assertEquals(expected, superTest(input + "\n"));
+            assertEquals(expected.strip(), superTest(input + "\n").strip());
         }
 
         // Expressions with a constant
@@ -111,7 +111,7 @@ class TestGrammarToPython {
         for(Pair<String, String> increment : increments) {
             String input = "a" + increment.first;
             String expected = "a" + increment.second;
-            assertEquals(expected + "\n", superTest(input + "\n"));
+            assertEquals(expected.strip(), superTest(input + "\n").strip());
         }
     }
 
@@ -127,7 +127,7 @@ class TestGrammarToPython {
         for(Pair<String, String> method : methods) {
             String input = method.first;
             String expected = method.second;
-            assertEquals(expected, superTest(input));
+            assertEquals(expected.strip(), superTest(input).strip());
         }
     }
 

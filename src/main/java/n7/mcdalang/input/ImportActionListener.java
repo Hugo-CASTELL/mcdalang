@@ -1,5 +1,7 @@
 package n7.mcdalang.input;
 
+import n7.mcdalang.controllers.OptionsPopupController;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
@@ -10,18 +12,19 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ImportActionListener implements ActionListener {
-    private JFrame frame;
-    private JFileChooser fileChooser;
-    private FileNameExtensionFilter filter;
 
-    private OptionActionListener optionActionListener;
+    private final JFrame frame;
+    private final JFileChooser fileChooser;
+    private final FileNameExtensionFilter filter;
 
-    public ImportActionListener(OptionActionListener optionActionListener) {
-        this.optionActionListener = optionActionListener;
+    private final OptionsPopupController optionsPopupController;
+
+    public ImportActionListener(OptionsPopupController optionsPopupController) {
+        this.optionsPopupController = optionsPopupController;
 
         // Create JFrame windows
         frame = new JFrame("File Import");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(600, 300);
 
         // Create JFileChooser
@@ -40,7 +43,7 @@ public class ImportActionListener implements ActionListener {
             File selectedFile = fileChooser.getSelectedFile();
             JOptionPane.showMessageDialog(null, "File selected : " + selectedFile.getAbsolutePath());
 
-            optionActionListener.setOriginTextArea(readFile(selectedFile));
+            optionsPopupController.triggerChangeForOriginCode(readFile(selectedFile));
 
         } else {
             JOptionPane.showMessageDialog(null, "No file selected", "Error", JOptionPane.ERROR_MESSAGE);

@@ -10,10 +10,19 @@ public abstract class Controller<V extends View> {
         this.view = view;
     }
 
-    public void showView() {
+    public void show() {
+        prepareView();
+        GlobalInstances.getAppManager().display(view);
+    }
+
+    public int showAsPopup() {
+        prepareView();
+        return GlobalInstances.getAppManager().displayPopup(view);
+    }
+
+    private void prepareView() {
         updateView();
         registerListeners();
-        GlobalInstances.getAppManager().display(view);
     }
 
     /**
