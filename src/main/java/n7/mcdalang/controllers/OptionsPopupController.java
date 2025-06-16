@@ -47,8 +47,8 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
 
     @Override
     protected void registerListeners() {
-        view.getExportButton().addActionListener(new ExportActionListener());
-        view.getImportButton().addActionListener(new ImportActionListener(this));
+        //view.getExportButton().addActionListener(new ExportActionListener());
+        //view.getImportButton().addActionListener(new ImportActionListener(this));
     }
 
     //#endregion Implemented Methods

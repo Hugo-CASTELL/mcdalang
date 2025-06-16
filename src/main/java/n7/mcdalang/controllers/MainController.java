@@ -46,6 +46,8 @@ public class MainController extends Controller<MainView> {
         view.getOptionsButton().addActionListener(new OptionActionListener(this));
         view.getMcdaBotButton().addActionListener(new mcdaBotActionListener(this));
         view.getOriginTextArea().registerListener(new CodeKeyListener(this, view.getOriginTextArea()));
+        view.getImportButton().addActionListener(new ImportActionListener(this));
+        view.getExportButton().addActionListener(new ExportActionListener());
     }
 
     //#endregion Implemented Methods
