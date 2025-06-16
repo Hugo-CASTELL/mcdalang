@@ -36,7 +36,7 @@ public class ExampleTab extends View {
         JPanel mainContent = new JPanel(new BorderLayout());
 
         // Code
-        CodeTextArea codeArea = new CodeTextArea(Languages.MACDALANG, true);
+        CodeTextArea codeArea = new CodeTextArea(Languages.MCDALANG, true);
         codeArea.registerListener(new CodeKeyListener(new MainController(new MainView()), codeArea));
         this.codeArea = codeArea;
 

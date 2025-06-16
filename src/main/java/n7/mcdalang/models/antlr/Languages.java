@@ -1,7 +1,7 @@
 package n7.mcdalang.models.antlr;
 
 public enum Languages {
-    MACDALANG,
+    MCDALANG,
     JAVA,
     ADA,
     ASSEMBLY,

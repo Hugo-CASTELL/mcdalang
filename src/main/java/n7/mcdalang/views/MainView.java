@@ -36,7 +36,7 @@ public class MainView extends View {
         Languages[] languages = GlobalInstances.getAppSettings().getLanguages().toArray(new Languages[0]);
         languageIndex = languages.length;
 
-        originTextArea = new CodeTextArea(Languages.MACDALANG,true);
+        originTextArea = new CodeTextArea(Languages.MCDALANG,true);
 
         codeTextArea = new CodeTextArea[languageIndex];
         for (int i = 0; i < languageIndex; i++) {
