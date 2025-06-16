@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class McdalangToJavaScript extends OutputBaseListener {
     ParseTreeProperty<String> values = new ParseTreeProperty<>();
-    protected StringBuilder output; // Assumed inherited from OutputBaseListener
+    protected StringBuilder output;
 
     public McdalangToJavaScript() {
         output = new StringBuilder();
@@ -22,7 +22,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
     }
 
     private String translateType(String type) {
-        return "let"; // JavaScript is dynamically typed
+        return "let";
     }
 
     @Override
@@ -45,24 +45,22 @@ public class McdalangToJavaScript extends OutputBaseListener {
                 return;
             }
         }
-        values.put(ctx, ""); // Ensure empty statements don't break propagation
+        values.put(ctx, "");
     }
 
     @Override
     public void exitVarDecl(McdalangParser.VarDeclContext ctx) {
         String id = ctx.ID().getText();
+        boolean isConst = ctx.getText().contains("const"); // Adjust based on grammar
+        String declKeyword = isConst ? "const" : "let";
         String expr = ctx.expr() != null ? " = " + values.get(ctx.expr()) : "";
-        values.put(ctx, "let " + id + expr + ";\n");
+        values.put(ctx, declKeyword + " " + id + expr + ";\n");
     }
 
     @Override
     public void exitPrintStmt(McdalangParser.PrintStmtContext ctx) {
         String expr = values.get(ctx.expr());
-        if (expr != null) {
-            values.put(ctx, "console.log(" + expr + ");\n");
-        } else {
-            values.put(ctx, "console.log();\n"); // Handle empty print
-        }
+        values.put(ctx, "console.log(" + (expr != null ? expr : "") + ");\n");
     }
 
     @Override
@@ -72,20 +70,20 @@ public class McdalangToJavaScript extends OutputBaseListener {
         if (startToken.equals("tantque")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            result = "while (" + (cond != null ? cond : "true") + ") {\n" + body + "}\n";
+            result = "while (" + (cond != null ? cond : "true") + ") {\n" + body + "\n}\n";
         } else if (startToken.equals("faire")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            result = "do {\n" + body + "} while (" + (cond != null ? cond : "true") + ");\n";
+            result = "do {\n" + body + "\n} while (" + (cond != null ? cond : "true") + ");\n";
         } else { // "pour"
             String init = values.get(ctx.assignment(0));
             String cond = values.get(ctx.expr());
             String update = values.get(ctx.assignment(1));
-            init = init != null ? init.replace(";", "") : "";
+            init = init != null ? init.replace(";\n", "") : "";
             cond = cond != null ? cond : "true";
-            update = update != null ? update.replace(";", "") : "";
+            update = update != null ? update.replace(";\n", "").replace(" = i + 1", "++") : "";
             String body = indent(values.get(ctx.block()));
-            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + body + "}\n";
+            result = "for (" + init + "; " + cond + "; " + (update.isEmpty() ? "" : update) + ") {\n" + body + "\n}\n";
         }
         values.put(ctx, result);
     }
@@ -212,8 +210,9 @@ public class McdalangToJavaScript extends OutputBaseListener {
     @Override
     public void exitIncrStmt(McdalangParser.IncrStmtContext ctx) {
         String id = ctx.ID().getText();
-        String op = ctx.getChild(1).getText(); // either '++' or '--'
-        values.put(ctx, id + op + ";\n");
+        String op = ctx.getChild(1).getText();
+        String jsOp = op.equals("++") ? " += 1" : " -= 1";
+        values.put(ctx, id + jsOp + ";\n");
     }
 
     @Override
@@ -221,12 +220,11 @@ public class McdalangToJavaScript extends OutputBaseListener {
         StringBuilder sb = new StringBuilder();
         String lastId = ctx.ID(ctx.ID().size() - 1).getText();
         if (lastId.equals("afficher")) {
-            // Handle 'afficher' as console.log
             List<McdalangParser.ExprContext> args = ctx.expr();
             String argVal = args.isEmpty() ? "" : values.get(args.get(0));
             sb.append("console.log(").append(argVal != null ? argVal : "").append(")");
+            values.put(ctx, sb.toString() + ";\n");
         } else {
-            // Handle regular function calls
             for (int i = 0; i < ctx.ID().size() - 1; i++) {
                 sb.append(ctx.ID(i).getText()).append(".");
             }
@@ -240,8 +238,8 @@ public class McdalangToJavaScript extends OutputBaseListener {
                 sb.append(String.join(", ", argVals));
             }
             sb.append(")");
+            values.put(ctx, sb.toString());
         }
-        values.put(ctx, sb.toString());
     }
 
     @Override
@@ -262,7 +260,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
             params = String.join(", ", paramList);
         }
         String body = values.get(ctx.block());
-        String result = "function " + methodName + "(" + params + ") {\n" + indent(body != null ? body : "") + "}\n";
+        String result = "function " + methodName + "(" + params + ") {\n" + indent(body != null ? body : "") + "\n}\n";
         values.put(ctx, result);
     }
 
@@ -272,18 +270,20 @@ public class McdalangToJavaScript extends OutputBaseListener {
         String cond = values.get(ctx.expr(0));
         String block = values.get(ctx.block(0));
         sb.append("if (").append(cond != null ? cond : "false").append(") {\n");
-        sb.append(indent(block != null ? block : "")).append("}");
+        sb.append(indent(block != null ? block : "")).append("\n}");
         int exprIdx = 1;
         int blockIdx = 1;
-        while (ctx.getChildCount() > 2 * blockIdx + 1 && ctx.getChild(2 * blockIdx + 1).getText().equals("snsi")) {
-            cond = values.get(ctx.expr(exprIdx++));
-            block = values.get(ctx.block(blockIdx++));
-            sb.append(" else if (").append(cond != null ? cond : "false").append(") {\n");
-            sb.append(indent(block != null ? block : "")).append("}");
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if (ctx.getChild(i).getText().equals("snsi")) {
+                cond = values.get(ctx.expr(exprIdx++));
+                block = values.get(ctx.block(blockIdx++));
+                sb.append(" else if (").append(cond != null ? cond : "false").append(") {\n");
+                sb.append(indent(block != null ? block : "")).append("\n}");
+            }
         }
         if (ctx.block().size() > blockIdx) {
             block = values.get(ctx.block(blockIdx));
-            sb.append(" else {\n").append(indent(block != null ? block : "")).append("}");
+            sb.append(" else {\n").append(indent(block != null ? block : "")).append("\n}");
         }
         sb.append("\n");
         values.put(ctx, sb.toString());
