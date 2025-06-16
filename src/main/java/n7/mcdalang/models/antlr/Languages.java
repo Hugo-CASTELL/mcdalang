@@ -10,7 +10,8 @@ public enum Languages {
     GO,
     PYTHON,
     RUST,
-    POWERSHELL;
+    POWERSHELL,
+    JavaScript;
 
     @Override
     public String toString() {

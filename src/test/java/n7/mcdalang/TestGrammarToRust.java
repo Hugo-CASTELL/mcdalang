@@ -119,6 +119,136 @@ class TestGrammarToRust {
         }
     }
 
+    @Test
+    void mixedTest() {
+        List<Pair<String, String>> mixedSnippets = List.of(
+                Pair.of("""
+                var entier x = 0
+                tantque (x < 3) {
+                    afficher(x)
+                    x = x + 1
+                }
+                """,
+                        """
+                    let mut x: i32 = 0;
+                    while x < 3 {
+                        println!("{}", x);
+                        x = x + 1;
+                    }
+                    """),
+
+                Pair.of("""
+                var entier a = 2
+                var entier b = 3
+                si (a < b) {
+                    afficher("a est plus petit que b")
+                } sinon {
+                    afficher("a est plus grand ou egal a b")
+                }
+                """,
+                        """
+                        let mut a: i32 = 2;
+                        let mut b: i32 = 3;
+                        if a < b {
+                            println!("{}", "a est plus petit que b");
+                        } else {
+                            println!("{}", "a est plus grand ou egal a b");
+                        }
+                        """),
+
+                Pair.of("""
+                methode vide afficherNombre(entier n) {
+                    var entier i
+                    pour (i = 0; i < n; i = i + 1) {
+                        afficher("Nombre: " & i)
+                        }
+                }
+                """,
+                        """
+                fn afficherNombre(n: i32) {
+                    let mut i: i32 = 0;
+                    for i in 0..n {
+                         println!("{}", "Nombre: " + i);
+                }}
+                    """)
+        );
+
+        for (Pair<String, String> snippet : mixedSnippets) {
+            assertEquals(snippet.second.strip(), superTest(snippet.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void mathFunctionTests() {
+        List<Pair<String, String>> mathSnippets = List.of(
+                // Factorielle
+                Pair.of("""
+                methode entier factoriel(entier n) {
+                    var entier resultat = 1
+                    var entier i
+                    pour (i = 1; i <= n; i = i + 1) {
+                        resultat = resultat * i
+                    }
+                    return resultat
+                }
+                """,
+                        """
+                        fn factoriel(n: i32) -> i32 {
+                            let mut resultat: i32 = 1;
+                            let mut i: i32 = 0;
+                            for i in 1..=n {
+                                resultat = resultat * i;
+                            }
+                            return resultat;}
+                        """),
+
+                // PGCD (algorithme d'Euclide)
+                Pair.of("""
+                methode entier pgcd(entier a, entier b) {
+                    tantque (b != 0) {
+                        var entier temp = b
+                        b = a % b
+                        a = temp
+                    }
+                    return a
+}
+                """,
+                        """
+                        fn pgcd(a: i32, b: i32) -> i32 {
+                            while b != 0 {
+                                let mut temp: i32 = b;
+                                b = a % b;
+                                a = temp;
+                            }
+                            return a;}
+                        """),
+
+                // Fibonacci
+                Pair.of("""
+                methode entier fibonacci(entier n) {
+                    si (n <= 1) {
+                        return n
+                    }sinon{
+                    return fibonacci(n - 1) + fibonacci(n - 2)
+                    }
+                }
+                """,
+                        """
+                        fn fibonacci(n: i32) -> i32 {
+                            if n <= 1 {
+                                return n;
+                            } else {
+                                return fibonacci(n - 1) + fibonacci(n - 2);
+                            }}
+                        """)
+        );
+
+        for (Pair<String, String> snippet : mathSnippets) {
+            assertEquals(snippet.second.strip(), superTest(snippet.first + "\n").strip());
+        }
+    }
+
+
     private static String superTest(String input) {
         return Translate.translateToOther(input, Languages.RUST); // Attention : s'assurer que Languages.RUST est bien défini
     }

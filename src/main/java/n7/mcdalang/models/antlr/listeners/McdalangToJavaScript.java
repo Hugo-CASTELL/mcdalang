@@ -5,12 +5,11 @@ import org.antlr.v4.runtime.tree.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class McdalangToGo extends OutputBaseListener {
+public class McdalangToJavaScript extends OutputBaseListener {
     ParseTreeProperty<String> values = new ParseTreeProperty<>();
     protected StringBuilder output; // Assumed inherited from OutputBaseListener
-    private boolean needsFmtImport = false; // Track if fmt is needed for fmt.Println
 
-    public McdalangToGo() {
+    public McdalangToJavaScript() {
         output = new StringBuilder();
     }
 
@@ -23,25 +22,12 @@ public class McdalangToGo extends OutputBaseListener {
     }
 
     private String translateType(String type) {
-        return switch (type) {
-            case "entier" -> "int";
-            case "flottant" -> "float64";
-            case "chaine" -> "string";
-            case "bool" -> "bool";
-            case "char" -> "rune";
-            case "vide" -> "";
-            case "tableau" -> "[]int";
-            default -> "interface{}";
-        };
+        return "let"; // JavaScript is dynamically typed
     }
 
     @Override
     public void exitProg(McdalangParser.ProgContext ctx) {
         StringBuilder sb = new StringBuilder();
-        sb.append("package main\n\n");
-        if (needsFmtImport) {
-            sb.append("import \"fmt\"\n\n");
-        }
         for (var stmt : ctx.statement()) {
             String val = values.get(stmt);
             if (val != null) sb.append(val);
@@ -64,23 +50,19 @@ public class McdalangToGo extends OutputBaseListener {
 
     @Override
     public void exitVarDecl(McdalangParser.VarDeclContext ctx) {
-        String type = translateType(ctx.type().getText());
         String id = ctx.ID().getText();
-        String expr = ctx.expr() != null ? values.get(ctx.expr()) : null;
-        if (expr != null) {
-            // Use short declaration for initialized variables
-            values.put(ctx, id + " := " + expr + "\n");
-        } else {
-            // Use var for uninitialized variables
-            values.put(ctx, "var " + id + " " + type + "\n");
-        }
+        String expr = ctx.expr() != null ? " = " + values.get(ctx.expr()) : "";
+        values.put(ctx, "let " + id + expr + ";\n");
     }
 
     @Override
     public void exitPrintStmt(McdalangParser.PrintStmtContext ctx) {
         String expr = values.get(ctx.expr());
-        needsFmtImport = true;
-        values.put(ctx, "fmt.Println(" + (expr != null ? expr : "") + ")\n");
+        if (expr != null) {
+            values.put(ctx, "console.log(" + expr + ");\n");
+        } else {
+            values.put(ctx, "console.log();\n"); // Handle empty print
+        }
     }
 
     @Override
@@ -90,12 +72,11 @@ public class McdalangToGo extends OutputBaseListener {
         if (startToken.equals("tantque")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            result = "for " + (cond != null ? cond : "true") + " {\n" + body + "}\n";
+            result = "while (" + (cond != null ? cond : "true") + ") {\n" + body + "}\n";
         } else if (startToken.equals("faire")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            // Go doesn't have do-while; use for with post-check
-            result = "for {\n" + body + "    if !" + (cond != null ? cond : "true") + " { break }\n}\n";
+            result = "do {\n" + body + "} while (" + (cond != null ? cond : "true") + ");\n";
         } else { // "pour"
             String init = values.get(ctx.assignment(0));
             String cond = values.get(ctx.expr());
@@ -104,7 +85,7 @@ public class McdalangToGo extends OutputBaseListener {
             cond = cond != null ? cond : "true";
             update = update != null ? update.replace(";", "") : "";
             String body = indent(values.get(ctx.block()));
-            result = "for " + init + "; " + cond + "; " + update + " {\n" + body + "}\n";
+            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + body + "}\n";
         }
         values.put(ctx, result);
     }
@@ -210,8 +191,7 @@ public class McdalangToGo extends OutputBaseListener {
             String left = values.get(ctx.atom(0));
             String right = values.get(ctx.atom(1));
             if (left != null && right != null) {
-                needsFmtImport = true; // math.Pow requires import
-                values.put(ctx, "math.Pow(" + left + ", " + right + ")");
+                values.put(ctx, "Math.pow(" + left + ", " + right + ")");
             } else {
                 values.put(ctx, left != null ? left : right != null ? right : "");
             }
@@ -223,17 +203,17 @@ public class McdalangToGo extends OutputBaseListener {
         String id = ctx.ID().getText();
         String expr = values.get(ctx.expr());
         if (expr != null) {
-            values.put(ctx, id + " = " + expr + "\n");
+            values.put(ctx, id + " = " + expr + ";\n");
         } else {
-            values.put(ctx, id + " = nil\n");
+            values.put(ctx, id + " = undefined;\n");
         }
     }
 
     @Override
     public void exitIncrStmt(McdalangParser.IncrStmtContext ctx) {
         String id = ctx.ID().getText();
-        String op = ctx.getChild(1).getText();
-        values.put(ctx, id + op + "\n");
+        String op = ctx.getChild(1).getText(); // either '++' or '--'
+        values.put(ctx, id + op + ";\n");
     }
 
     @Override
@@ -241,11 +221,12 @@ public class McdalangToGo extends OutputBaseListener {
         StringBuilder sb = new StringBuilder();
         String lastId = ctx.ID(ctx.ID().size() - 1).getText();
         if (lastId.equals("afficher")) {
-            needsFmtImport = true;
+            // Handle 'afficher' as console.log
             List<McdalangParser.ExprContext> args = ctx.expr();
             String argVal = args.isEmpty() ? "" : values.get(args.get(0));
-            sb.append("fmt.Println(").append(argVal != null ? argVal : "").append(")");
+            sb.append("console.log(").append(argVal != null ? argVal : "").append(")");
         } else {
+            // Handle regular function calls
             for (int i = 0; i < ctx.ID().size() - 1; i++) {
                 sb.append(ctx.ID(i).getText()).append(".");
             }
@@ -260,35 +241,28 @@ public class McdalangToGo extends OutputBaseListener {
             }
             sb.append(")");
         }
-        values.put(ctx, sb.toString() + "\n");
+        values.put(ctx, sb.toString());
     }
 
     @Override
     public void exitReturnStmt(McdalangParser.ReturnStmtContext ctx) {
         String expr = ctx.expr() != null ? values.get(ctx.expr()) : "";
-        values.put(ctx, "return " + expr + "\n");
+        values.put(ctx, "return " + expr + ";\n");
     }
 
     @Override
     public void exitMethodDecl(McdalangParser.MethodDeclContext ctx) {
         String methodName = ctx.ID().getText();
-        String returnType = translateType(ctx.type().getText());
         String params = "";
         if (ctx.paramList() != null) {
             List<String> paramList = new ArrayList<>();
             for (int i = 0; i < ctx.paramList().ID().size(); i++) {
-                String paramName = ctx.paramList().ID(i).getText();
-                String paramType = translateType(ctx.paramList().type(i).getText());
-                paramList.add(paramName + " " + paramType);
+                paramList.add(ctx.paramList().ID(i).getText());
             }
             params = String.join(", ", paramList);
         }
         String body = values.get(ctx.block());
-        String result = "func " + methodName + "(" + params + ")";
-        if (!returnType.isEmpty()) {
-            result += " " + returnType;
-        }
-        result += " {\n" + indent(body != null ? body : "") + "}\n";
+        String result = "function " + methodName + "(" + params + ") {\n" + indent(body != null ? body : "") + "}\n";
         values.put(ctx, result);
     }
 
@@ -297,14 +271,14 @@ public class McdalangToGo extends OutputBaseListener {
         StringBuilder sb = new StringBuilder();
         String cond = values.get(ctx.expr(0));
         String block = values.get(ctx.block(0));
-        sb.append("if ").append(cond != null ? cond : "false").append(" {\n");
+        sb.append("if (").append(cond != null ? cond : "false").append(") {\n");
         sb.append(indent(block != null ? block : "")).append("}");
         int exprIdx = 1;
         int blockIdx = 1;
         while (ctx.getChildCount() > 2 * blockIdx + 1 && ctx.getChild(2 * blockIdx + 1).getText().equals("snsi")) {
             cond = values.get(ctx.expr(exprIdx++));
             block = values.get(ctx.block(blockIdx++));
-            sb.append(" else if ").append(cond != null ? cond : "false").append(" {\n");
+            sb.append(" else if (").append(cond != null ? cond : "false").append(") {\n");
             sb.append(indent(block != null ? block : "")).append("}");
         }
         if (ctx.block().size() > blockIdx) {

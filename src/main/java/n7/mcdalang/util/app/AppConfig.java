@@ -19,8 +19,8 @@ public final class AppConfig {
     public static final URL MCDABOT_HEAD_PATH = Objects.requireNonNull(AppConfig.class.getResource("/images/mcdala_tete_grand.png"));
 
     public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
-    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST);
-    public static final Themes DEFAULT_THEME = Themes.LIGHT;
+    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST, Languages.POWERSHELL, Languages.JAVA, Languages.JavaScript);
+    public static final Themes DEFAULT_THEME = Themes.INTELLIJ;
     public static final boolean DEFAULT_AUTORUN_MODE = false;
 
     private AppConfig() {}

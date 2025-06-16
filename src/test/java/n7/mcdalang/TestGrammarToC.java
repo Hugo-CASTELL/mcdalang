@@ -122,6 +122,129 @@ class TestGrammarToC {
         }
     }
 
+    @Test
+    void mixedTest() {
+        List<Pair<String, String>> mixedSnippets = List.of(
+                Pair.of("""
+                    var entier x = 0
+                    tantque (x < 3) {
+                        afficher(x)
+                        x = x + 1
+                    }
+                    """,
+                        """
+                    int x = 0;
+                    while (x < 3) {
+                        printf("%s\\n", x);
+                        x = x + 1;}
+                    """),
+
+                Pair.of("""
+                    var entier a = 2
+                    var entier b = 3
+                    si (a < b) {
+                        afficher("a est plus petit que b")
+                    } sinon {
+                        afficher("a est plus grand ou egal a b")
+                    }
+                    """,
+                        """
+                        int a = 2;
+                        int b = 3;
+                        if (a < b) {
+                            printf("%s\\n", "a est plus petit que b");} else {
+                            printf("%s\\n", "a est plus grand ou egal a b");}
+                        """),
+
+                Pair.of("""
+                    methode vide afficherNombre(entier n) {
+                        var entier i
+                        pour (i = 0; i < n; i = i + 1) {
+                            afficher("Nombre: " & i)
+                            }
+                    }
+                    """,
+                        """
+                    void afficherNombre(int n) {
+                        int i;
+                        for (i = 0; i < n; i = i + 1) {
+                            printf("%s\\n", "Nombre: " + i);}}
+                        """)
+        );
+
+        for (Pair<String, String> snippet : mixedSnippets) {
+            assertEquals(snippet.second.strip(), superTest(snippet.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void mathFunctionTests() {
+        List<Pair<String, String>> mathSnippets = List.of(
+                // Factorielle
+                Pair.of("""
+                    methode entier factoriel(entier n) {
+                        var entier resultat = 1
+                        var entier i
+                        pour (i = 1; i <= n; i = i + 1) {
+                            resultat = resultat * i
+                        }
+                        return resultat
+                    }
+                    """,
+                        """
+                        int factoriel(int n) {
+                            int resultat = 1;
+                            int i;
+                            for (i = 1; i <= n; i = i + 1) {
+                                resultat = resultat * i;}
+                            return resultat;}
+                        """),
+
+                // PGCD (algorithme d'Euclide)
+                Pair.of("""
+                    methode entier pgcd(entier a, entier b) {
+                        tantque (b != 0) {
+                            var entier temp = b
+                            b = a % b
+                            a = temp
+                        }
+                        return a
+                    }
+                    """,
+                        """
+                        int pgcd(int a, int b) {
+                            while (b != 0) {
+                                int temp = b;
+                                b = a % b;a = temp;}
+                            return a;}
+                        
+                        """),
+
+                // Fibonacci
+                Pair.of("""
+                    methode entier fibonacci(entier n) {
+                        si (n <= 1) {
+                            return n
+                        }
+                        return fibonacci(n - 1) + fibonacci(n - 2)
+                    }
+                    """,
+                        """
+                        int fibonacci(int n) {
+                            if (n <= 1) {
+                                return n;}
+                            return fibonacci(n - 1) + fibonacci(n - 2);}
+                        
+                        """)
+        );
+
+        for (Pair<String, String> snippet : mathSnippets) {
+            assertEquals(snippet.second.strip(), superTest(snippet.first + "\n").strip());
+        }
+    }
+
+
+
     private static String superTest(String input) {
         return Translate.translateToOther(input, Languages.C).replace("#include <stdio.h>\n", "");
     }
