@@ -3,7 +3,7 @@ package n7.mcdalang.models.antlr;
 import java.io.Serializable;
 
 public enum Languages implements Serializable {
-    MACDALANG,
+    MCDALANG,
     JAVA,
     ADA,
     ASSEMBLY,
