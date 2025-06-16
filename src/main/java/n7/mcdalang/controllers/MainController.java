@@ -1,7 +1,7 @@
 package n7.mcdalang.controllers;
 
-import n7.mcdalang.input.*;
-import n7.mcdalang.input.mcdabot.McdaBotActionListener;
+import n7.mcdalang.listeners.*;
+import n7.mcdalang.listeners.mcdabot.McdaBotActionListener;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;

@@ -1,6 +1,6 @@
 package n7.mcdalang.views.components.mcdabot;
 
-import n7.mcdalang.input.CodeKeyListener;
+import n7.mcdalang.listeners.CodeKeyListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.View;
 import n7.mcdalang.views.components.util.CodeTextArea;

@@ -1,4 +1,4 @@
-package n7.mcdalang.input;
+package n7.mcdalang.listeners;
 
 import n7.mcdalang.util.GlobalInstances;
 
@@ -6,6 +6,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class MainFrameWindowListener implements WindowListener {
+
+    //#region Listener Methods
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -41,4 +43,7 @@ public class MainFrameWindowListener implements WindowListener {
     public void windowDeactivated(WindowEvent e) {
         // No action needed here
     }
+
+    //#endregion Listener Methods
+
 }

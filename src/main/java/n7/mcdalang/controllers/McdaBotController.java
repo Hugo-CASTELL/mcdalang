@@ -1,8 +1,8 @@
 package n7.mcdalang.controllers;
 
 import com.ibm.icu.impl.Pair;
-import n7.mcdalang.input.mcdabot.ExampleTabListener;
-import n7.mcdalang.input.mcdabot.LeaveListener;
+import n7.mcdalang.listeners.mcdabot.ExampleTabListener;
+import n7.mcdalang.listeners.mcdabot.LeaveListener;
 import n7.mcdalang.views.McdaBotMainView;
 import n7.mcdalang.views.components.mcdabot.ExampleTab;
 import n7.mcdalang.views.components.mcdabot.examples.*;

@@ -1,6 +1,6 @@
 package n7.mcdalang.views.components.mcdabot;
 
-import n7.mcdalang.input.mcdabot.ExampleTabListener;
+import n7.mcdalang.listeners.mcdabot.ExampleTabListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.View;
 import n7.mcdalang.views.components.util.RoundButton;

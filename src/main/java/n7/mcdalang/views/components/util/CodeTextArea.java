@@ -1,6 +1,6 @@
 package n7.mcdalang.views.components.util;
 
-import n7.mcdalang.input.CodeKeyListener;
+import n7.mcdalang.listeners.CodeKeyListener;
 import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.util.app.AppConfig;
 import net.miginfocom.swing.MigLayout;
