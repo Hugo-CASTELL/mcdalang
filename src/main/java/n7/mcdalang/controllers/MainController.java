@@ -8,7 +8,6 @@ import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.main.CodeTextArea;
 
 import java.awt.*;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,8 +35,8 @@ public class MainController extends Controller<MainView> {
     @Override
     protected void updateView() {
         // No specific updates needed for the main view at this time.
-        setFontSize(GlobalInstances.getAppSettings().getFontSize());
         setFont(GlobalInstances.getAppSettings().getFont());
+        setFontSize(GlobalInstances.getAppSettings().getFontSize());
     }
 
     @Override

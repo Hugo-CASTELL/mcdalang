@@ -28,8 +28,8 @@ public class OptionActionListener implements ActionListener {
 
         if (popupResult == JOptionPane.OK_OPTION) {
             mainController.enableAutoRun(optionsPopupController.hasSelectedAutoRun());
-            mainController.setFontSize(optionsPopupController.selectFontSize());
             mainController.setFont(optionsPopupController.selectFont());
+            mainController.setFontSize(optionsPopupController.selectFontSize());
         }
     }
 }
