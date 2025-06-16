@@ -12,7 +12,8 @@ public enum Languages implements Serializable {
     GO,
     PYTHON,
     RUST,
-    POWERSHELL;
+    POWERSHELL,
+    JavaScript;
 
     @Override
     public String toString() {

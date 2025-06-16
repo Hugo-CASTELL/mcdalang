@@ -10,7 +10,6 @@ public class McdalangToC extends OutputBaseListener {
 
     public McdalangToC() {
         output = new StringBuilder();
-        requiredHeaders.add("#include <stdio.h>\n\n");
     }
 
     ParseTreeProperty<String> values = new ParseTreeProperty<>();
@@ -45,6 +44,10 @@ public class McdalangToC extends OutputBaseListener {
 
     @Override
     public void exitStatement(McdalangParser.StatementContext ctx) {
+        if (ctx.NEWLINE() != null && ctx.getChildCount() == 1) {
+            values.put(ctx, "\n");
+            return;
+        }
         for (int i = 0; i < ctx.getChildCount(); i++) {
             String val = values.get(ctx.getChild(i));
             if (val != null) {
@@ -114,7 +117,7 @@ public class McdalangToC extends OutputBaseListener {
         }
 
         String body = values.get(ctx.block());
-        values.put(ctx, returnType + " " + methodName + "(" + params + ") {\n" + indent(body) + "}\n");
+        values.put(ctx, returnType + " " + methodName + "(" + params + ") {\n" + indent(body) + "\n}");
     }
 
     @Override
@@ -131,20 +134,19 @@ public class McdalangToC extends OutputBaseListener {
         StringBuilder sb = new StringBuilder();
         if (ctx.getText().contains("snsi")) {
             sb.append("if (").append(values.get(ctx.expr(0))).append(") {\n")
-                    .append(indent(values.get(ctx.block(0)))).append("} else if (")
+                    .append(indent(values.get(ctx.block(0)))).append("\n} else if (")
                     .append(values.get(ctx.expr(1))).append(") {\n")
-                    .append(indent(values.get(ctx.block(1)))).append("}");
+                    .append(indent(values.get(ctx.block(1)))).append("\n}");
             if (ctx.block().size() == 3) {
                 sb.append(" else {\n").append(indent(values.get(ctx.block(2)))).append("}");
             }
         } else {
             sb.append("if (").append(values.get(ctx.expr(0))).append(") {\n")
-                    .append(indent(values.get(ctx.block(0)))).append("}");
+                    .append(indent(values.get(ctx.block(0)))).append("\n}");
             if (ctx.block().size() == 2) {
-                sb.append(" else {\n").append(indent(values.get(ctx.block(1)))).append("}");
+                sb.append(" else {\n").append(indent(values.get(ctx.block(1)))).append("\n}");
             }
         }
-        sb.append("\n");
         values.put(ctx, sb.toString());
     }
 
@@ -154,17 +156,17 @@ public class McdalangToC extends OutputBaseListener {
         if (ctx.getStart().getText().equals("tantque")) {
             String cond = values.get(ctx.expr());
             String body = values.get(ctx.block());
-            result = "while (" + cond + ") {\n" + indent(body) + "}\n";
+            result = "while (" + cond + ") {\n" + indent(body) + "}";
         } else if (ctx.getStart().getText().equals("faire")) {
             String body = values.get(ctx.block());
             String cond = values.get(ctx.expr());
-            result = "do {\n" + indent(body) + "} while (" + cond + ");\n";
+            result = "do {\n" + indent(body) + "\n} while (" + cond + ");";
         } else {
             String init = values.get(ctx.assignment(0)).replace(";", "");
             String cond = values.get(ctx.expr()).replace(";", "");
             String update = values.get(ctx.assignment(1)).replace(";", "");
             String body = values.get(ctx.block());
-            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + indent(body) + "}\n";
+            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + indent(body) + "}";
         }
         values.put(ctx, result);
     }
