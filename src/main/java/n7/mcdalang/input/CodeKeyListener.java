@@ -28,6 +28,16 @@ public class CodeKeyListener implements KeyListener {
     public void keyTyped(KeyEvent e) {
         SwingUtilities.invokeLater(() -> {
             mainController.triggerAutoRun();
+            switch (e.getKeyChar()) {
+                case '{' -> codeTextArea.completePreviousCharWith('}');
+                case '[' -> codeTextArea.completePreviousCharWith(']');
+                case '(' -> codeTextArea.completePreviousCharWith(')');
+                case '\'' -> codeTextArea.completePreviousCharWith('\'');
+                case '\"' -> codeTextArea.completePreviousCharWith('\"');
+                case '\t' -> codeTextArea.addTab();
+                case '\n' -> codeTextArea.addNewLine();
+                default -> { /* No action for other characters */ }
+            }
             codeTextArea.updateLineNumbers();
         });
     }
@@ -41,6 +51,7 @@ public class CodeKeyListener implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
+        // No specific action needed on key pressed
     }
 
     /**
@@ -52,5 +63,6 @@ public class CodeKeyListener implements KeyListener {
      */
     @Override
     public void keyReleased(KeyEvent e) {
+        // No specific action needed on key released
     }
 }

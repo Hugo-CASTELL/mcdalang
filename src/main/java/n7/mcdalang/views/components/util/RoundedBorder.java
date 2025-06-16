@@ -1,9 +1,8 @@
-package n7.mcdalang.views.components.mcdabot;
+package n7.mcdalang.views.components.util;
 
 import java.awt.*;
 
-// Classe pour les bordures arrondies
-public class RoundedBorder implements javax.swing.border.Border {
+public class RoundedBorder {
     private int radius;
 
     RoundedBorder(int radius) {

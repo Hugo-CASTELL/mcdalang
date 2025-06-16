@@ -5,7 +5,13 @@ import n7.mcdalang.util.app.AppSettings;
 
 public final class GlobalInstances {
 
+    //#region Prevent instantiation
+
     private GlobalInstances() {}
+
+    //#endregion Prevent instantiation
+
+    //#region Singleton Instances Getters
 
     public static AppSettings getAppSettings() {
         return AppSettingsSingletonHolder.INSTANCE;
@@ -15,6 +21,10 @@ public final class GlobalInstances {
         return AppManagerSingletonHolder.INSTANCE;
     }
 
+    //#endregion Singleton Instances Getters
+
+    //#region Singleton Instances Holders
+
     private static final class AppSettingsSingletonHolder {
         private static final AppSettings INSTANCE = new AppSettings();
     }
@@ -22,4 +32,6 @@ public final class GlobalInstances {
     private static final class AppManagerSingletonHolder {
         private static final AppManager INSTANCE = new AppManager();
     }
+
+    //#endregion Singleton Instances Holders
 }
