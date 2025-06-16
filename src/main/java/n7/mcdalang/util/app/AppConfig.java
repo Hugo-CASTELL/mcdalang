@@ -11,6 +11,7 @@ import java.util.Objects;
 public final class AppConfig {
 
     public static final String APP_TITLE = "McDaLang";
+    public static final String APP_SETTINGS_FILE = "mcdalang.properties";
 
     public static final URL SPLASH_GIF = Objects.requireNonNull(AppConfig.class.getResource("/images/splash.gif"));
     public static final URL SPLASH_AUDIO = Objects.requireNonNull(AppConfig.class.getResource("/audio/splash.wav"));
