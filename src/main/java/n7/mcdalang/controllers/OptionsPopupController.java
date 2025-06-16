@@ -1,7 +1,5 @@
 package n7.mcdalang.controllers;
 
-import n7.mcdalang.input.ExportActionListener;
-import n7.mcdalang.input.ImportActionListener;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
@@ -12,7 +10,6 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.Objects;
 
 public class OptionsPopupController extends Controller<OptionsPopupView> {
 
@@ -47,11 +44,12 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
 
     @Override
     protected void registerListeners() {
-        //view.getExportButton().addActionListener(new ExportActionListener());
-        //view.getImportButton().addActionListener(new ImportActionListener(this));
+        // No specific listeners to register for the options popup
     }
 
     //#endregion Implemented Methods
+
+    //#region Public Methods
 
     public boolean hasSelectedAutoRun() {
         return view.getAutoRunCheckBox().isSelected();
@@ -80,4 +78,7 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
     public void triggerChangeForOriginCode(String code){
         this.mainController.triggerChangeForOriginCode(code);
     }
+
+    //#endregion Public Methods
+
 }

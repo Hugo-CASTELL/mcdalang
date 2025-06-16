@@ -11,12 +11,22 @@ import java.util.List;
 
 public class McdaBotController extends Controller<McdaBotMainView> {
 
-    private MainController mainController;
+    //#region Fields
+
+    private final MainController mainController;
+
+    //#region Fields
+
+    //#region Constructor
 
     public McdaBotController(McdaBotMainView view, MainController mainController) {
         super(view);
         this.mainController = mainController;
     }
+
+    //#endregion Constructor
+
+    //#region Overriden Methods
 
     @Override
     protected void updateView() {
@@ -48,7 +58,22 @@ public class McdaBotController extends Controller<McdaBotMainView> {
         view.getMenuTab().getBtnLeave().addActionListener(new LeaveListener(mainController::show));
     }
 
+    //#endregion Overriden Methods
+
+    //#region Public Methods
+
     public void triggerShow(ExampleTab exampleTab) {
-        view.show(exampleTab);
+        changeTab(exampleTab);
     }
+
+    //#endregion Public Methods
+
+    //#region Private Methods
+
+    private void changeTab(ExampleTab tab) {
+        view.show(tab);
+    }
+
+    //#endregion Private Methods
+
 }
