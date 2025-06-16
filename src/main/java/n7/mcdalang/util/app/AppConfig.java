@@ -14,6 +14,7 @@ public final class AppConfig {
 
     public static final String APP_TITLE = "McDaLang";
     public static final String APP_SETTINGS_FILE = "mcdalang.properties";
+    public static final URL MCDA_ICON = getURL("/images/mcdala.png");
 
     public static final URL SPLASH_GIF = getURL("/images/splash.gif");
     public static final URL SPLASH_AUDIO = getURL("/audio/splash.wav");
@@ -35,7 +36,7 @@ public final class AppConfig {
 
     public static final URL MCDABOT_HEAD_PATH = getURL("/images/mcdala_tete_grand.png");
 
-    public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
+    public static final Dimension DEFAULT_SIZE = new Dimension(1080, 720);
     public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST);
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
     public static final boolean DEFAULT_AUTORUN_MODE = false;

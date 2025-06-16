@@ -21,9 +21,6 @@ public class OptionsPopupView extends View {
     private ButtonGroup fontGroup;
     private List<JRadioButton> fontRadioButtons;
 
-    private JButton exportButton;
-    private JButton importButton;
-
     public OptionsPopupView() {
         setName("Options");
         setPopupOptions(JOptionPane.OK_CANCEL_OPTION);
@@ -32,11 +29,6 @@ public class OptionsPopupView extends View {
         autoRunCheckBox = new JCheckBox("AutoRun");
         add(autoRunCheckBox, "cell " + (2) + " 0");
 
-        exportButton = new JButton("Export");
-        add(exportButton, "cell 0 1");
-
-        importButton = new JButton("Import");
-        add(importButton, "cell 2 1");
         fontSizeLabel = new JLabel("Font Size :");
 
         add(fontSizeLabel, "cell 0 0, alignx right");
@@ -61,14 +53,6 @@ public class OptionsPopupView extends View {
 
     public JCheckBox getAutoRunCheckBox() {
         return autoRunCheckBox;
-    }
-
-    public JButton getExportButton() {
-        return exportButton;
-    }
-
-    public JButton getImportButton() {
-        return importButton;
     }
 
     public JSpinner getFontSizeSpinner() {

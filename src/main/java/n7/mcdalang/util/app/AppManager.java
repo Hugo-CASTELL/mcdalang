@@ -8,9 +8,12 @@ import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.SplashView;
 import n7.mcdalang.views.View;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -80,6 +83,12 @@ public class AppManager {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         mainFrame.addWindowListener(new MainFrameWindowListener());
+        // Icon application
+        try {
+            mainFrame.setIconImage(ImageIO.read(AppConfig.MCDA_ICON));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void schedule(Runnable runnable, int delay) {
