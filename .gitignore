@@ -1,3 +1,6 @@
+# Runtime properties
+mcdalang.properties
+
 # Compiled class file
 *.class
 

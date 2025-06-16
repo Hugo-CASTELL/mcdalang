@@ -1,23 +1,33 @@
 package n7.mcdalang.util.app;
 
-import n7.mcdalang.controllers.Controller;
 import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.controllers.SplashController;
+import n7.mcdalang.input.MainFrameWindowListener;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.SplashView;
 import n7.mcdalang.views.View;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class AppManager {
 
+    //#region Attribute
+
     private JFrame mainFrame;
 
-    public void startApp() {
+    //#endregion Attribute
+
+    //#region Public Methods
+
+    public void onStartUp() {
         // Prepare the main frame
         createMainFrame();
 
@@ -28,27 +38,22 @@ public class AppManager {
         schedule(() -> new MainController(new MainView()).show(), AppConfig.SPLASH_DURATION_MS);
 
         // Initialize default settings
-        GlobalInstances.getAppSettings().initializeDefaultSettings();
+        if(new File(AppConfig.APP_SETTINGS_FILE).exists()) {
+            GlobalInstances.getAppSettings().loadFromFile();
+        } else {
+            GlobalInstances.getAppSettings().initializeDefaultSettings();
+        }
     }
 
-    private void createMainFrame() {
-        mainFrame = new JFrame(AppConfig.APP_TITLE);
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        mainFrame.setVisible(true);
-        mainFrame.setSize(AppConfig.DEFAULT_SIZE);
-        mainFrame.setLocationRelativeTo(null);
-    }
+    public void onShutDown() {
+        // Save settings to file before exiting
+        GlobalInstances.getAppSettings().saveToFile();
 
-    private void schedule(Runnable runnable, int delay) {
-        new Timer().schedule(
-            new TimerTask() {
-                @Override
-                public void run() {
-                    runnable.run();
-                }
-            },
-            delay
-        );
+        // Close the main frame
+        mainFrame.dispose();
+
+        // Log the shutdown event
+        System.exit(0);
     }
 
     public void display(View view) {
@@ -66,4 +71,37 @@ public class AppManager {
     public View getMainFrameCurrentView() {
         return (View) mainFrame.getContentPane().getComponent(0);
     }
+
+    //#endregion Public Methods
+
+    //#region Private Methods
+
+    private void createMainFrame() {
+        mainFrame = new JFrame(AppConfig.APP_TITLE);
+        mainFrame.setVisible(true);
+        mainFrame.setSize(AppConfig.DEFAULT_SIZE);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        mainFrame.addWindowListener(new MainFrameWindowListener());
+        // Icon application
+        try {
+            mainFrame.setIconImage(ImageIO.read(AppConfig.MCDA_ICON));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void schedule(Runnable runnable, int delay) {
+        new Timer().schedule(
+            new TimerTask() {
+                @Override
+                public void run() {
+                    runnable.run();
+                }
+            },
+            delay
+        );
+    }
+
+    //#endregion Private Methods
 }

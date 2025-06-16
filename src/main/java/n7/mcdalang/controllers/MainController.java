@@ -3,6 +3,8 @@ package n7.mcdalang.controllers;
 import n7.mcdalang.input.*;
 import n7.mcdalang.input.mcdabot.mcdaBotActionListener;
 import n7.mcdalang.util.GlobalInstances;
+import n7.mcdalang.util.app.AppConfig;
+import n7.mcdalang.util.font.Fonts;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.main.CodeTextArea;
 
@@ -34,6 +36,8 @@ public class MainController extends Controller<MainView> {
     @Override
     protected void updateView() {
         // No specific updates needed for the main view at this time.
+        setFont(GlobalInstances.getAppSettings().getFont());
+        setFontSize(GlobalInstances.getAppSettings().getFontSize());
     }
 
     @Override
@@ -43,6 +47,8 @@ public class MainController extends Controller<MainView> {
         view.getOptionsButton().addActionListener(new OptionActionListener(this));
         view.getMcdaBotButton().addActionListener(new mcdaBotActionListener(this));
         view.getOriginTextArea().registerListener(new CodeKeyListener(this, view.getOriginTextArea()));
+        view.getImportButton().addActionListener(new ImportActionListener(this));
+        view.getExportButton().addActionListener(new ExportActionListener());
     }
 
     //#endregion Implemented Methods
@@ -85,5 +91,21 @@ public class MainController extends Controller<MainView> {
     public void enableAutoRun(boolean enabled) {
         GlobalInstances.getAppSettings().setAutoRun(enabled);
         this.autoRun();
+    }
+
+    public void setFontSize(int fontSize) {
+        GlobalInstances.getAppSettings().setFontSize(fontSize);
+        for (CodeTextArea textArea : view.getCodeTextAreas()) {
+            textArea.setSizeFont(fontSize);
+        }
+        view.getOriginTextArea().setSizeFont(fontSize);
+    }
+
+    public void setFont(Fonts font) {
+        GlobalInstances.getAppSettings().setFont(font);
+        for (CodeTextArea textArea : view.getCodeTextAreas()) {
+            textArea.setFont(textArea.createFont(AppConfig.FONT_ADAPTERS.get(font)));
+        }
+        view.getOriginTextArea().setFont(view.getOriginTextArea().createFont(AppConfig.FONT_ADAPTERS.get(font)));
     }
 }
