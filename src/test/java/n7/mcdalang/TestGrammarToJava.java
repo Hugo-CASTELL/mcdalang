@@ -1,8 +1,17 @@
 package n7.mcdalang;
 
 import com.ibm.icu.impl.Pair;
+import n7.mcdalang.models.antlr.FetchAntlrError;
 import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.models.antlr.Translate;
+import n7.mcdalang.models.antlr.generated.McdalangLexer;
+import n7.mcdalang.models.antlr.generated.McdalangParser;
+import n7.mcdalang.models.antlr.listeners.*;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -117,7 +126,16 @@ class TestGrammarToJava {
         }
     }
 
-    private static String superTest(String input) {
-        return Translate.translateToOther(input, Languages.JAVA).strip();
+    private static String superTest(String inputText) {
+        CharStream input = CharStreams.fromString(inputText);
+        McdalangLexer lexer = new McdalangLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        McdalangParser parser = new McdalangParser(tokens);
+        parser.addErrorListener(new FetchAntlrError());
+        ParseTree tree = parser.prog();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        OutputBaseListener translator = new McdalangToJava(false);
+        walker.walk(translator, tree);
+        return translator.getCode().strip();
     }
 }
