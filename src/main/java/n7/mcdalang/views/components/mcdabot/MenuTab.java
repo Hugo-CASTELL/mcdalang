@@ -4,6 +4,7 @@ import n7.mcdalang.input.mcdabot.ExampleTabListener;
 import n7.mcdalang.input.mcdabot.LeaveListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.View;
+import n7.mcdalang.views.components.mcdabot.example.*;
 import n7.mcdalang.views.components.util.RoundButton;
 import net.miginfocom.swing.MigLayout;
 
@@ -21,8 +22,8 @@ public class MenuTab extends View {
 
         // Création de l'en-tête
         PanelDialog headerPanel = new PanelDialog(
-                "Bonjour ! Je suis Mc-Dala, votre guide pour vous apprendre le mcdalang." +
-                        "Sélectionnez une option ci-dessous pour en apprendre plus sur la syntaxe.",
+                "Bonjour ! Je suis Mc-Dala, votre guide pour vous apprendre le McDalang. " +
+                        "Veuillez sélectionner une option ci-dessous pour en apprendre davantage sur la syntaxe.",
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
@@ -32,7 +33,7 @@ public class MenuTab extends View {
         headerPanel.add(btnLeave, "pos 0 0, h 30!");
 
         // Création du corps avec les options cliquables
-        JPanel bodyPanel = new JPanel(new MigLayout("wrap, fillx", "[center]", ""));
+        JPanel bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 0", "[]20[]", "[]"));
 
         // ScrollPane
         JScrollPane scrollPane = new JScrollPane(bodyPanel);
@@ -42,31 +43,23 @@ public class MenuTab extends View {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         // Ajout des cases cliquables
-        this.createOPtion("Variable et types", bodyPanel,
-                "explication : Variable et types",
-                "||code"
-        );
-        this.createOPtion("Boucles", bodyPanel,
-                "explication : Boucles",
-                "||code"
-        );
-        this.createOPtion("Conditions", bodyPanel,
-                "explication : Conditions",
-                "||code"
-        );
-        this.createOPtion("Fonctions / methodes", bodyPanel,
-                "Explication : Fonctions / methodes",
-                "||code"
-        );
+        this.createOPtion("Variable et types\n", bodyPanel, new VarTab());
+        this.createOPtion("Boucles", bodyPanel,new LoopTab());
+        this.createOPtion("Conditions", bodyPanel,new ConditionTab());
+        this.createOPtion("Fonctions", bodyPanel,new FuncTab());
+        this.createOPtion("Blocs", bodyPanel,new BaseSyntaxTab());
+        this.createOPtion("Commentaires", bodyPanel,new CommentTab());
+        this.createOPtion("Operations", bodyPanel,new OperationTab());
+
 
         // Ajout au panel principal
         this.add(headerPanel, "grow, wrap");
         this.add(scrollPane, "grow");
     }
 
-    private void createOPtion(String titre, JPanel container, String explication, String code) {
+    private void createOPtion(String titre, JPanel container, ExampleTab frame) {
         RoundButton option = new RoundButton(titre, new Color(180, 220, 255), 20);
-        option.addActionListener(new ExampleTabListener(explication, code, this));
+        option.addActionListener(new ExampleTabListener(frame, this));
         container.add(option, "grow, h 100!, w 300!");
     }
 }

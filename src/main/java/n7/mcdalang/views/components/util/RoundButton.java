@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class RoundButton extends JButton {
-    private int arcWidth;
-    private int arcHeight;
-    private Color backgroundColor;
+    private final int arcWidth;
+    private final int arcHeight;
+    private final Color backgroundColor;
 
     public RoundButton(String text, Color bgColor, int radius) {
         super(text);

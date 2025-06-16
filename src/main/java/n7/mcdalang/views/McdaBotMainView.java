@@ -8,14 +8,11 @@ import java.awt.*;
 
 public class McdaBotMainView extends View {
     private JPanel menuTab;
-    private JPanel exampleTab;
     private MainController mainViewController;
 
     public McdaBotMainView() {
         this.setLayout(new BorderLayout());
         menuTab = new MenuTab();
-        exampleTab = null;
-
         show(menuTab);
     }
 

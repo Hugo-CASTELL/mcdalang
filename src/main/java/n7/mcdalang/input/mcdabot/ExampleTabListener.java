@@ -8,20 +8,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ExampleTabListener implements ActionListener {
-    private String explication;
-    private String code;
-    private View menuTab;
+    private final ExampleTab frame;
+    private final View menuTab;
 
 
-    public ExampleTabListener(String explication, String code, View menuTab) {
-        this.explication = explication;
-        this.code = code;
+    public ExampleTabListener(ExampleTab frame, View menuTab) {
+        this.frame = frame;
         this.menuTab = menuTab;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         McdaBotMainView mainView = (McdaBotMainView) this.menuTab.getParent();
-        mainView.show(new ExampleTab(this.explication, this.code));
+        this.frame.reset();
+        mainView.show(this.frame);
     }
 }
