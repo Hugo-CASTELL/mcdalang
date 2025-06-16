@@ -1,14 +1,11 @@
 package n7.mcdalang.controllers;
 
-import n7.mcdalang.input.CodeKeyListener;
-import n7.mcdalang.input.OptionActionListener;
-import n7.mcdalang.input.RunActionListener;
-import n7.mcdalang.input.SwitchActionListener;
+import n7.mcdalang.input.*;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
 import n7.mcdalang.views.MainView;
-import n7.mcdalang.views.components.CodeTextArea;
+import n7.mcdalang.views.components.main.CodeTextArea;
 
 import java.awt.*;
 import java.net.URL;
@@ -48,7 +45,7 @@ public class MainController extends Controller<MainView> {
         view.getRunButton().addActionListener(new RunActionListener(this));
         view.getSwitchButton().addActionListener(new SwitchActionListener());
         view.getOptionsButton().addActionListener(new OptionActionListener(this));
-
+        view.getMcdaBotButton().addActionListener(new mcdaBotActionListener(this));
         view.getOriginTextArea().registerListener(new CodeKeyListener(this, view.getOriginTextArea()));
     }
 

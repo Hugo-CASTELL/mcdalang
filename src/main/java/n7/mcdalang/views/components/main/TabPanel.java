@@ -1,4 +1,4 @@
-package n7.mcdalang.views.components;
+package n7.mcdalang.views.components.main;
 
 import javax.swing.*;
 import java.awt.*;
