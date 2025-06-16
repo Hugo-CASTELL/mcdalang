@@ -1,5 +1,6 @@
 package n7.mcdalang.input;
 
+import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.controllers.OptionsPopupController;
 import n7.mcdalang.util.file.FileUtils;
 
@@ -11,10 +12,10 @@ import java.io.IOException;
 
 public class ImportActionListener implements ActionListener {
 
-    private final OptionsPopupController optionsPopupController;
+    private final MainController mainController;
 
-    public ImportActionListener(OptionsPopupController optionsPopupController) {
-        this.optionsPopupController = optionsPopupController;
+    public ImportActionListener(MainController mainController) {
+        this.mainController = mainController;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class ImportActionListener implements ActionListener {
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             try {
-                optionsPopupController.triggerChangeForOriginCode(FileUtils.readFile(fileChooser.getSelectedFile()));
+                mainController.triggerChangeForOriginCode(FileUtils.readFile(fileChooser.getSelectedFile()));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(new Frame(), "Error while importing", "Error", JOptionPane.ERROR_MESSAGE);
             }

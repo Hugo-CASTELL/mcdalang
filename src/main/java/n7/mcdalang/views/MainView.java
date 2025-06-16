@@ -12,7 +12,7 @@ public class MainView extends View {
 
     //#region Fields
 
-    //private JPanel topGUI;
+    private final JPanel topGUI;
     private final JPanel bodyGUI;
     private final JPanel bottomGUI;
 
@@ -20,6 +20,8 @@ public class MainView extends View {
     private final JButton runButton;
     private final JButton optionsButton;
     private final JButton mcdaBotButton;
+    private final JButton importButton;
+    private final JButton exportButton;
 
     private final CodeTextArea originTextArea;
     private final CodeTextArea[] codeTextArea;
@@ -48,9 +50,14 @@ public class MainView extends View {
         switchButton = new JButton("Switch");
         optionsButton = new JButton("Options");
         mcdaBotButton = new JButton("Mcdabot");
+        importButton = new JButton("Import");
+        exportButton = new JButton("Export");
 
         // topGUI components
-        // topGUI = new JPanel(new MigLayout("fillx"));
+        topGUI = new JPanel(new MigLayout("fillx, gap 0", "[10%][10%][10%][70%]", "[shrink]"));
+        topGUI.add(optionsButton, "cell 0 0, growx, push");
+        topGUI.add(importButton, "cell 1 0, growx, push");
+        topGUI.add(exportButton, "cell 2 0, growx, push");
 
         // bodyGUI components
         bodyGUI = new JPanel(new MigLayout("fill, ins 0", "[50%][50%]"));
@@ -63,14 +70,14 @@ public class MainView extends View {
 
         bottomGUI.add(switchButton, "cell 1 0");
         bottomGUI.add(runButton, "cell 2 0");
-        bottomGUI.add(optionsButton, "cell 3 0");
+        bottomGUI.add(mcdaBotButton, "cell 3 0");
 
 
         // add all components
-        this.setLayout(new MigLayout("fill, ins 0, gap 0", "[grow]", "[grow][shrink]"));
-        // add(topGUI, "cell 0 0, growx");
-        this.add(bodyGUI, "cell 0 0, grow, push");
-        this.add(bottomGUI, "cell 0 1, grow, push");
+        this.setLayout(new MigLayout("fill, ins 0, gap 0", "[grow]", "[shrink][grow][shrink]"));
+        this.add(topGUI, "cell 0 0, grow");
+        this.add(bodyGUI, "cell 0 1, grow, push");
+        this.add(bottomGUI, "cell 0 2, grow, push");
     }
 
     //#endregion Constructor
@@ -98,6 +105,14 @@ public class MainView extends View {
     }
 
     public JButton getMcdaBotButton() {return mcdaBotButton;}
+
+    public JButton getImportButton() {
+        return importButton;
+    }
+
+    public JButton getExportButton() {
+        return exportButton;
+    }
 
     //#endregion Getters and Setters
 }
