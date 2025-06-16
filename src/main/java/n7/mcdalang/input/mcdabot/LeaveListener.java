@@ -1,7 +1,9 @@
-package n7.mcdalang.views.components.mcdabot;
+package n7.mcdalang.input.mcdabot;
 
 import n7.mcdalang.views.McdaBotMainView;
 import n7.mcdalang.views.View;
+import n7.mcdalang.views.components.mcdabot.ExampleTab;
+import n7.mcdalang.views.components.mcdabot.MenuTab;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
