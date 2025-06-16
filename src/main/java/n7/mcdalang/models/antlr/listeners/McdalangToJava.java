@@ -7,6 +7,8 @@ import java.util.*;
 public class McdalangToJava extends OutputBaseListener {
     private final ParseTreeProperty<String> values = new ParseTreeProperty<>();
     private final boolean wrapMain;
+    private String userMainBody = null;
+
     public McdalangToJava(boolean wrapMain) {
         this.output = new StringBuilder();
         this.wrapMain = wrapMain;
@@ -39,7 +41,9 @@ public class McdalangToJava extends OutputBaseListener {
         for (var stmtCtx : ctx.statement()) {
             ParseTree child = stmtCtx.getChild(0);
             if (child instanceof McdalangParser.MethodDeclContext) {
-                methodCode.append("\n").append(values.get(child)).append("\n");
+                if (!(values.get(child) == null || values.get(child).contains("main()"))) {
+                    methodCode.append("\n").append(values.get(child)).append("\n");
+                }
             } else {
                 mainBody.append(values.get(stmtCtx));
             }
@@ -49,18 +53,23 @@ public class McdalangToJava extends OutputBaseListener {
 
         if (wrapMain) {
             finalCode.append("public class Main {\n\n")
-                    .append("    public static void main(String[] args) {\n")
-                    .append(indent(mainBody.toString()))
-                    .append("    }\n\n")
-                    .append(indent(methodCode.toString()))
-                    .append("\n}");
+                    .append("    public static void main(String[] args) {\n");
+
+            if (userMainBody != null) {
+                finalCode.append(indent(indent(userMainBody.strip())));
+            } else {
+                finalCode.append(indent(indent(mainBody.toString().strip())));
+            }
+
+            finalCode.append("\n    }\n");
+
+            finalCode.append(indent(methodCode.toString())).append("\n}");
         } else {
             finalCode.append(mainBody).append("\n").append(methodCode);
         }
         values.put(ctx, finalCode.toString());
         output.append(finalCode);
     }
-
 
     @Override
     public void exitStatement(McdalangParser.StatementContext ctx) {
@@ -132,6 +141,12 @@ public class McdalangToJava extends OutputBaseListener {
         }
 
         String body = values.get(ctx.block());
+
+        if (wrapMain && methodName.equals("main") && returnType.equals("void") && ctx.paramList() == null) {
+            userMainBody = body;
+            return;
+        }
+
         values.put(ctx, "public static " + returnType + " " + methodName + "(" + params + ") {" + indent(body) + "\n}");
     }
 

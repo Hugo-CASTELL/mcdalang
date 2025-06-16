@@ -136,7 +136,8 @@ class TestGrammarToC {
                     int x = 0;
                     while (x < 3) {
                         printf("%s\\n", x);
-                        x = x + 1;}
+                        x = x + 1;
+                    }
                     """),
 
                 Pair.of("""
@@ -152,8 +153,10 @@ class TestGrammarToC {
                         int a = 2;
                         int b = 3;
                         if (a < b) {
-                            printf("%s\\n", "a est plus petit que b");} else {
-                            printf("%s\\n", "a est plus grand ou egal a b");}
+                            printf("%s\\n", "a est plus petit que b");
+                        } else {
+                            printf("%s\\n", "a est plus grand ou egal a b");
+                        }
                         """),
 
                 Pair.of("""
@@ -168,7 +171,9 @@ class TestGrammarToC {
                     void afficherNombre(int n) {
                         int i;
                         for (i = 0; i < n; i = i + 1) {
-                            printf("%s\\n", "Nombre: " + i);}}
+                            printf("%s\\n", "Nombre: " + i);
+                        }
+                    }
                         """)
         );
 
@@ -196,8 +201,10 @@ class TestGrammarToC {
                             int resultat = 1;
                             int i;
                             for (i = 1; i <= n; i = i + 1) {
-                                resultat = resultat * i;}
-                            return resultat;}
+                                resultat = resultat * i;
+                            }
+                            return resultat;
+                        }
                         """),
 
                 // PGCD (algorithme d'Euclide)
@@ -215,9 +222,10 @@ class TestGrammarToC {
                         int pgcd(int a, int b) {
                             while (b != 0) {
                                 int temp = b;
-                                b = a % b;a = temp;}
-                            return a;}
-                        
+                                b = a % b;a = temp;
+                            }
+                            return a;
+                        }
                         """),
 
                 // Fibonacci
@@ -232,9 +240,10 @@ class TestGrammarToC {
                         """
                         int fibonacci(int n) {
                             if (n <= 1) {
-                                return n;}
-                            return fibonacci(n - 1) + fibonacci(n - 2);}
-                        
+                                return n;
+                            }
+                            return fibonacci(n - 1) + fibonacci(n - 2);
+                        }
                         """)
         );
 

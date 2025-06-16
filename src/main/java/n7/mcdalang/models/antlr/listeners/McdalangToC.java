@@ -156,7 +156,7 @@ public class McdalangToC extends OutputBaseListener {
         if (ctx.getStart().getText().equals("tantque")) {
             String cond = values.get(ctx.expr());
             String body = values.get(ctx.block());
-            result = "while (" + cond + ") {\n" + indent(body) + "}";
+            result = "while (" + cond + ") {\n" + indent(body) + "\n}";
         } else if (ctx.getStart().getText().equals("faire")) {
             String body = values.get(ctx.block());
             String cond = values.get(ctx.expr());
@@ -166,7 +166,7 @@ public class McdalangToC extends OutputBaseListener {
             String cond = values.get(ctx.expr()).replace(";", "");
             String update = values.get(ctx.assignment(1)).replace(";", "");
             String body = values.get(ctx.block());
-            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + indent(body) + "}";
+            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + indent(body) + "\n}";
         }
         values.put(ctx, result);
     }
@@ -269,5 +269,13 @@ public class McdalangToC extends OutputBaseListener {
         else if (ctx.expr() != null) values.put(ctx, "(" + values.get(ctx.expr()) + ")");
         else if (ctx.getStart().getText().equals("true")) values.put(ctx, "true");
         else if (ctx.getStart().getText().equals("false")) values.put(ctx, "false");
+    }
+
+    @Override
+    public String getCode() {
+        return """
+               #include <stdio.h>
+               
+               """ + output.toString();
     }
 }
