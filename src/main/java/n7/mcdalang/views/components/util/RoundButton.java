@@ -5,9 +5,16 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class RoundButton extends JButton {
+
+    //#region Fields
+
     private final int arcWidth;
     private final int arcHeight;
     private final Color backgroundColor;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public RoundButton(String text, Color bgColor, int radius) {
         super(text);
@@ -27,6 +34,10 @@ public class RoundButton extends JButton {
                 super.getPreferredSize().height + 10
         ));
     }
+
+    //#endregion Constructor
+
+    //#region Overrides
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -51,8 +62,10 @@ public class RoundButton extends JButton {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(getForeground());
         g2.draw(new RoundRectangle2D.Double(
-                0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight
+                0, 0, getWidth() - 1.0, getHeight() - 1.0, arcWidth, arcHeight
         ));
         g2.dispose();
     }
+
+    //#endregion Overrides
 }

@@ -4,7 +4,7 @@ import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.file.FileUtils;
 import n7.mcdalang.views.MainView;
-import n7.mcdalang.views.components.main.CodeTextArea;
+import n7.mcdalang.views.components.util.CodeTextArea;
 
 import javax.swing.*;
 import java.awt.*;

@@ -6,7 +6,7 @@ import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
 import n7.mcdalang.views.MainView;
-import n7.mcdalang.views.components.main.CodeTextArea;
+import n7.mcdalang.views.components.util.CodeTextArea;
 
 import java.awt.*;
 import java.util.logging.Level;
@@ -76,15 +76,19 @@ public class MainController extends Controller<MainView> {
     public void run() {
         try {
             for (CodeTextArea textArea : view.getCodeTextAreas()) {
-                try {
-                    String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
-                    textArea.setCode(code, Color.BLACK);
-                } catch (Exception e) {
-                    textArea.setCode(e.getMessage(), Color.RED);
-                }
+                runTranslation(textArea);
             }
         } catch (Exception e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, e.getMessage());
+        }
+    }
+
+    private void runTranslation(CodeTextArea textArea) {
+        try {
+            String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
+            textArea.setCode(code, Color.BLACK);
+        } catch (Exception e) {
+            textArea.setCode(e.getMessage(), Color.RED);
         }
     }
 

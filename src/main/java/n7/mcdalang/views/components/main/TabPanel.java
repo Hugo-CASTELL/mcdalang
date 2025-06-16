@@ -1,14 +1,17 @@
 package n7.mcdalang.views.components.main;
 
+import n7.mcdalang.views.components.util.CodeTextArea;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class TabPanel extends JPanel {
-    private JTabbedPane tabbedPane;
+
+    //#region Constructor
 
     public TabPanel(CodeTextArea[] codeTextArea) {
         // Create Tabs
-        tabbedPane = new JTabbedPane(JTabbedPane.RIGHT);
+        JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.RIGHT);
 
         // Add CodeTextArea in Tabs
         for (CodeTextArea area : codeTextArea) {
@@ -18,4 +21,7 @@ public class TabPanel extends JPanel {
         setLayout(new BorderLayout());
         add(tabbedPane, BorderLayout.CENTER);
     }
+
+    //#endregion Constructor
+
 }
