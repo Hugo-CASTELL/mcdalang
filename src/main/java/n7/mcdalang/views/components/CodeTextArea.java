@@ -24,7 +24,6 @@ public class CodeTextArea extends JPanel {
     public CodeTextArea(Languages name, boolean editable) {
         this.name = name;
 
-
         // Add content pane
         contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
@@ -43,7 +42,7 @@ public class CodeTextArea extends JPanel {
 
         // Create font
         fontCode = new Font("Arial", Font.PLAIN, 12);
-        setFont(this.createFont(AppConfig.FONT_JETBRAINS_BOLD));
+        setFont(this.createFont(AppConfig.FONT_ADAPTERS.get(AppConfig.DEFAULT_FONT)));
 
         // Add label
         nameLabel = new JLabel(name.toString(), SwingConstants.CENTER);
@@ -112,20 +111,17 @@ public class CodeTextArea extends JPanel {
         lineNumbers.setFont(newFont);
     }
 
-
     @Override
     public void setFont(Font fontType) {
-        fontCode = fontType;
         super.setFont(fontType);
-        if (codeArea != null) {
+        fontCode = fontType;
+        if (codeArea != null && lineNumbers != null) {
             codeArea.setFont(fontType);
-        }
-        if (lineNumbers != null) {
             lineNumbers.setFont(fontType);
         }
     }
 
-    private Font createFont(URL fontUrl) {
+    public Font createFont(URL fontUrl) {
         try {
             return Font.createFont(Font.TRUETYPE_FONT, new File(fontUrl.toURI())).deriveFont(Font.PLAIN, 12);
         } catch (Exception e) {

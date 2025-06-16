@@ -5,10 +5,13 @@ import n7.mcdalang.input.OptionActionListener;
 import n7.mcdalang.input.RunActionListener;
 import n7.mcdalang.input.SwitchActionListener;
 import n7.mcdalang.util.GlobalInstances;
+import n7.mcdalang.util.app.AppConfig;
+import n7.mcdalang.util.font.Fonts;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.CodeTextArea;
 
 import java.awt.*;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +40,7 @@ public class MainController extends Controller<MainView> {
     protected void updateView() {
         // No specific updates needed for the main view at this time.
         setFontSize(GlobalInstances.getAppSettings().getFontSize());
+        setFont(GlobalInstances.getAppSettings().getFont());
     }
 
     @Override
@@ -96,5 +100,13 @@ public class MainController extends Controller<MainView> {
             textArea.setSizeFont(fontSize);
         }
         view.getOriginTextArea().setSizeFont(fontSize);
+    }
+
+    public void setFont(Fonts font) {
+        GlobalInstances.getAppSettings().setFont(font);
+        for (CodeTextArea textArea : view.getCodeTextAreas()) {
+            textArea.setFont(textArea.createFont(AppConfig.FONT_ADAPTERS.get(font)));
+        }
+        view.getOriginTextArea().setFont(view.getOriginTextArea().createFont(AppConfig.FONT_ADAPTERS.get(font)));
     }
 }

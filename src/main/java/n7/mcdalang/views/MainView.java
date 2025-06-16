@@ -63,7 +63,6 @@ public class MainView extends View {
         bottomGUI.add(runButton, "cell 2 0");
         bottomGUI.add(optionsButton, "cell 3 0");
 
-
         // add all components
         this.setLayout(new MigLayout("fill, ins 0, gap 0", "[grow]", "[grow][shrink]"));
         // add(topGUI, "cell 0 0, growx");
