@@ -1,8 +1,12 @@
 package n7.mcdalang.input;
 
+<<<<<<< HEAD
+import n7.mcdalang.views.components.main.CodeTextArea;
+=======
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.CodeTextArea;
+>>>>>>> 6f94b6f59875c1c3da2b7e857c8af5b4280d683d
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
