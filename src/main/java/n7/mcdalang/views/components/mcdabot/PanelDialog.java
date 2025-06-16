@@ -8,6 +8,8 @@ import java.awt.*;
 import java.net.URL;
 
 public class PanelDialog extends JPanel {
+    private JTextArea dialogue;
+
     public PanelDialog(String message, URL image) {
         super(new MigLayout("insets 0, align center center", "[center]", "[center]"));
 
@@ -16,6 +18,7 @@ public class PanelDialog extends JPanel {
 
         // Boîte de dialogue (style moderne avec bordure arrondie)
         JTextArea dialogue = new JTextArea(message);
+        this.dialogue = dialogue;
         dialogue.setEditable(false);
         dialogue.setLineWrap(true);
         dialogue.setWrapStyleWord(true);
@@ -27,9 +30,20 @@ public class PanelDialog extends JPanel {
         dialogue.setFont(new Font("Arial", Font.PLAIN, 14));
         dialogue.setOpaque(true);
 
+        //scrollpane
+        JScrollPane scrollPane = new JScrollPane(dialogue);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
         // Ajout des composants à l'en-tête
         this.add(character, "w 120!, h 160!");
-        this.add(dialogue, "w 300!, h 120!, gapright 20");
+        this.add(scrollPane, "w 500!, h 120!, gapright 20");
+    }
+
+    public void setDialogue(String message) {
+        this.dialogue.setText(message);
     }
 
 }

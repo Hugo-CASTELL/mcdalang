@@ -52,6 +52,7 @@ public class MainView extends View {
 
         runButton = new JButton("Run");
         switchButton = new JButton("Switch");
+
         optionsButton = new JButton("Options");
         importButton = new JButton("Import");
         exportButton = new JButton("Export");
@@ -84,7 +85,6 @@ public class MainView extends View {
         bottomGUI.add(switchButton, "cell 1 0");
         bottomGUI.add(runButton, "cell 2 0");
         bottomGUI.add(mcdaBotButton, "cell 3 0");
-
 
         // add all components
         this.setLayout(new MigLayout("fill, ins 0, gap 0", "[grow]", "[shrink][grow][shrink]"));
