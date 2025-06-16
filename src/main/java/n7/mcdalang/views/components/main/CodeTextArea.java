@@ -2,10 +2,13 @@ package n7.mcdalang.views.components.main;
 
 import n7.mcdalang.input.CodeKeyListener;
 import n7.mcdalang.models.antlr.Languages;
+import n7.mcdalang.util.app.AppConfig;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.net.URL;
 
 public class CodeTextArea extends JPanel {
 
@@ -16,6 +19,7 @@ public class CodeTextArea extends JPanel {
     private JPanel contentPane;
     private JScrollPane scrollPane;
     private JPanel labelPanel;
+    private Font fontCode;
 
     public CodeTextArea(Languages name, boolean editable) {
         this.name = name;
@@ -35,6 +39,10 @@ public class CodeTextArea extends JPanel {
         // Add code zone
         codeArea = new JTextArea();
         codeArea.setEditable(editable);
+
+        // Create font
+        fontCode = new Font("Arial", Font.PLAIN, 12);
+        setFont(this.createFont(AppConfig.FONT_ADAPTERS.get(AppConfig.DEFAULT_FONT)));
 
         // Add label
         nameLabel = new JLabel(name.toString(), SwingConstants.CENTER);
@@ -86,19 +94,40 @@ public class CodeTextArea extends JPanel {
 
     @Override
     public String getName() {
-        return name.toString();
+        if (name == Languages.CPlusPlus) {
+            return "C++";
+        } else {
+            return name.toString();
+        }
     }
 
     public Languages getLanguage(){
         return name;
     }
 
-    public void setCaret(int caret){
-        codeArea.setCaretPosition(caret);
+    public void setSizeFont(int fontSize) {
+        Font newFont = fontCode.deriveFont(fontCode.getStyle(), (float) fontSize);
+        codeArea.setFont(newFont);
+        lineNumbers.setFont(newFont);
     }
 
-    public int getCaret(){
-        return codeArea.getCaretPosition();
+    @Override
+    public void setFont(Font fontType) {
+        super.setFont(fontType);
+        fontCode = fontType;
+        if (codeArea != null && lineNumbers != null) {
+            codeArea.setFont(fontType);
+            lineNumbers.setFont(fontType);
+        }
+    }
+
+    public Font createFont(URL fontUrl) {
+        try {
+            return Font.createFont(Font.TRUETYPE_FONT, new File(fontUrl.toURI())).deriveFont(Font.PLAIN, 12);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Font("Arial", Font.PLAIN, 12);
+        }
     }
 
     public void registerListener(CodeKeyListener listener) {
