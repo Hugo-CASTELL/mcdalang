@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class McdalangToPowershell extends OutputBaseListener {
     ParseTreeProperty<String> values = new ParseTreeProperty<>();
-    protected StringBuilder output; // Assumed inherited from OutputBaseListener
+    protected StringBuilder output;
 
     public McdalangToPowershell() {
         output = new StringBuilder();
@@ -51,18 +51,17 @@ public class McdalangToPowershell extends OutputBaseListener {
                 return;
             }
         }
-        values.put(ctx, ""); // Ensure empty statements don't break propagation
+        values.put(ctx, "");
     }
 
     @Override
     public void exitVarDecl(McdalangParser.VarDeclContext ctx) {
-        String type = translateType(ctx.type().getText());
         String id = "$" + ctx.ID().getText();
         String expr = ctx.expr() != null ? values.get(ctx.expr()) : null;
         if (expr != null) {
-            values.put(ctx, type + " " + id + " = " + expr + "\n");
+            values.put(ctx, id + " = " + expr + "\n");
         } else {
-            values.put(ctx, type + " " + id + "\n");
+            values.put(ctx, id + " = $null\n");
         }
     }
 
@@ -79,20 +78,20 @@ public class McdalangToPowershell extends OutputBaseListener {
         if (startToken.equals("tantque")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            result = "while (" + (cond != null ? cond : "$true") + ") {\n" + body + "}\n";
+            result = "while " + (cond != null ? cond : "$true") + " {\n" + body + "\n}\n";
         } else if (startToken.equals("faire")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            result = "do {\n" + body + "} while (" + (cond != null ? cond : "$true") + ")\n";
+            result = "do {\n" + body + "\n} while " + (cond != null ? cond : "$true") + "\n";
         } else { // "pour"
             String init = values.get(ctx.assignment(0));
             String cond = values.get(ctx.expr());
             String update = values.get(ctx.assignment(1));
-            init = init != null ? init.replace(";", "").replace("=", "$i =") : "";
+            init = init != null ? init.replace("\n", "").trim() : "";
             cond = cond != null ? cond : "$true";
-            update = update != null ? update.replace(";", "") : "";
+            update = update != null ? update.replace("\n", "").trim() : "";
             String body = indent(values.get(ctx.block()));
-            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + body + "}\n";
+            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + body + "\n}\n";
         }
         values.put(ctx, result);
     }
@@ -122,7 +121,7 @@ public class McdalangToPowershell extends OutputBaseListener {
                 String val = values.get(ctx.equalityExpr(i));
                 if (val != null) sb.append(" + ").append(val);
             }
-            values.put(ctx, sb.toString());
+            values.put(ctx, "(" + sb.toString() + ")");
         }
     }
 
@@ -133,9 +132,9 @@ public class McdalangToPowershell extends OutputBaseListener {
         } else {
             String left = values.get(ctx.relationalExpr(0));
             String right = values.get(ctx.relationalExpr(1));
-            String op = ctx.getChild(1).getText().equals("==") ? "-eq" : "-ne"; // PowerShell operators
+            String op = ctx.getChild(1).getText().equals("==") ? "-eq" : "-ne";
             if (left != null && right != null) {
-                values.put(ctx, left + " " + op + " " + right);
+                values.put(ctx, "(" + left + " " + op + " " + right + ")");
             } else {
                 values.put(ctx, left != null ? left : right != null ? right : "");
             }
@@ -157,7 +156,7 @@ public class McdalangToPowershell extends OutputBaseListener {
                 default -> ctx.getChild(1).getText();
             };
             if (left != null && right != null) {
-                values.put(ctx, left + " " + op + " " + right);
+                values.put(ctx, "(" + left + " " + op + " " + right + ")");
             } else {
                 values.put(ctx, left != null ? left : right != null ? right : "");
             }
@@ -173,7 +172,7 @@ public class McdalangToPowershell extends OutputBaseListener {
             String right = values.get(ctx.mulExpr(1));
             String op = ctx.getChild(1).getText();
             if (left != null && right != null) {
-                values.put(ctx, left + " " + op + " " + right);
+                values.put(ctx, "(" + left + " " + op + " " + right + ")");
             } else {
                 values.put(ctx, left != null ? left : right != null ? right : "");
             }
@@ -189,7 +188,7 @@ public class McdalangToPowershell extends OutputBaseListener {
             String right = values.get(ctx.powExpr(1));
             String op = ctx.getChild(1).getText();
             if (left != null && right != null) {
-                values.put(ctx, left + " " + op + " " + right);
+                values.put(ctx, "(" + left + " " + op + " " + right + ")");
             } else {
                 values.put(ctx, left != null ? left : right != null ? right : "");
             }
@@ -248,16 +247,22 @@ public class McdalangToPowershell extends OutputBaseListener {
                         .map(values::get)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
-                sb.append(" ").append(String.join(" ", argVals));
+                sb.append("(").append(String.join(", ", argVals)).append(")");
+            } else {
+                sb.append("()");
             }
         }
-        values.put(ctx, sb.toString() + "\n");
+        values.put(ctx, sb.toString());
     }
 
     @Override
     public void exitReturnStmt(McdalangParser.ReturnStmtContext ctx) {
         String expr = ctx.expr() != null ? values.get(ctx.expr()) : "";
-        values.put(ctx, "return " + expr + "\n");
+        if (expr.contains("+") || expr.contains("-") || expr.contains("*") || expr.contains("/")) {
+            values.put(ctx, "return (" + expr + ")\n");
+        } else {
+            values.put(ctx, "return " + expr + "\n");
+        }
     }
 
     @Override
@@ -269,10 +274,10 @@ public class McdalangToPowershell extends OutputBaseListener {
             for (int i = 0; i < ctx.paramList().ID().size(); i++) {
                 paramList.add("$" + ctx.paramList().ID(i).getText());
             }
-            params = "param(" + String.join(", ", paramList) + ")";
+            params = "(" + String.join(", ", paramList) + ")";
         }
         String body = values.get(ctx.block());
-        String result = "function " + methodName + " {\n" + params + "\n" + indent(body != null ? body : "") + "}\n";
+        String result = "function " + methodName + params + " {\n" + (body != null && !body.isEmpty() ? indent(body) + "\n" : "") + "}\n";
         values.put(ctx, result);
     }
 
@@ -281,19 +286,21 @@ public class McdalangToPowershell extends OutputBaseListener {
         StringBuilder sb = new StringBuilder();
         String cond = values.get(ctx.expr(0));
         String block = values.get(ctx.block(0));
-        sb.append("if (").append(cond != null ? cond : "$false").append(") {\n");
-        sb.append(indent(block != null ? block : "")).append("}");
+        sb.append("if ").append(cond != null ? cond : "$false").append(" {\n");
+        sb.append(indent(block != null ? block : "")).append("\n}");
         int exprIdx = 1;
         int blockIdx = 1;
-        while (ctx.getChildCount() > 2 * blockIdx + 1 && ctx.getChild(2 * blockIdx + 1).getText().equals("snsi")) {
-            cond = values.get(ctx.expr(exprIdx++));
-            block = values.get(ctx.block(blockIdx++));
-            sb.append(" elseif (").append(cond != null ? cond : "$false").append(") {\n");
-            sb.append(indent(block != null ? block : "")).append("}");
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if (ctx.getChild(i).getText().equals("snsi")) {
+                cond = values.get(ctx.expr(exprIdx++));
+                block = values.get(ctx.block(blockIdx++));
+                sb.append(" elseif ").append(cond != null ? cond : "$false").append(" {\n");
+                sb.append(indent(block != null ? block : "")).append("\n}");
+            }
         }
         if (ctx.block().size() > blockIdx) {
             block = values.get(ctx.block(blockIdx));
-            sb.append(" else {\n").append(indent(block != null ? block : "")).append("}");
+            sb.append(" else {\n").append(indent(block != null ? block : "")).append("\n}");
         }
         sb.append("\n");
         values.put(ctx, sb.toString());
