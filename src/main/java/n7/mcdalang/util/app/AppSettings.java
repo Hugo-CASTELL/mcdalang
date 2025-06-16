@@ -1,18 +1,15 @@
 package n7.mcdalang.util.app;
 
 import n7.mcdalang.models.antlr.Languages;
-import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.font.Fonts;
 import n7.mcdalang.util.file.Setting;
 import n7.mcdalang.util.file.SettingsManager;
 import n7.mcdalang.util.theme.ThemeManager;
 import n7.mcdalang.util.theme.Themes;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
-import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +56,14 @@ public class AppSettings {
         return autoRun;
     }
 
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public Fonts getFont() {
+        return font;
+    }
+
     //#endregion Getters
 
     //#region Setters
@@ -73,16 +78,8 @@ public class AppSettings {
         this.fontSize = fontSize;
     }
 
-    public int getFontSize() {
-        return fontSize;
-    }
-
     public void setFont(Fonts font) {
         this.font = font;
-    }
-
-    public Fonts getFont() {
-        return font;
     }
 
     public void setAutoRun(boolean autoRun) {

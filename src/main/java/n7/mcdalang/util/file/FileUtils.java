@@ -20,7 +20,6 @@ public final class FileUtils {
 
     public static void writeFile(File filePath, String content) throws IOException {
         try(FileWriter writer = new FileWriter(filePath)) {
-            // write the string to the file
             writer.write(content);
         }
     }

@@ -16,7 +16,13 @@ import java.util.TimerTask;
 
 public class AppManager {
 
+    //#region Attribute
+
     private JFrame mainFrame;
+
+    //#endregion Attribute
+
+    //#region Public Methods
 
     public void onStartUp() {
         // Prepare the main frame
@@ -47,6 +53,26 @@ public class AppManager {
         System.exit(0);
     }
 
+    public void display(View view) {
+        mainFrame.getContentPane().removeAll();
+        mainFrame.add(view);
+        mainFrame.setVisible(true);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+
+    public int displayPopup(View view) {
+        return JOptionPane.showConfirmDialog(new Frame(), view, view.getName(), view.getPopupOptions(), JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public View getMainFrameCurrentView() {
+        return (View) mainFrame.getContentPane().getComponent(0);
+    }
+
+    //#endregion Public Methods
+
+    //#region Private Methods
+
     private void createMainFrame() {
         mainFrame = new JFrame(AppConfig.APP_TITLE);
         mainFrame.setVisible(true);
@@ -68,19 +94,5 @@ public class AppManager {
         );
     }
 
-    public void display(View view) {
-        mainFrame.getContentPane().removeAll();
-        mainFrame.add(view);
-        mainFrame.setVisible(true);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
-    public int displayPopup(View view) {
-        return JOptionPane.showConfirmDialog(new Frame(), view, view.getName(), view.getPopupOptions(), JOptionPane.PLAIN_MESSAGE);
-    }
-
-    public View getMainFrameCurrentView() {
-        return (View) mainFrame.getContentPane().getComponent(0);
-    }
+    //#endregion Private Methods
 }
