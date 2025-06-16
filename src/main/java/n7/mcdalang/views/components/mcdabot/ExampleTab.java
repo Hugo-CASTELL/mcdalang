@@ -5,36 +5,45 @@ import n7.mcdalang.input.CodeKeyListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.McdaBotMainView;
+import n7.mcdalang.views.View;
 import n7.mcdalang.views.components.main.CodeTextArea;
 import n7.mcdalang.models.antlr.Languages;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ExampleTab extends JPanel {
+public class ExampleTab extends View {
     public ExampleTab(String explication, String code) {
-        super(new BorderLayout());
-                CodeTextArea zoneCode = new CodeTextArea(Languages.MACDALANG, true);
+        this.setLayout(new BorderLayout());
 
-        // met a jour les numeros de lignes
-        zoneCode.registerListener(new CodeKeyListener(new MainController(new MainView()), zoneCode));
-        zoneCode.setCode(code);
+        // bouton retour
+        JButton btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
+        btnLeave.addActionListener(new LeaveListener(this));
 
+        // dialogue
         JPanel headerPanel = new PanelDialog(explication,
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
-        // Ajout du bouton retour
-        JButton btnLeave = new RoundButton("Retour", Color.LIGHT_GRAY, 50);
-        btnLeave.addActionListener(e -> {
-            MenuTab newPanel = new MenuTab();
-            McdaBotMainView mainView = (McdaBotMainView) this.getParent();
-            mainView.show(newPanel);
-        });
-        headerPanel.add(btnLeave, "pos 0 0, h 30!");
+        JPanel mainContent = new JPanel(new BorderLayout());
 
+        // Code
+        CodeTextArea zoneCode = new CodeTextArea(Languages.MACDALANG, true);
+        zoneCode.registerListener(new CodeKeyListener(new MainController(new MainView()), zoneCode));
+        zoneCode.setCode(code);
+
+        // liste de boutons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        JButton btnRun = new RoundButton("Essayer la traduction", new Color(100, 200, 100), 10);
+        btnRun.addActionListener(new TryCode(this, zoneCode));
+        buttonPanel.add(btnRun);
+
+
+        headerPanel.add(btnLeave, "pos 0 0, h 30!");
         this.add(headerPanel, BorderLayout.NORTH);
-        this.add(zoneCode, BorderLayout.CENTER);
+        this.add(mainContent, BorderLayout.CENTER);
+        mainContent.add(buttonPanel, BorderLayout.NORTH);
+        mainContent.add(zoneCode, BorderLayout.CENTER);
 
     }
 }

@@ -1,16 +1,19 @@
 package n7.mcdalang.views.components.mcdabot;
 
+import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.util.app.AppConfig;
+import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.McdaBotMainView;
+import n7.mcdalang.views.View;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
-public class MenuTab extends JPanel {
+public class MenuTab extends View {
 
     public MenuTab() {
-        super();
         this.setMainTutoFrame();
     }
 
@@ -24,17 +27,22 @@ public class MenuTab extends JPanel {
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
-// Création du corps avec les options cliquables
-        JPanel bodyPanel = new JPanel(new MigLayout("wrap, fillx", "[center]", ""));
-        JButton btnLeave = new RoundButton("Retour", Color.LIGHT_GRAY, 50);
-        btnLeave.addActionListener(e -> {
-            System.out.println("Leave button clicked");
-        });
+        JButton btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
+        btnLeave.addActionListener(new LeaveListener(this));
 
-// Ajout du bouton en haut à droite avec une taille réduite
         headerPanel.add(btnLeave, "pos 0 0, h 30!");
 
-        // Création des cases cliquables
+        // Création du corps avec les options cliquables
+        JPanel bodyPanel = new JPanel(new MigLayout("wrap, fillx", "[center]", ""));
+
+        // ScrollPane
+        JScrollPane scrollPane = new JScrollPane(bodyPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+        // Ajout des cases cliquables
         this.createOPtion("Variable et types", bodyPanel,
                 "explication : Variable et types",
                 "||code"
@@ -52,18 +60,14 @@ public class MenuTab extends JPanel {
                 "||code"
         );
 
-        // Ajout des panels au panel principal
+        // Ajout au panel principal
         this.add(headerPanel, "grow, wrap");
-        this.add(bodyPanel, "grow");
+        this.add(scrollPane, "grow");
     }
 
     private void createOPtion(String titre, JPanel container, String explication, String code) {
         RoundButton option = new RoundButton(titre, new Color(180, 220, 255), 20);
-        option.addActionListener(e -> {
-            ExampleTab newPanel = new ExampleTab(explication, code);
-            McdaBotMainView mainView = (McdaBotMainView) this.getParent();
-            mainView.show(newPanel);
-        });
+        option.addActionListener(new ExampleTabListener(explication, code, this));
         container.add(option, "grow, h 100!, w 300!");
     }
 }

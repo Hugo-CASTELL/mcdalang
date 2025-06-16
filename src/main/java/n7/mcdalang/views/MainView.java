@@ -46,8 +46,8 @@ public class MainView extends View {
 
         runButton = new JButton("Run");
         switchButton = new JButton("Switch");
-        optionsButton = new JButton("Options");
         mcdaBotButton = new JButton("Mcdabot");
+        optionsButton = new JButton("Options");
 
         // topGUI components
         // topGUI = new JPanel(new MigLayout("fillx"));
@@ -63,7 +63,8 @@ public class MainView extends View {
 
         bottomGUI.add(switchButton, "cell 1 0");
         bottomGUI.add(runButton, "cell 2 0");
-        bottomGUI.add(optionsButton, "cell 3 0");
+        bottomGUI.add(mcdaBotButton, "cell 3 0");
+        bottomGUI.add(optionsButton, "cell 4 0");
 
 
         // add all components
