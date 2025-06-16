@@ -2,188 +2,270 @@ package n7.mcdalang.models.antlr.listeners;
 
 import n7.mcdalang.models.antlr.generated.McdalangParser;
 import org.antlr.v4.runtime.tree.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class McdalangToRust extends OutputBaseListener {
-    private final Stack<String> currentFunction = new Stack<>();
-    private final Map<String, String> symbolTable = new HashMap<>();
-    private final StringBuilder output;
-    private int indentLevel = 0;
-
     public McdalangToRust() {
         output = new StringBuilder();
     }
+    ParseTreeProperty<String> values = new ParseTreeProperty<>();
+
+    private String indent(String code) {
+        if (code == null || code.isBlank()) return "";
+        return Arrays.stream(code.split("\n"))
+                .filter(line -> !line.isBlank())
+                .map(line -> "    " + line)
+                .collect(Collectors.joining("\n"));
+    }
 
     @Override
-    public void enterMethodDecl(McdalangParser.MethodDeclContext ctx) {
-        String returnType = mapType(ctx.type().getText());
-        String name = ctx.ID().getText();
-        currentFunction.push(name);
+    public void exitProg(McdalangParser.ProgContext ctx) {
+        for (var stmt : ctx.statement()) {
+            String val = values.get(stmt);
+            if (val != null) output.append(val);
+        }
+    }
 
-        output.append(indent()).append("fn ").append(name).append("(");
-        if (ctx.paramList() != null) {
-            List<String> paramStrs = new ArrayList<>();
-            for (int i = 0; i < ctx.paramList().type().size(); i++) {
-                String paramType = mapType(ctx.paramList().type(i).getText());
-                String paramName = ctx.paramList().ID(i).getText();
-                symbolTable.put(paramName, paramType);
-                paramStrs.add(paramName + ": " + paramType);
+    @Override
+    public void exitStatement(McdalangParser.StatementContext ctx) {
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            String val = values.get(ctx.getChild(i));
+            if (val != null) {
+                values.put(ctx, val);
+                return;
             }
-            output.append(String.join(", ", paramStrs));
         }
-        output.append(")");
-        if (!returnType.equals("()")) {
-            output.append(" -> ").append(returnType);
-        }
-        output.append(" {\n");
-        indentLevel++;
+    }
+
+    @Override
+    public void exitVarDecl(McdalangParser.VarDeclContext ctx) {
+        String type = translateType(ctx.type().getText());
+        String id = ctx.ID().getText();
+        String expr = ctx.expr() != null ? values.get(ctx.expr()) : defaultValue(type);
+        values.put(ctx, "let mut " + id + ": " + type + " = " + expr + ";\n");
+    }
+
+    @Override
+    public void exitAssignment(McdalangParser.AssignmentContext ctx) {
+        String id = ctx.ID().getText();
+        String expr = values.get(ctx.expr());
+        values.put(ctx, id + " = " + expr + ";\n");
+    }
+
+    @Override
+    public void exitIncrStmt(McdalangParser.IncrStmtContext ctx) {
+        String var = ctx.ID().getText();
+        String op = ctx.getChild(1).getText();
+        String opRust = op.equals("++") ? "+= 1" : "-= 1";
+        values.put(ctx, var + " " + opRust + ";\n");
+    }
+
+    @Override
+    public void exitPrintStmt(McdalangParser.PrintStmtContext ctx) {
+        String expr = values.get(ctx.expr());
+        values.put(ctx, "println!(\"{}\", " + expr + ");\n");
+    }
+
+    @Override
+    public void exitReturnStmt(McdalangParser.ReturnStmtContext ctx) {
+        String expr = ctx.expr() != null ? values.get(ctx.expr()) : "";
+        values.put(ctx, expr.isBlank() ? "return;\n" : "return " + expr + ";\n");
     }
 
     @Override
     public void exitMethodDecl(McdalangParser.MethodDeclContext ctx) {
-        indentLevel--;
-        output.append(indent()).append("}\n\n");
-        currentFunction.pop();
-    }
-
-    @Override
-    public void enterVarDecl(McdalangParser.VarDeclContext ctx) {
-        String type = mapType(ctx.type().getText());
+        String returnType = translateType(ctx.type().getText());
         String name = ctx.ID().getText();
-        symbolTable.put(name, type);
+        String params = "";
 
-        output.append(indent()).append("let mut ").append(name);
-        output.append(": ").append(type);
-        if (ctx.expr() != null) {
-            output.append(" = ").append(exprToString(ctx.expr()));
-        } else {
-            output.append(" = ").append(defaultValue(type));
+        if (ctx.paramList() != null) {
+            var ids = ctx.paramList().ID();
+            var types = ctx.paramList().type();
+            List<String> paramPairs = new ArrayList<>();
+            for (int i = 0; i < ids.size(); i++) {
+                paramPairs.add(ids.get(i).getText() + ": " + translateType(types.get(i).getText()));
+            }
+            params = String.join(", ", paramPairs);
         }
-        output.append(";\n");
+
+        String body = values.get(ctx.block());
+        String sig = "fn " + name + "(" + params + ")";
+        if (!returnType.equals("()")) sig += " -> " + returnType;
+
+        values.put(ctx, sig + " {\n" + indent(body) + "}\n");
     }
 
     @Override
-    public void enterAssignment(McdalangParser.AssignmentContext ctx) {
-        output.append(indent()).append(ctx.ID().getText()).append(" = ")
-                .append(exprToString(ctx.expr())).append(";\n");
-    }
-
-    @Override
-    public void enterReturnStmt(McdalangParser.ReturnStmtContext ctx) {
-        output.append(indent()).append("return");
-        if (ctx.expr() != null) {
-            output.append(" ").append(exprToString(ctx.expr()));
-        }
-        output.append(";\n");
-    }
-
-    @Override
-    public void enterIncrStmt(McdalangParser.IncrStmtContext ctx) {
-        String varName = ctx.ID().getText();
-        String op = ctx.getChild(1).getText(); // '++' or '--'
-        String opRust = op.equals("++") ? "+= 1" : "-= 1";
-        output.append(indent()).append(varName).append(" ").append(opRust).append(";\n");
-    }
-
-    @Override
-    public void enterPrintStmt(McdalangParser.PrintStmtContext ctx) {
-        output.append(indent()).append("println!(\"{}\", ").append(exprToString(ctx.expr())).append(");\n");
-    }
-
-    @Override
-    public void enterIfStmt(McdalangParser.IfStmtContext ctx) {
-        output.append(indent()).append("if ").append(exprToString(ctx.expr(0))).append(" {\n");
-        indentLevel++;
+    public void exitFuncCall(McdalangParser.FuncCallContext ctx) {
+        List<String> callers = new ArrayList<>();
+        List<String> args = new ArrayList<>();
+        for (var expr : ctx.expr()) args.add(values.get(expr));
+        for (var caller : ctx.ID()) callers.add(caller.getText());
+        values.put(ctx, String.join("::", callers) + "(" + String.join(", ", args) + ")");
     }
 
     @Override
     public void exitIfStmt(McdalangParser.IfStmtContext ctx) {
-        indentLevel--;
-        output.append(indent()).append("}\n");
-        // For else-if and else, you'd extend here if supported in grammar
-    }
+        StringBuilder result = new StringBuilder();
 
-    @Override
-    public void enterLoopStmt(McdalangParser.LoopStmtContext ctx) {
-        String firstToken = ctx.getChild(0).getText();
-        if (firstToken.equals("tantque")) {
-            output.append(indent()).append("while ").append(exprToString(ctx.expr())).append(" {\n");
-            indentLevel++;
-        } else if (firstToken.equals("faire")) {
-            output.append(indent()).append("loop {\n");
-            indentLevel++;
-        } else if (firstToken.equals("pour")) {
-            // 'pour' '(' assignment ';' expr ';' assignment ')' block
-            McdalangParser.AssignmentContext init = ctx.assignment(0);
-            McdalangParser.ExprContext cond = ctx.expr();
-            McdalangParser.AssignmentContext update = ctx.assignment(1);
+        // Bloc "si"
+        String cond = values.get(ctx.expr(0));
+        String ifBody = indent(values.get(ctx.block(0)));
+        result.append("if ").append(cond).append(" {\n").append(ifBody).append("\n}");
 
-            String varName = init.ID().getText();
-            String varType = symbolTable.getOrDefault(varName, "i32");
-            symbolTable.putIfAbsent(varName, varType);
-
-            output.append(indent()).append("for ").append(varName).append(" in ");
-            output.append(exprToString(init.expr())).append("..");
-            output.append(exprToString(cond)).append(" {\n");
-            indentLevel++;
-            // Note: Rust's for loop does not have update expression; you might need a while loop instead if update is complex
-            // Here we assume increment by 1, or rewrite as while loop if needed
+        // Cas avec "sinonsi"
+        for (int i = 1; i < ctx.expr().size(); i++) {
+            String elifCond = values.get(ctx.expr(i));
+            String elifBody = indent(values.get(ctx.block(i)));
+            result.append(" else if ").append(elifCond).append(" {\n").append(elifBody).append("\n}");
         }
+
+        // Cas avec "sinon"
+        if (ctx.block().size() > ctx.expr().size()) {
+            String elseBody = indent(values.get(ctx.block(ctx.block().size() - 1)));
+            result.append(" else {\n").append(elseBody).append("\n}");
+        }
+
+        result.append("\n\n"); // Ajoute une nouvelle ligne après le bloc if-else
+
+        values.put(ctx, result.toString());
     }
 
     @Override
     public void exitLoopStmt(McdalangParser.LoopStmtContext ctx) {
-        indentLevel--;
-        String firstToken = ctx.getChild(0).getText();
-        if (firstToken.equals("faire")) {
-            output.append(indent()).append("if !(").append(exprToString(ctx.expr())).append(") { break; }\n");
-            output.append(indent()).append("}\n");
+        String result;
+        if (ctx.getStart().getText().equals("tantque")) {
+            String cond = values.get(ctx.expr());
+            String body = indent(values.get(ctx.block()));
+            result = "while " + cond + " {\n" + body + "\n}\n";
+        } else if (ctx.getStart().getText().equals("faire")) {
+            String cond = values.get(ctx.expr());
+            String body = indent(values.get(ctx.block()));
+            result = "loop {\n" + body + "\n    if !(" + cond + ") { break; }\n}\n";
+        } else { // pour
+            String init = values.get(ctx.assignment(0)).strip();
+            String cond = values.get(ctx.expr()).strip();
+            String update = values.get(ctx.assignment(1)).strip();
+            String[] parts = init.split("=");
+            String var = parts[0].strip();
+            String start = parts[1].strip().replace(";", "");
+
+            String end = cond.replaceAll(".*<=", "").strip();
+            boolean inclusive = cond.contains("<=");
+
+            if (!inclusive) {
+                end = cond.replaceAll(".*<", "").strip();
+            }
+            String range = inclusive ? (start + "..=" + end) : (start + ".." + end);
+            String body = indent(values.get(ctx.block()));
+            result = "for " + var + " in " + range + " {\n" + body + "\n}\n";
+        }
+        values.put(ctx, result);
+    }
+
+    @Override
+    public void exitBlock(McdalangParser.BlockContext ctx) {
+        StringBuilder sb = new StringBuilder();
+        for (var stmt : ctx.statement()) {
+            String val = values.get(stmt);
+            if (val != null) sb.append(val);
+        }
+        values.put(ctx, sb.toString());
+    }
+
+    @Override
+    public void exitExpr(McdalangParser.ExprContext ctx) {
+        values.put(ctx, values.get(ctx.concatenationExpr()));
+    }
+
+    @Override
+    public void exitConcatenationExpr(McdalangParser.ConcatenationExprContext ctx) {
+        if (ctx.equalityExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.equalityExpr(0)));
         } else {
-            output.append(indent()).append("}\n");
+            StringBuilder sb = new StringBuilder(values.get(ctx.equalityExpr(0)));
+            for (int i = 1; i < ctx.equalityExpr().size(); i++) {
+                sb.append(" + ").append(values.get(ctx.equalityExpr(i)));
+            }
+            values.put(ctx, sb.toString());
         }
     }
 
-    private String exprToString(ParseTree tree) {
-        if (tree == null) return "";
-
-        if (tree instanceof TerminalNode) {
-            return tree.getText();
+    @Override
+    public void exitEqualityExpr(McdalangParser.EqualityExprContext ctx) {
+        if (ctx.relationalExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.relationalExpr(0)));
+        } else {
+            String left = values.get(ctx.relationalExpr(0));
+            String right = values.get(ctx.relationalExpr(1));
+            String op = ctx.getChild(1).getText();
+            values.put(ctx, left + " " + op + " " + right);
         }
-
-        if (tree instanceof McdalangParser.FuncCallContext ctx) {
-            StringBuilder name = new StringBuilder();
-            for (int i = 0; i < ctx.ID().size(); i++) {
-                name.append(ctx.ID(i).getText());
-                if (i < ctx.ID().size() - 1) name.append("::");
-            }
-            List<String> args = new ArrayList<>();
-            for (McdalangParser.ExprContext e : ctx.expr()) {
-                args.add(exprToString(e));
-            }
-            return name + "(" + String.join(", ", args) + ")";
-        }
-
-        if (tree.getChildCount() == 1) {
-            return exprToString(tree.getChild(0));
-        }
-
-        if (tree.getChildCount() == 3) {
-            String left = exprToString(tree.getChild(0));
-            String op = tree.getChild(1).getText();
-            String right = exprToString(tree.getChild(2));
-            return left + " " + op + " " + right;
-        }
-
-        if (tree.getChildCount() == 2) {
-            String op = tree.getChild(1).getText();
-            return exprToString(tree.getChild(0)) + op;
-        }
-
-        return tree.getText();
     }
 
-    private String mapType(String mcdType) {
+    @Override
+    public void exitRelationalExpr(McdalangParser.RelationalExprContext ctx) {
+        if (ctx.addExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.addExpr(0)));
+        } else {
+            String left = values.get(ctx.addExpr(0));
+            String right = values.get(ctx.addExpr(1));
+            String op = ctx.getChild(1).getText();
+            values.put(ctx, left + " " + op + " " + right);
+        }
+    }
+
+    @Override
+    public void exitAddExpr(McdalangParser.AddExprContext ctx) {
+        if (ctx.mulExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.mulExpr(0)));
+        } else {
+            String left = values.get(ctx.mulExpr(0));
+            String right = values.get(ctx.mulExpr(1));
+            String op = ctx.getChild(1).getText();
+            values.put(ctx, left + " " + op + " " + right);
+        }
+    }
+
+    @Override
+    public void exitMulExpr(McdalangParser.MulExprContext ctx) {
+        if (ctx.powExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.powExpr(0)));
+        } else {
+            String left = values.get(ctx.powExpr(0));
+            String right = values.get(ctx.powExpr(1));
+            String op = ctx.getChild(1).getText();
+            values.put(ctx, left + " " + op + " " + right);
+        }
+    }
+
+    @Override
+    public void exitPowExpr(McdalangParser.PowExprContext ctx) {
+        if (ctx.atom().size() == 1) {
+            values.put(ctx, values.get(ctx.atom(0)));
+        } else {
+            String left = values.get(ctx.atom(0));
+            String right = values.get(ctx.atom(1));
+            values.put(ctx, "(" + left + ").pow(" + right + ")");
+        }
+    }
+
+    @Override
+    public void exitAtom(McdalangParser.AtomContext ctx) {
+        if (ctx.INT() != null) values.put(ctx, ctx.INT().getText());
+        else if (ctx.FLOAT() != null) values.put(ctx, ctx.FLOAT().getText());
+        else if (ctx.STRING() != null) values.put(ctx, ctx.STRING().getText());
+        else if (ctx.CHAR() != null) values.put(ctx, ctx.CHAR().getText());
+        else if (ctx.ID() != null) values.put(ctx, ctx.ID().getText());
+        else if (ctx.funcCall() != null) values.put(ctx, values.get(ctx.funcCall()));
+        else if (ctx.expr() != null) values.put(ctx, "(" + values.get(ctx.expr()) + ")");
+        else if (ctx.getStart().getText().equals("true")) values.put(ctx, "true");
+        else if (ctx.getStart().getText().equals("false")) values.put(ctx, "false");
+    }
+
+    private String translateType(String mcdType) {
         return switch (mcdType) {
             case "entier" -> "i32";
             case "flottant" -> "f32";
@@ -202,18 +284,12 @@ public class McdalangToRust extends OutputBaseListener {
             case "bool" -> "false";
             case "String" -> "String::new()";
             case "char" -> "'\\0'";
-            case "Vec<i32>" -> "Vec::new()";
             default -> "Default::default()";
         };
     }
 
-    private String indent() {
-        return "    ".repeat(indentLevel);
-    }
-
     @Override
     public String getCode() {
-        // No special includes needed for Rust
         return output.toString();
     }
 }
