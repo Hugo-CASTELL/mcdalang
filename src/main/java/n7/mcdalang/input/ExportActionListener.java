@@ -33,7 +33,7 @@ public class ExportActionListener implements ActionListener {
                     throw new FileNotFoundException("Failed to create directory: " + selectedDir.getAbsolutePath());
                 }
 
-                FileUtils.writeFile(new File(wrappedDir, Languages.MACDALANG.toString()), mainView.getOriginTextArea().getCode());
+                FileUtils.writeFile(new File(wrappedDir, Languages.MCDALANG.toString()), mainView.getOriginTextArea().getCode());
                 for (CodeTextArea codeTextArea : mainView.getCodeTextAreas()) {
                     FileUtils.writeFile(new File(wrappedDir, codeTextArea.getLanguage().toString()), codeTextArea.getCode());
                 }

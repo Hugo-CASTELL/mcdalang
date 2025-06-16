@@ -14,7 +14,7 @@ import java.awt.*;
 public class ExampleTab extends JPanel {
     public ExampleTab(String explication, String code) {
         super(new BorderLayout());
-                CodeTextArea zoneCode = new CodeTextArea(Languages.MACDALANG, true);
+                CodeTextArea zoneCode = new CodeTextArea(Languages.MCDALANG, true);
 
         // met a jour les numeros de lignes
         zoneCode.registerListener(new CodeKeyListener(new MainController(new MainView()), zoneCode));
