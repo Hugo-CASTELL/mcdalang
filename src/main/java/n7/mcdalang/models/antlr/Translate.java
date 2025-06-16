@@ -31,7 +31,7 @@ public class Translate {
         OutputBaseListener translator = null;
 
         switch (languages) {
-            case JAVA -> translator = new McdalangToJava();
+            case JAVA -> translator = new McdalangToJava(true);
             case C ->  translator = new McdalangToC();
             case POWERSHELL -> translator = new McdalangToPowershell();
             case ADA -> translator = new McdalangToAda();
