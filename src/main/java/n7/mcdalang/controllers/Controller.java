@@ -4,10 +4,12 @@ import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.View;
 
 public abstract class Controller<V extends View> {
+    protected boolean initialized;
     protected final V view;
 
     protected Controller(V view) {
         this.view = view;
+        this.initialized = false;
     }
 
     public void show() {
@@ -21,8 +23,11 @@ public abstract class Controller<V extends View> {
     }
 
     private void prepareView() {
-        updateView();
-        registerListeners();
+        if (!initialized) {
+            updateView();
+            registerListeners();
+            this.initialized = true;
+        }
     }
 
     /**

@@ -2,8 +2,6 @@ package n7.mcdalang.views.components.mcdabot;
 
 import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.input.CodeKeyListener;
-import n7.mcdalang.input.mcdabot.LeaveListener;
-import n7.mcdalang.input.mcdabot.TryCodeListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.View;
@@ -17,15 +15,13 @@ import java.awt.*;
 public class ExampleTab extends View {
     protected String explication = "";
     protected String code = "";
-    private CodeTextArea codeArea;
-    private PanelDialog dialogue;
-    
+    private final CodeTextArea codeArea;
+    private final PanelDialog dialogue;
+    private final JButton btnLeave;
+    private final JButton btnTryCode;
+
     public ExampleTab() {
         this.setLayout(new BorderLayout());
-
-        // bouton retour
-        JButton btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
-        btnLeave.addActionListener(new LeaveListener(this));
 
         // dialogue
         PanelDialog headerPanel = new PanelDialog("",
@@ -37,20 +33,28 @@ public class ExampleTab extends View {
 
         // Code
         CodeTextArea codeArea = new CodeTextArea(Languages.MCDALANG, true);
-        codeArea.registerListener(new CodeKeyListener(new MainController(new MainView()), codeArea));
+        codeArea.registerListener(new CodeKeyListener(null, codeArea));
         this.codeArea = codeArea;
 
         // liste de boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        JButton btnRun = new RoundButton("Essayer la traduction", new Color(100, 200, 100), 10);
-        btnRun.addActionListener(new TryCodeListener(this, codeArea));
-        buttonPanel.add(btnRun);
+        btnTryCode = new RoundButton("Essayer la traduction", new Color(100, 200, 100), 10);
+        buttonPanel.add(btnTryCode);
 
+        btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
         headerPanel.add(btnLeave, "pos 0 0, h 30!");
         this.add(headerPanel, BorderLayout.NORTH);
         this.add(mainContent, BorderLayout.CENTER);
         mainContent.add(buttonPanel, BorderLayout.NORTH);
         mainContent.add(codeArea, BorderLayout.CENTER);
+    }
+
+    public JButton getBtnTryCode() {
+        return btnTryCode;
+    }
+
+    public String getCode() {
+        return this.codeArea.getCode();
     }
     
     protected void setCode(String code){
@@ -64,6 +68,10 @@ public class ExampleTab extends View {
     public void reset(){
         this.setCode(this.code);
         this.setDialogue(this.explication);
+    }
+
+    public JButton getBtnLeave() {
+        return btnLeave;
     }
 
 }

@@ -1,7 +1,7 @@
 package n7.mcdalang.controllers;
 
 import n7.mcdalang.input.*;
-import n7.mcdalang.input.mcdabot.mcdaBotActionListener;
+import n7.mcdalang.input.mcdabot.McdaBotActionListener;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
@@ -45,7 +45,7 @@ public class MainController extends Controller<MainView> {
         view.getRunButton().addActionListener(new RunActionListener(this));
         view.getSwitchButton().addActionListener(new SwitchActionListener());
         view.getOptionsButton().addActionListener(new OptionActionListener(this));
-        view.getMcdaBotButton().addActionListener(new mcdaBotActionListener(this));
+        view.getMcdaBotButton().addActionListener(new McdaBotActionListener(this));
         view.getOriginTextArea().registerListener(new CodeKeyListener(this, view.getOriginTextArea()));
         view.getImportButton().addActionListener(new ImportActionListener(this));
         view.getExportButton().addActionListener(new ExportActionListener());
