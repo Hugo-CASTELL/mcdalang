@@ -121,7 +121,9 @@ public class AppSettings {
             SettingsManager.saveAsFile(AppConfig.APP_SETTINGS_FILE, List.of(
                 Setting.of("theme", theme),
                 Setting.of("languages", (Serializable) languages),
-                Setting.of("autoRun", autoRun)
+                Setting.of("autorun", autoRun),
+                Setting.of("font", font),
+                Setting.of("fontsize", fontSize)
             ));
         }
     }
@@ -132,7 +134,9 @@ public class AppSettings {
                 switch (setting.getKey()) {
                     case "theme" -> setTheme((Themes) setting.getValue());
                     case "languages" -> addLanguages((List<Languages>) setting.getValue());
-                    case "autoRun" -> setAutoRun((Boolean) setting.getValue());
+                    case "autorun" -> setAutoRun((Boolean) setting.getValue());
+                    case "font" -> setFont((Fonts) setting.getValue());
+                    case "fontsize" -> setFontSize((Integer) setting.getValue());
                     default -> throw new IllegalArgumentException("Unknown key: " + setting.getKey());
                 }
             }
