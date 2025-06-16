@@ -9,14 +9,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TestGrammarToC {
+class TestGrammarToCPlusPlus {
 
     @Test
     void declarationTest() {
         List<Pair<String, String>> declarations = List.of(
                 Pair.of("var entier x = 10", "int x = 10;"),
                 Pair.of("var flottant y = 3.14", "float y = 3.14;"),
-                Pair.of("const chaine nom = \"Alice\"", "char* nom = \"Alice\";"),
+                Pair.of("const chaine nom = \"Alice\"", "std::string nom = \"Alice\";"),
                 Pair.of("var bool estValide = true", "bool estValide = true;"),
                 Pair.of("var char lettre = 'A'", "char lettre = 'A';")
         );
@@ -29,9 +29,9 @@ class TestGrammarToC {
     @Test
     void afficherTest() {
         List<Pair<String, String>> printStatements = List.of(
-                Pair.of("afficher(\"message\")", "printf(\"%s\\n\", \"message\");"),
-                Pair.of("var entier x = 2\nafficher(x)", "int x = 2;\nprintf(\"%s\\n\", x);"),
-                Pair.of("var entier x = 2\nafficher(\"compteur: \" & x)", "int x = 2;\nprintf(\"%s\\n\", \"compteur: \" + x);")
+                Pair.of("afficher(\"message\")", "std::cout << \"message\" << std::endl;"),
+                Pair.of("var entier x = 2\nafficher(x)", "int x = 2;\nstd::cout << x << std::endl;"),
+                Pair.of("var entier x = 2\nafficher(\"compteur: \" & x)", "int x = 2;\nstd::cout << \"compteur: \" + x << std::endl;")
         );
 
         for (Pair<String, String> print : printStatements) {
@@ -43,11 +43,11 @@ class TestGrammarToC {
     void conditionTest() {
         List<Pair<String, String>> conditions = List.of(
                 Pair.of("si (x < 5) {\n    afficher(\"x est inferieur a 5\")\n}",
-                        "if (x < 5) {\n    printf(\"%s\\n\", \"x est inferieur a 5\");\n}"),
+                        "if (x < 5) {\n    std::cout << \"x est inferieur a 5\" << std::endl;\n}"),
                 Pair.of("si (x > 5) {\n    afficher(\"x est superieur a 5\")\n} sinon {\n    afficher(\"x est inferieur ou egal a 5\")\n}",
-                        "if (x > 5) {\n    printf(\"%s\\n\", \"x est superieur a 5\");\n} else {\n    printf(\"%s\\n\", \"x est inferieur ou egal a 5\");\n}"),
+                        "if (x > 5) {\n    std::cout << \"x est superieur a 5\" << std::endl;\n} else {\n    std::cout << \"x est inferieur ou egal a 5\" << std::endl;\n}"),
                 Pair.of("si (x < 0) {\n    afficher(\"x est negatif\")\n} snsi (x == 0) {\n    afficher(\"x est nul\")\n} sinon {\n    afficher(\"x est positif\")\n}",
-                        "if (x < 0) {\n    printf(\"%s\\n\", \"x est negatif\");\n} else if (x == 0) {\n    printf(\"%s\\n\", \"x est nul\");\n} else {\n    printf(\"%s\\n\", \"x est positif\");}")
+                        "if (x < 0) {\n    std::cout << \"x est negatif\" << std::endl;\n} else if (x == 0) {\n    std::cout << \"x est nul\" << std::endl;\n} else {\n    std::cout << \"x est positif\" << std::endl;\n}")
         );
 
         for (Pair<String, String> condition : conditions) {
@@ -59,11 +59,11 @@ class TestGrammarToC {
     void boucleTest() {
         List<Pair<String, String>> loops = List.of(
                 Pair.of("tantque (x < 15) {\n    afficher(x)\n    x = x + 1\n}",
-                        "while (x < 15) {\n    printf(\"%s\\n\", x);\n    x = x + 1;}"),
+                        "while (x < 15) {\n    std::cout << x << std::endl;\n    x = x + 1;\n}"),
                 Pair.of("faire {\n    afficher(\"Exécution\")\n    y = y - 1\n} tantque (y > 0)",
-                        "do {\n    printf(\"%s\\n\", \"Exécution\");\n    y = y - 1;\n} while (y > 0);"),
+                        "do {\n    std::cout << \"Exécution\" << std::endl;\n    y = y - 1;\n} while (y > 0);"),
                 Pair.of("pour (x = 0; x < 5; x = x + 1) {\n    afficher(\"compteur: \" & x)\n}",
-                        "for (x = 0; x < 5; x = x + 1) {\n    printf(\"%s\\n\", \"compteur: \" + x);}")
+                        "for (x = 0; x < 5; x = x + 1) {\n    std::cout << \"compteur: \" + x << std::endl;\n}")
         );
 
         for (Pair<String, String> loop : loops) {
@@ -73,13 +73,10 @@ class TestGrammarToC {
 
     @Test
     void expressionsTest() {
-        // Expressions between two variables (assignation included)
         List<Pair<String, String>> expressions = List.of(
-                //Pair.of("=", "="),
                 Pair.of("+", "+"),
                 Pair.of("-", "-"),
                 Pair.of("*", "*"),
-                //Pair.of("^", "**"),
                 Pair.of("/", "/"),
                 Pair.of("//", "//"),
                 Pair.of("%", "%"),
@@ -94,11 +91,9 @@ class TestGrammarToC {
         for(Pair<String, String> expression : expressions) {
             String input = "a " + expression.first + " b";
             String expected = "a " + expression.second + " b";
-            //expected = expected + ";";
             assertEquals(expected.strip(), superTest(input + "\n").strip());
         }
 
-        // Expressions with a constant
         List<Pair<String, String>> increments = List.of(
                 Pair.of("++", "++"),
                 Pair.of("--", "--")
@@ -123,6 +118,6 @@ class TestGrammarToC {
     }
 
     private static String superTest(String input) {
-        return Translate.translateToOther(input, Languages.C).replace("#include <stdio.h>\n", "");
+        return Translate.translateToOther(input, Languages.CPlusPlus).replaceAll("#include.*\n", "").replaceAll("using namespace std;", "");
     }
 }

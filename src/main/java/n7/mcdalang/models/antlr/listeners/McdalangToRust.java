@@ -30,6 +30,10 @@ public class McdalangToRust extends OutputBaseListener {
 
     @Override
     public void exitStatement(McdalangParser.StatementContext ctx) {
+        if (ctx.NEWLINE() != null && ctx.getChildCount() == 1) {
+            values.put(ctx, "\n");
+            return;
+        }
         for (int i = 0; i < ctx.getChildCount(); i++) {
             String val = values.get(ctx.getChild(i));
             if (val != null) {
@@ -94,7 +98,7 @@ public class McdalangToRust extends OutputBaseListener {
         String sig = "fn " + name + "(" + params + ")";
         if (!returnType.equals("()")) sig += " -> " + returnType;
 
-        values.put(ctx, sig + " {\n" + indent(body) + "}\n");
+        values.put(ctx, sig + " {\n" + indent(body) + "\n}");
     }
 
     @Override
@@ -127,9 +131,6 @@ public class McdalangToRust extends OutputBaseListener {
             String elseBody = indent(values.get(ctx.block(ctx.block().size() - 1)));
             result.append(" else {\n").append(elseBody).append("\n}");
         }
-
-        result.append("\n\n"); // Ajoute une nouvelle ligne après le bloc if-else
-
         values.put(ctx, result.toString());
     }
 
@@ -139,11 +140,11 @@ public class McdalangToRust extends OutputBaseListener {
         if (ctx.getStart().getText().equals("tantque")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            result = "while " + cond + " {\n" + body + "\n}\n";
+            result = "while " + cond + " {\n" + body + "\n}";
         } else if (ctx.getStart().getText().equals("faire")) {
             String cond = values.get(ctx.expr());
             String body = indent(values.get(ctx.block()));
-            result = "loop {\n" + body + "\n    if !(" + cond + ") { break; }\n}\n";
+            result = "loop {\n" + body + "\n    if !(" + cond + ") { break; }\n}";
         } else { // pour
             String init = values.get(ctx.assignment(0)).strip();
             String cond = values.get(ctx.expr()).strip();
@@ -160,7 +161,7 @@ public class McdalangToRust extends OutputBaseListener {
             }
             String range = inclusive ? (start + "..=" + end) : (start + ".." + end);
             String body = indent(values.get(ctx.block()));
-            result = "for " + var + " in " + range + " {\n" + body + "\n}\n";
+            result = "for " + var + " in " + range + " {\n" + body + "\n}";
         }
         values.put(ctx, result);
     }

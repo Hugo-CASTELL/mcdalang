@@ -110,8 +110,8 @@ class TestGrammarToRust {
     @Test
     void methodTest() {
         List<Pair<String, String>> methods = List.of(
-                Pair.of("methode vide test() {}", "fn test() {\n}\n"),
-                Pair.of("methode entier test(entier a, entier b) {}", "fn test(a: i32, b: i32) -> i32 {\n}\n")
+                Pair.of("methode vide test() {}", "fn test() {\n\n}"),
+                Pair.of("methode entier test(entier a, entier b) {}", "fn test(a: i32, b: i32) -> i32 {\n\n}")
         );
 
         for (Pair<String, String> method : methods) {
