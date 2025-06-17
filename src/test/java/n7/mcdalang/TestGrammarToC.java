@@ -59,11 +59,11 @@ class TestGrammarToC {
     void boucleTest() {
         List<Pair<String, String>> loops = List.of(
                 Pair.of("tantque (x < 15) {\n    afficher(x)\n    x = x + 1\n}",
-                        "while (x < 15) {\n    printf(\"%s\\n\", x);\n    x = x + 1;}"),
+                        "while (x < 15) {\n    printf(\"%s\\n\", x);\n    x = x + 1;\n}"),
                 Pair.of("faire {\n    afficher(\"Exécution\")\n    y = y - 1\n} tantque (y > 0)",
                         "do {\n    printf(\"%s\\n\", \"Exécution\");\n    y = y - 1;\n} while (y > 0);"),
                 Pair.of("pour (x = 0; x < 5; x = x + 1) {\n    afficher(\"compteur: \" & x)\n}",
-                        "for (x = 0; x < 5; x = x + 1) {\n    printf(\"%s\\n\", \"compteur: \" + x);}")
+                        "for (x = 0; x < 5; x = x + 1) {\n    printf(\"%s\\n\", \"compteur: \" + x);\n}")
         );
 
         for (Pair<String, String> loop : loops) {

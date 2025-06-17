@@ -168,9 +168,10 @@ class TestGrammarToRust {
                 fn afficherNombre(n: i32) {
                     let mut i: i32 = 0;
                     for i in 0..n {
-                         println!("{}", "Nombre: " + i);
-                }}
-                    """)
+                        println!("{}", "Nombre: " + i);
+                    }
+                }
+                """)
         );
 
         for (Pair<String, String> snippet : mixedSnippets) {
@@ -199,7 +200,8 @@ class TestGrammarToRust {
                             for i in 1..=n {
                                 resultat = resultat * i;
                             }
-                            return resultat;}
+                            return resultat;
+                        }
                         """),
 
                 // PGCD (algorithme d'Euclide)
@@ -220,7 +222,8 @@ class TestGrammarToRust {
                                 b = a % b;
                                 a = temp;
                             }
-                            return a;}
+                            return a;
+                        }
                         """),
 
                 // Fibonacci
@@ -239,7 +242,8 @@ class TestGrammarToRust {
                                 return n;
                             } else {
                                 return fibonacci(n - 1) + fibonacci(n - 2);
-                            }}
+                            }
+                        }
                         """)
         );
 
