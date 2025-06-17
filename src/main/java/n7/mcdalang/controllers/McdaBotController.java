@@ -1,22 +1,32 @@
 package n7.mcdalang.controllers;
 
 import com.ibm.icu.impl.Pair;
-import n7.mcdalang.input.mcdabot.ExampleTabListener;
-import n7.mcdalang.input.mcdabot.LeaveListener;
+import n7.mcdalang.listeners.mcdabot.ExampleTabListener;
+import n7.mcdalang.listeners.mcdabot.LeaveListener;
 import n7.mcdalang.views.McdaBotMainView;
 import n7.mcdalang.views.components.mcdabot.ExampleTab;
-import n7.mcdalang.views.components.mcdabot.example.*;
+import n7.mcdalang.views.components.mcdabot.examples.*;
 
 import java.util.List;
 
 public class McdaBotController extends Controller<McdaBotMainView> {
 
-    private MainController mainController;
+    //#region Fields
+
+    private final MainController mainController;
+
+    //#region Fields
+
+    //#region Constructor
 
     public McdaBotController(McdaBotMainView view, MainController mainController) {
         super(view);
         this.mainController = mainController;
     }
+
+    //#endregion Constructor
+
+    //#region Overriden Methods
 
     @Override
     protected void updateView() {
@@ -37,23 +47,33 @@ public class McdaBotController extends Controller<McdaBotMainView> {
 
         for (Pair<String, ExampleTab> exampleTabPair : exampleTabs) {
             ExampleTab tab = exampleTabPair.second;
-            tab.getBtnTryCode().addActionListener(new LeaveListener(() -> {
+            tab.getTryCodeButton().addActionListener(new LeaveListener(() -> {
                 mainController.triggerChangeForOriginCode(tab.getCode());
                 mainController.show();
             }));
-            tab.getBtnLeave().addActionListener(new LeaveListener(() -> this.view.show(this.view.getMenuTab())));
+            tab.getLeaveButton().addActionListener(new LeaveListener(() -> this.view.show(this.view.getMenuTab())));
             view.getMenuTab().createOption(exampleTabPair.first, new ExampleTabListener(tab, this));
         }
 
         view.getMenuTab().getBtnLeave().addActionListener(new LeaveListener(mainController::show));
     }
 
+    //#endregion Overriden Methods
+
+    //#region Public Methods
+
     public void triggerShow(ExampleTab exampleTab) {
-        view.show(exampleTab);
+        changeTab(exampleTab);
     }
 
-    @Override
-    public void show() {
-        super.show();
+    //#endregion Public Methods
+
+    //#region Private Methods
+
+    private void changeTab(ExampleTab tab) {
+        view.show(tab);
     }
+
+    //#endregion Private Methods
+
 }

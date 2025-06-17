@@ -7,10 +7,15 @@ import java.awt.*;
 
 public class SplashView extends View {
 
+    //#region Constructor
+
     public SplashView() {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
         add(new JLabel(new ImageIcon(AppConfig.SPLASH_GIF)), BorderLayout.CENTER);
     }
+
+    //#endregion Constructor
+
 }

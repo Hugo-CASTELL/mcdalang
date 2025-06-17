@@ -8,7 +8,14 @@ import java.awt.*;
 import java.net.URL;
 
 public class PanelDialog extends JPanel {
-    private JTextArea dialogue;
+
+    //#region Fields
+
+    private final JTextArea dialogue;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public PanelDialog(String message, URL image) {
         super(new MigLayout("insets 0, align center center", "[center]", "[center]"));
@@ -17,23 +24,22 @@ public class PanelDialog extends JPanel {
         JLabel character = new JLabel(new ImageIcon(new ImageIcon(image).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)));
 
         // Boîte de dialogue (style moderne avec bordure arrondie)
-        JTextArea dialogue = new JTextArea(message);
-        this.dialogue = dialogue;
+        dialogue = new JTextArea(message);
         dialogue.setEditable(false);
         dialogue.setLineWrap(true);
         dialogue.setWrapStyleWord(true);
         dialogue.setBackground(new Color(220, 240, 255));
         dialogue.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(180, 220, 255), 2),
-                new EmptyBorder(10, 15, 10, 15)
+            BorderFactory.createLineBorder(new Color(180, 220, 255), 2),
+            new EmptyBorder(10, 15, 10, 15)
         ));
         dialogue.setFont(new Font("Arial", Font.PLAIN, 14));
         dialogue.setOpaque(true);
 
-        //scrollpane
+        // Scrollpane
         JScrollPane scrollPane = new JScrollPane(dialogue);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
@@ -42,8 +48,14 @@ public class PanelDialog extends JPanel {
         this.add(scrollPane, "w 500!, h 120!, gapright 20");
     }
 
+    //#endregion Constructor
+
+    //#region Setters
+
     public void setDialogue(String message) {
         this.dialogue.setText(message);
     }
+
+    //#region Setters
 
 }

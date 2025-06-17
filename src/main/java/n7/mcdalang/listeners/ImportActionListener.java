@@ -1,7 +1,6 @@
-package n7.mcdalang.input;
+package n7.mcdalang.listeners;
 
 import n7.mcdalang.controllers.MainController;
-import n7.mcdalang.controllers.OptionsPopupController;
 import n7.mcdalang.util.file.FileUtils;
 
 import javax.swing.*;
@@ -12,11 +11,21 @@ import java.io.IOException;
 
 public class ImportActionListener implements ActionListener {
 
+    //#region Fields
+
     private final MainController mainController;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public ImportActionListener(MainController mainController) {
         this.mainController = mainController;
     }
+
+    //#endregion Constructor
+
+    //#region Listener Methods
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
@@ -31,4 +40,7 @@ public class ImportActionListener implements ActionListener {
             }
         }
     }
+
+    //#endregion Listener Methods
+
 }

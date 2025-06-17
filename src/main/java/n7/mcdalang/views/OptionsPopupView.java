@@ -12,14 +12,17 @@ import java.util.Map;
 
 public class OptionsPopupView extends View {
 
-    private JCheckBox autoRunCheckBox;
+    //#region Fields
 
-    private JLabel fontSizeLabel;
-    private JSpinner fontSizeSpinner;
-    private SpinnerModel fontSizeSpinnerModel;
+    private final JCheckBox autoRunCheckBox;
 
-    private ButtonGroup fontGroup;
-    private List<JRadioButton> fontRadioButtons;
+    private final JSpinner fontSizeSpinner;
+
+    private final ButtonGroup fontGroup;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public OptionsPopupView() {
         setName("Options");
@@ -29,10 +32,10 @@ public class OptionsPopupView extends View {
         autoRunCheckBox = new JCheckBox("AutoRun");
         add(autoRunCheckBox, "cell " + (2) + " 0");
 
-        fontSizeLabel = new JLabel("Font Size :");
+        JLabel fontSizeLabel = new JLabel("Font Size :");
 
         add(fontSizeLabel, "cell 0 0, alignx right");
-        fontSizeSpinnerModel = new SpinnerNumberModel(
+        SpinnerModel fontSizeSpinnerModel = new SpinnerNumberModel(
                 12, // init value
                 8,  // minimum value
                 72, // maximum value
@@ -41,7 +44,7 @@ public class OptionsPopupView extends View {
         add(fontSizeSpinner, "cell 1 0, growx");
 
         fontGroup = new ButtonGroup();
-        fontRadioButtons = new ArrayList<>();
+        List<JRadioButton> fontRadioButtons = new ArrayList<>();
 
         for (Map.Entry<Fonts, URL> entry : AppConfig.FONT_ADAPTERS.entrySet()) {
             JRadioButton radioButton = new JRadioButton(entry.getKey().toString());
@@ -50,6 +53,10 @@ public class OptionsPopupView extends View {
             add(radioButton, "cell " + fontRadioButtons.size() % 3 + " " + (3 + fontRadioButtons.size() / 3));
         }
     }
+
+    //#endregion Constructor
+
+    //#region Getters
 
     public JCheckBox getAutoRunCheckBox() {
         return autoRunCheckBox;
@@ -63,8 +70,6 @@ public class OptionsPopupView extends View {
         return fontGroup;
     }
 
-    public List<JRadioButton> getFontRadioButtons() {
-        return fontRadioButtons;
-    }
+    //#endregion Getters
 
 }
