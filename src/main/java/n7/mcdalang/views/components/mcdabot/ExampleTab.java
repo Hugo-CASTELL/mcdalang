@@ -4,12 +4,14 @@ import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.input.CodeKeyListener;
 import n7.mcdalang.input.mcdabot.LeaveListener;
 import n7.mcdalang.input.mcdabot.TryCodeListener;
+import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.View;
 import n7.mcdalang.views.components.main.CodeTextArea;
 import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.views.components.util.RoundButton;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +21,18 @@ public class ExampleTab extends View {
     protected String code = "";
     private CodeTextArea codeArea;
     private PanelDialog dialogue;
+
+    /*
+    headerPanel
+        btnLeave
+    mainContent
+        buttonPanel
+            btnRun
+        codeArea
+    */
     
     public ExampleTab() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new MigLayout("fill, insets 20", "[grow]", "[][grow]"));
 
         // bouton retour
         JButton btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
@@ -38,6 +49,8 @@ public class ExampleTab extends View {
         // Code
         CodeTextArea codeArea = new CodeTextArea(Languages.MCDALANG, true);
         codeArea.registerListener(new CodeKeyListener(new MainController(new MainView()), codeArea));
+        codeArea.setFont(codeArea.createFont(AppConfig.FONT_ADAPTERS.get(GlobalInstances.getAppSettings().getFont())));
+        codeArea.setSizeFont(GlobalInstances.getAppSettings().getFontSize());
         this.codeArea = codeArea;
 
         // liste de boutons
@@ -47,8 +60,8 @@ public class ExampleTab extends View {
         buttonPanel.add(btnRun);
 
         headerPanel.add(btnLeave, "pos 0 0, h 30!");
-        this.add(headerPanel, BorderLayout.NORTH);
-        this.add(mainContent, BorderLayout.CENTER);
+        this.add(headerPanel, "grow, wrap");
+        this.add(mainContent, "grow");
         mainContent.add(buttonPanel, BorderLayout.NORTH);
         mainContent.add(codeArea, BorderLayout.CENTER);
     }

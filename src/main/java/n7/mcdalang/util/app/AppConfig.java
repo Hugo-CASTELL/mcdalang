@@ -20,6 +20,9 @@ public final class AppConfig {
     public static final URL SPLASH_AUDIO = getURL("/audio/splash.wav");
     public static final int SPLASH_DURATION_MS = 3300;
 
+    public static final URL TOTEM_GIF = getURL("/images/totem2-without_all.gif");
+    public static final int TOTEM_DURATION = 2300;
+
     // FontAdapters
     public static final Map<Fonts, URL> FONT_ADAPTERS = Map.of(
         Fonts.JETBRAINS_LIGHT, getURL("/fonts/JetBrainsMono-Light.ttf"),

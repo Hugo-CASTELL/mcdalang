@@ -18,7 +18,8 @@ public class mcdaBotActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         McdaBotMainView mcdaBotMainView = new McdaBotMainView();
         new McdaBotController(mcdaBotMainView).show();
-        //mcdaBotMainView.setMainViewController(new MainController(new MainView()));
         mcdaBotMainView.setMainViewController(this.mainController);
     }
+
+
 }

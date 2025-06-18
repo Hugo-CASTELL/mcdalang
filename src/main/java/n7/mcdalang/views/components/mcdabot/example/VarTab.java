@@ -9,11 +9,15 @@ public class VarTab extends ExampleTab {
 
         this.explication = "Variable et types\n" +
                 "Mcdalang prend en charge les types suivants :\n" +
-                "nombre entier, nombre à virgule, caractère unique, " +
-                "chaîne de caractères, booléen, et vide " +
-                "(uniquement pour les fonctions ne retournant rien)\n" +
-                "Il est possible de déclarer des variables (valeur modifiable)" +
-                " ou des constantes (valeur fixe)\n" +
+                " - nombre entier\n" +
+                "- nombre à virgule\"" +
+                "- caractère unique\n" +
+                "- chaîne de caractères\n" +
+                "- booléen (qui sont pour l'instant ignoré)\n"  +
+                "- vide (uniquement pour les fonctions ne retournant rien)\n\n" +
+                "Il est possible de déclarer :\n" +
+                "- des variables (valeur modifiable)\n" +
+                "- des constantes (valeur fixe)\n\n" +
                 "L’affectation (=) est optionnelle lors de la déclaration.";
 
         this.code = "var entier a\n" +

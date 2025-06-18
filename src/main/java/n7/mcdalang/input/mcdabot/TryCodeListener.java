@@ -21,5 +21,6 @@ public class TryCodeListener implements ActionListener {
         McdaBotMainView mcdaBotMainView = (McdaBotMainView) this.menuTab.getParent();
         mcdaBotMainView.getMainViewController().triggerChangeForOriginCode(this.zoneCode.getCode());
         mcdaBotMainView.showMainView();
+        mcdaBotMainView.runTraduction();
     }
 }
