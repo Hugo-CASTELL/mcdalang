@@ -21,7 +21,7 @@ public final class AppConfig {
     public static final int SPLASH_DURATION_MS = 3300;
 
     public static final URL TOTEM_GIF = getURL("/images/totem2-without_all.gif");
-    public static final int TOTEM_DURATION = 2300;
+    public static final int TOTEM_DURATION = 2200;
 
     // FontAdapters
     public static final Map<Fonts, URL> FONT_ADAPTERS = Map.of(
