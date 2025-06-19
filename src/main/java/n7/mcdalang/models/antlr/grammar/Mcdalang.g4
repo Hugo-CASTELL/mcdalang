@@ -15,7 +15,7 @@ statement
     | incrStmt NEWLINE
     | returnStmt NEWLINE
     | printStmt NEWLINE
-    | funcCall NEWLINE?
+    | funcCall NEWLINE
     | expr NEWLINE
     | ifStmt
     | loopStmt
@@ -94,7 +94,20 @@ block
 
 // Expression avec ordre de précédence
 expr
-    : concatenationExpr
+    : orExpr
+    ;
+
+orExpr
+    : andExpr ( ( '||' | 'OR' ) andExpr )*
+    ;
+
+andExpr
+    : notExpr ( ( '&&' | 'AND' ) notExpr )*
+    ;
+
+notExpr
+    : '!' notExpr
+    | concatenationExpr
     ;
 
 concatenationExpr
@@ -144,4 +157,4 @@ CHAR    : '\'' . '\'' ;
 NEWLINE     : '\r'? '\n' ;
 WS          : [ \t]+ -> skip ;
 COMMENT_ML  : '/**' .*? '*/' -> skip ;
-COMMENT_SL  : '||' ~[\r\n]* -> skip ;
+COMMENT_SL  : '#' ~[\r\n]* ;
