@@ -1,10 +1,8 @@
 package n7.mcdalang.views.components.mcdabot;
 
-import n7.mcdalang.input.mcdabot.ExampleTabListener;
-import n7.mcdalang.input.mcdabot.LeaveListener;
+import n7.mcdalang.listeners.mcdabot.ExampleTabListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.View;
-import n7.mcdalang.views.components.mcdabot.example.*;
 import n7.mcdalang.views.components.util.RoundButton;
 import net.miginfocom.swing.MigLayout;
 
@@ -34,10 +32,11 @@ public class MenuTab extends View {
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
+        JPanel maxLengthPanel = new JPanel(new BorderLayout());
         btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
+        maxLengthPanel.add(btnLeave, BorderLayout.WEST);
 
-        headerPanel.add(btnLeave, "pos 0 0, h 30!");
-        headerPanel.add(topButtonPanel, BorderLayout.NORTH);
+        headerPanel.add(maxLengthPanel, BorderLayout.NORTH);
         headerPanel.add(panelDialog, BorderLayout.CENTER);
 
         // Création du corps avec les options cliquables

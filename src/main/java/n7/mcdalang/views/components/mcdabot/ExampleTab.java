@@ -1,15 +1,11 @@
 package n7.mcdalang.views.components.mcdabot;
 
-import n7.mcdalang.controllers.MainController;
-import n7.mcdalang.input.CodeKeyListener;
-import n7.mcdalang.input.mcdabot.LeaveListener;
-import n7.mcdalang.input.mcdabot.TryCodeListener;
+import n7.mcdalang.listeners.CodeKeyListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.View;
 import n7.mcdalang.views.components.util.CodeTextArea;
 import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.views.components.util.RoundButton;
-import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +44,7 @@ public class ExampleTab extends View {
         mainContent.add(codeArea, BorderLayout.CENTER);
 
         // split pane
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, headerPanel, mainContent);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, dialogue, mainContent);
         splitPane.setResizeWeight(0.3); // 30% pour le haut, 70% pour le bas
         splitPane.setOneTouchExpandable(true); // petit bouton pour replier/déplier
 

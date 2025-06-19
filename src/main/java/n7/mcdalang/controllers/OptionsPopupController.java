@@ -15,7 +15,7 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
 
     //#region Fields
 
-    private MainController mainController;
+    private final MainController mainController;
 
     //#endregion Fields
 

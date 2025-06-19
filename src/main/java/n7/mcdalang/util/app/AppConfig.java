@@ -22,7 +22,7 @@ public final class AppConfig {
 
     public static final URL TOTEM_GIF = getURL("/images/totem_without_bg.gif");
     public static final URL TOTEM_AUDIO = getURL("/audio/totem_sound.wav");
-    public static final int TOTEM_DURATION = 2200;
+    public static final int TOTEM_DURATION_MS = 2200;
 
     // FontAdapters
     public static final Map<Fonts, URL> FONT_ADAPTERS = Map.of(

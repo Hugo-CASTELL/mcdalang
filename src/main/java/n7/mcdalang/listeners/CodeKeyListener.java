@@ -37,7 +37,7 @@ public class CodeKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         SwingUtilities.invokeLater(() -> {
-            mainController.triggerAutoRun();
+            if(mainController != null) mainController.triggerAutoRun();
             switch (e.getKeyChar()) {
                 case '{' -> codeTextArea.completePreviousCharWith('}');
                 case '[' -> codeTextArea.completePreviousCharWith(']');

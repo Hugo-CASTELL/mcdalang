@@ -1,65 +1,74 @@
-package n7.mcdalang.input;
+package n7.mcdalang.listeners;
 
+import n7.mcdalang.controllers.EasterEggController;
+import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.app.AppManager;
-import n7.mcdalang.util.audio.AudioPlayer;
+import n7.mcdalang.util.timer.Scheduler;
 import n7.mcdalang.views.EasterEggView;
 import n7.mcdalang.views.View;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class EasterEggListener implements KeyEventDispatcher {
 
-    private int index = 0;
-    private static boolean animationIsRunning = false;
-    private final String keyWord = "MC-DALA";
-    private final AppManager appManager;
-    private final EasterEggView easterEggPanel;
+    //#region Fields
 
-    public EasterEggListener(AppManager manager) {
-        this.appManager = manager;
-        this.easterEggPanel = new EasterEggView();
+    private static final String KEYWORD = "MC-DALA";
+
+    private int index;
+    private boolean animationIsRunning;
+
+    //#endregion Fields
+
+    //#region Constructor
+
+    public EasterEggListener() {
+        this.index = 0;
+        this.animationIsRunning = false;
     }
+
+    //#endregion Constructor
+
+    //#region Listener Methods
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
-        if (e.getID() != KeyEvent.KEY_TYPED) {
-            return false;
-        }
+        if (e.getID() == KeyEvent.KEY_TYPED) {
+            char typedChar = Character.toUpperCase(e.getKeyChar());
 
-        char typedChar = Character.toUpperCase(e.getKeyChar());
-
-        if (typedChar == keyWord.charAt(index)) {
-            index++;
-            if (index == keyWord.length()) {
-                this.runEasterEgg();
-                index = 0;
+            if (typedChar == KEYWORD.charAt(index)) {
+                index++;
+                if (index == KEYWORD.length()) {
+                    this.runEasterEgg();
+                    index = 0;
+                }
             }
         }
+
         return false; // ne bloque pas la propagation
     }
 
+    //#endregion Listener Methods
+
+    //#region Private Methods
+
     private void runEasterEgg() {
-        if (!EasterEggListener.animationIsRunning) {
-            View actualView = this.appManager.getMainFrameCurrentView();
+        if (!this.animationIsRunning) {
+            AppManager appManager = GlobalInstances.getAppManager();
+            View actualView = appManager.getMainFrameCurrentView();
 
-            this.easterEggPanel.setBackground(actualView);
-            this.appManager.display(this.easterEggPanel);
+            new EasterEggController(new EasterEggView(actualView)).show();
+            this.animationIsRunning = true;
 
-            Timer timer = new Timer(AppConfig.TOTEM_DURATION, null);
-            timer.setRepeats(false);
-            AudioPlayer.play(AppConfig.TOTEM_AUDIO);
-            EasterEggListener.animationIsRunning = true;
-            timer.addActionListener(e -> {
-                View newActualView = this.appManager.getMainFrameCurrentView();
-                if (newActualView == easterEggPanel) {
-                    this.appManager.display(actualView);
-                }
-                EasterEggListener.animationIsRunning = false;
-            });
-            timer.start();
+            Scheduler.runAfter(() -> {
+                appManager.display(actualView);
+                this.animationIsRunning = false;
+            }, AppConfig.TOTEM_DURATION_MS);
         }
     }
+
+    //#endregion Private Methods
+
 }

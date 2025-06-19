@@ -7,7 +7,7 @@ public class VarTab extends ExampleTab {
     public VarTab() {
         super();
 
-        this.explication = "Variable et types\n" +
+        this.setDialogue("Variable et types\n" +
                 "Mcdalang prend en charge les types suivants :\n" +
                 " - nombre entier\n" +
                 "- nombre à virgule\"" +
@@ -18,16 +18,12 @@ public class VarTab extends ExampleTab {
                 "Il est possible de déclarer :\n" +
                 "- des variables (valeur modifiable)\n" +
                 "- des constantes (valeur fixe)\n\n" +
-                "L’affectation (=) est optionnelle lors de la déclaration.";
+                "L’affectation (=) est optionnelle lors de la déclaration.");
 
-        this.code = "var entier a\n" +
+        this.setCode("var entier a\n" +
             "var flottant PI = 3.1415926\n" +
             "var char c = 'a'\n" +
             "var chaine d = \"Bonjour\"\n" +
-            "var bool e = false\n";
-
-
-        this.setCode(this.code);
-        this.setDialogue(this.explication);
+            "var bool e = false\n");
     }
 }

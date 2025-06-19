@@ -8,10 +8,8 @@ import java.awt.*;
 public class EasterEggView extends View{
 
     private final JLayeredPane layeredPane;
-    private JLabel easterEggGif;
 
-    public EasterEggView() {
-        super();
+    public EasterEggView(View backgroundView) {
         this.setLayout(new BorderLayout());
 
         this.layeredPane = new JLayeredPane();
@@ -19,13 +17,15 @@ public class EasterEggView extends View{
         this.add(layeredPane, BorderLayout.CENTER);
 
         ImageIcon gifIcon = new ImageIcon(AppConfig.TOTEM_GIF);
-        this.easterEggGif = new JLabel(gifIcon);
-        this.easterEggGif.setAlignmentX(0.5f);
-        this.easterEggGif.setAlignmentY(0.5f);
-        layeredPane.add(this.easterEggGif, JLayeredPane.PALETTE_LAYER);
+        JLabel easterEggGif = new JLabel(gifIcon);
+        easterEggGif.setAlignmentX(0.5f);
+        easterEggGif.setAlignmentY(0.5f);
+        layeredPane.add(easterEggGif, JLayeredPane.PALETTE_LAYER);
+
+        this.setBackgroundView(backgroundView);
     }
 
-    public void setBackground(View view) {
+    public void setBackgroundView(View view) {
         for (Component comp : this.layeredPane.getComponentsInLayer(JLayeredPane.DEFAULT_LAYER)) {
             this.layeredPane.remove(comp);
         }
