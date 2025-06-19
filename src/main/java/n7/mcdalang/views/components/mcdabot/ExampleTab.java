@@ -43,6 +43,12 @@ public class ExampleTab extends View {
         mainContent.add(buttonPanel, BorderLayout.NORTH);
         mainContent.add(codeArea, BorderLayout.CENTER);
 
+        // split pane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, dialogue, mainContent);
+        splitPane.setResizeWeight(0.3); // 30% pour le haut, 70% pour le bas
+        splitPane.setOneTouchExpandable(true); // petit bouton pour replier/déplier
+
+        this.add(splitPane, BorderLayout.CENTER);
         this.add(dialogue, BorderLayout.NORTH);
         this.add(mainContent, BorderLayout.CENTER);
     }

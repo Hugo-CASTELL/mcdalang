@@ -5,6 +5,7 @@ import n7.mcdalang.listeners.mcdabot.ExampleTabListener;
 import n7.mcdalang.listeners.mcdabot.LeaveListener;
 import n7.mcdalang.views.McdaBotMainView;
 import n7.mcdalang.views.components.mcdabot.ExampleTab;
+import n7.mcdalang.views.components.mcdabot.example.CodeCompleteTab;
 import n7.mcdalang.views.components.mcdabot.examples.*;
 
 import java.util.List;
@@ -42,7 +43,8 @@ public class McdaBotController extends Controller<McdaBotMainView> {
             Pair.of("Fonctions",new FuncTab()),
             Pair.of("Blocs",new BaseSyntaxTab()),
             Pair.of("Commentaires",new CommentTab()),
-            Pair.of("Operations",new OperationTab())
+            Pair.of("Operations",new OperationTab()),
+            Pair.of("Exemple concret",new CodeCompleteTab())
         );
 
         for (Pair<String, ExampleTab> exampleTabPair : exampleTabs) {

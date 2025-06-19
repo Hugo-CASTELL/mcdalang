@@ -23,16 +23,21 @@ public class MenuTab extends View {
     public MenuTab() {
         this.setLayout(new MigLayout("fill, insets 20", "[grow]", "[][grow]"));
 
+
+        JPanel headerPanel = new JPanel(new BorderLayout());
         // Création de l'en-tête
-        PanelDialog headerPanel = new PanelDialog(
+        PanelDialog panelDialog = new PanelDialog(
                 "Bonjour ! Je suis Mc-Dala, votre guide pour vous apprendre le McDalang. " +
                         "Veuillez sélectionner une option ci-dessous pour en apprendre davantage sur la syntaxe.",
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
+        JPanel maxLengthPanel = new JPanel(new BorderLayout());
         btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
+        maxLengthPanel.add(btnLeave, BorderLayout.WEST);
 
-        headerPanel.add(btnLeave, "pos 0 0, h 30!");
+        headerPanel.add(maxLengthPanel, BorderLayout.NORTH);
+        headerPanel.add(panelDialog, BorderLayout.CENTER);
 
         // Création du corps avec les options cliquables
         bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 0", "[]20[]", "[]"));
