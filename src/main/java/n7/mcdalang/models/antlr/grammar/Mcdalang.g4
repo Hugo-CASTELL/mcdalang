@@ -106,9 +106,10 @@ andExpr
     ;
 
 notExpr
-    : '!' notExpr
+    : ('!' | 'NOT') notExpr      // support both ! and NOT
     | concatenationExpr
     ;
+
 
 concatenationExpr
     : equalityExpr ( '&' equalityExpr )*
