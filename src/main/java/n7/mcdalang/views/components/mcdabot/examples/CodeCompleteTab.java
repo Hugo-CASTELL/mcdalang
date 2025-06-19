@@ -31,16 +31,16 @@ public class CodeCompleteTab extends ExampleTab {
                          var entier i = 0
                      
                          tantque (i < NB_ELEVES) {
-                             afficher("Élève numéro " & i + 1)
+                             afficher("Élève numéro " & str(i + 1))
                      
                              var entier note1 = i * 3 + 8
                              var entier note2 = i * 2 + 9
                      
-                             afficher("Note 1 = " & note1)
-                             afficher("Note 2 = " & note2)
+                             afficher("Note 1 = " & str(note1))
+                             afficher("Note 2 = " & str(note2))
                      
                              var flottant moyenne = calculerMoyenne(note1, note2)
-                             afficher("Moyenne = " & moyenne)
+                             afficher("Moyenne = " & str(moyenne))
                      
                              var chaine decision = resultat(moyenne)
                              afficher("Résultat : " & decision)

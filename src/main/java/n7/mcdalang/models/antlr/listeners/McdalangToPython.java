@@ -61,7 +61,7 @@ public class McdalangToPython extends OutputBaseListener {
     public void exitAssignment(McdalangParser.AssignmentContext ctx) {
         String id = ctx.ID().getText();
         String expr = values.get(ctx.expr());
-        values.put(ctx, id + " = " + expr);
+        values.put(ctx, id + " = " + expr + "\n");
     }
 
     @Override

@@ -7,6 +7,7 @@ import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.views.components.util.RoundButton;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class ExampleTab extends View {
@@ -28,6 +29,7 @@ public class ExampleTab extends View {
 
         // bouton au top
         JPanel topButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        topButtonPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Ajout d'une bordure vide pour l'espacement
         leaveButton = new RoundButton("Retour", new Color(100, 200, 100), 50);
         topButtonPanel.add(leaveButton);
         this.add(topButtonPanel, BorderLayout.NORTH);

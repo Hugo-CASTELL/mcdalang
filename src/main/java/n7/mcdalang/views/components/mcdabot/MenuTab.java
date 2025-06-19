@@ -7,6 +7,7 @@ import n7.mcdalang.views.components.util.RoundButton;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class MenuTab extends View {
@@ -21,7 +22,7 @@ public class MenuTab extends View {
     //#region Constructor
 
     public MenuTab() {
-        this.setLayout(new MigLayout("fill, insets 20", "[grow]", "[][grow]"));
+        this.setLayout(new BorderLayout());
 
 
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -32,15 +33,16 @@ public class MenuTab extends View {
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
-        JPanel maxLengthPanel = new JPanel(new BorderLayout());
+        JPanel topButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        topButtonPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Ajout d'une bordure vide pour l'espacement
         btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
-        maxLengthPanel.add(btnLeave, BorderLayout.WEST);
+        topButtonPanel.add(btnLeave);
 
-        headerPanel.add(maxLengthPanel, BorderLayout.NORTH);
+        headerPanel.add(topButtonPanel, BorderLayout.NORTH);
         headerPanel.add(panelDialog, BorderLayout.CENTER);
 
-        // Création du corps avec les options cliquables
-        bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 0", "[]20[]", "[]"));
+        // Création du corps code avec les options cliquables
+        bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 10 0 0 0", "[]20[]", "[]"));
 
         // ScrollPane
         JScrollPane scrollPane = new JScrollPane(bodyPanel);
@@ -50,8 +52,8 @@ public class MenuTab extends View {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         // Ajout au panel principal
-        this.add(headerPanel, "grow, wrap");
-        this.add(scrollPane, "grow");
+        this.add(headerPanel, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
     }
 
     //#endregion Constructor
