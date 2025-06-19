@@ -3,6 +3,7 @@ package n7.mcdalang.controllers;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
+import n7.mcdalang.util.theme.Themes;
 import n7.mcdalang.views.OptionsPopupView;
 
 import javax.swing.*;
@@ -13,17 +14,10 @@ import java.util.Map;
 
 public class OptionsPopupController extends Controller<OptionsPopupView> {
 
-    //#region Fields
-
-    private final MainController mainController;
-
-    //#endregion Fields
-
     //#region Constructor
 
-    public OptionsPopupController(OptionsPopupView view, MainController mainController) {
+    public OptionsPopupController(OptionsPopupView view) {
         super(view);
-        this.mainController = mainController;
     }
 
     //#endregion Constructor
@@ -37,6 +31,12 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
 
         Collections.list(view.getFontGroup().getElements()).forEach(button -> {
             if (button.getText().equals(GlobalInstances.getAppSettings().getFont().toString())) {
+                button.setSelected(true);
+            }
+        });
+
+        Collections.list(view.getThemeGroup().getElements()).forEach(button -> {
+            if  (button.getText().equals(GlobalInstances.getAppSettings().getTheme().toString())) {
                 button.setSelected(true);
             }
         });
@@ -55,11 +55,11 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
         return view.getAutoRunCheckBox().isSelected();
     }
 
-    public int selectFontSize() {
+    public int getSelectedFontSize() {
         return (Integer) view.getFontSizeSpinner().getValue();
     }
 
-    public Fonts selectFont() {
+    public Fonts getSelectedFont() {
         Enumeration<AbstractButton> buttonsIterator = view.getFontGroup().getElements();
         while (buttonsIterator.hasMoreElements()) {
             AbstractButton button = buttonsIterator.nextElement();
@@ -75,8 +75,20 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
         return AppConfig.DEFAULT_FONT;
     }
 
-    public void triggerChangeForOriginCode(String code){
-        this.mainController.triggerChangeForOriginCode(code);
+    public Themes getSelectedTheme() {
+        Enumeration<AbstractButton> buttonsIterator = view.getThemeGroup().getElements();
+        while (buttonsIterator.hasMoreElements()) {
+            AbstractButton button = buttonsIterator.nextElement();
+            if (button.isSelected()) {
+                for (Themes theme : Themes.values()) {
+                    if (theme.toString().equals(button.getText())) {
+                        return theme;
+                    }
+                }
+                return AppConfig.DEFAULT_THEME;
+            }
+        }
+        return AppConfig.DEFAULT_THEME;
     }
 
     //#endregion Public Methods

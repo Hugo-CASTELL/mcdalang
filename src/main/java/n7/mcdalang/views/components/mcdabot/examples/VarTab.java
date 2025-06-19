@@ -10,10 +10,10 @@ public class VarTab extends ExampleTab {
         this.setDialogue("""
                          Variable et types
                          Mcdalang prend en charge les types suivants :
-                         nombre entier, nombre à virgule, caractère unique, 
-                         chaîne de caractères, booléen, et vide 
+                         nombre entier, nombre à virgule, caractère unique,
+                         chaîne de caractères, booléen, et vide
                          (uniquement pour les fonctions ne retournant rien)
-                         Il est possible de déclarer des variables (valeur modifiable) 
+                         Il est possible de déclarer des variables (valeur modifiable)
                          ou des constantes (valeur fixe)
                          L’affectation (=) est optionnelle lors de la déclaration.
                          """);

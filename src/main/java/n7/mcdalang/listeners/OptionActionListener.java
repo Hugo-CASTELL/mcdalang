@@ -33,13 +33,14 @@ public class OptionActionListener implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        OptionsPopupController optionsPopupController = new OptionsPopupController(new OptionsPopupView(), mainController);
+        OptionsPopupController optionsPopupController = new OptionsPopupController(new OptionsPopupView());
         int popupResult = optionsPopupController.showAsPopup();
 
         if (popupResult == JOptionPane.OK_OPTION) {
             mainController.enableAutoRun(optionsPopupController.hasSelectedAutoRun());
-            mainController.setFont(optionsPopupController.selectFont());
-            mainController.setFontSize(optionsPopupController.selectFontSize());
+            mainController.setFont(optionsPopupController.getSelectedFont());
+            mainController.setFontSize(optionsPopupController.getSelectedFontSize());
+            mainController.setTheme(optionsPopupController.getSelectedTheme());
         }
     }
 

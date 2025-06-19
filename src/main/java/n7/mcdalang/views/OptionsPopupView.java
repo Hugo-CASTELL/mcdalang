@@ -2,6 +2,7 @@ package n7.mcdalang.views;
 
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
+import n7.mcdalang.util.theme.Themes;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -19,6 +20,8 @@ public class OptionsPopupView extends View {
     private final JSpinner fontSizeSpinner;
 
     private final ButtonGroup fontGroup;
+
+    private final ButtonGroup themeGroup;
 
     //#endregion Fields
 
@@ -45,13 +48,26 @@ public class OptionsPopupView extends View {
 
         fontGroup = new ButtonGroup();
         List<JRadioButton> fontRadioButtons = new ArrayList<>();
-
         for (Map.Entry<Fonts, URL> entry : AppConfig.FONT_ADAPTERS.entrySet()) {
             JRadioButton radioButton = new JRadioButton(entry.getKey().toString());
             fontRadioButtons.add(radioButton);
             fontGroup.add(radioButton);
-            add(radioButton, "cell " + fontRadioButtons.size() % 3 + " " + (3 + fontRadioButtons.size() / 3));
+            int col = (fontRadioButtons.size() - 1) % 3;
+            int row = 3 + (fontRadioButtons.size() - 1) / 3;
+            add(radioButton, "cell " + col + " " + row);
         }
+
+        themeGroup = new ButtonGroup();
+        List<JRadioButton> themeRadioButtons = new ArrayList<>();
+        int themeRow = 3;
+        for (Themes themes : Themes.values()) {
+            JRadioButton radioButton = new JRadioButton(themes.toString());
+            themeRadioButtons.add(radioButton);
+            themeGroup.add(radioButton);
+            add(radioButton, "cell 4 " + themeRow);
+            themeRow++;
+        }
+
     }
 
     //#endregion Constructor
@@ -68,6 +84,10 @@ public class OptionsPopupView extends View {
 
     public ButtonGroup getFontGroup() {
         return fontGroup;
+    }
+
+    public ButtonGroup getThemeGroup() {
+        return  themeGroup;
     }
 
     //#endregion Getters

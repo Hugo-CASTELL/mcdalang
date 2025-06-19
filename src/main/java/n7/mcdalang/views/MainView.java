@@ -67,7 +67,7 @@ public class MainView extends View {
         // bodyGUI components
         JPanel bodyGUI = new JPanel(new MigLayout("fill, ins 0", "[50%][50%]", "[center]"));
         bodyGUI.add(originTextArea, "cell 0 0, grow, push");
-        bodyGUI.add(tabPanel, "cell 1 0, grow, push");
+        bodyGUI.add(tabPanel, "cell 1 0, grow, push, width 53%!");
 
         // bottomGUI components
         JPanel bottomGUI = new JPanel(new MigLayout("wrap, fillx", "", "[center]"));

@@ -42,6 +42,9 @@ public class AppManager {
         } else {
             GlobalInstances.getAppSettings().initializeDefaultSettings();
         }
+
+        // Register Easter Egg
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new EasterEggListener());
     }
 
     public void onShutDown() {
@@ -67,6 +70,10 @@ public class AppManager {
         return JOptionPane.showConfirmDialog(new Frame(), view, view.getName(), view.getPopupOptions(), JOptionPane.PLAIN_MESSAGE);
     }
 
+    public void onUIUpdate() {
+        SwingUtilities.updateComponentTreeUI(mainFrame);
+    }
+
     public View getMainFrameCurrentView() {
         return (View) mainFrame.getContentPane().getComponent(0);
     }
@@ -82,7 +89,6 @@ public class AppManager {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         mainFrame.addWindowListener(new MainFrameWindowListener());
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new EasterEggListener());
         try {
             mainFrame.setIconImage(ImageIO.read(AppConfig.MCDA_ICON));
         } catch (IOException ignored) {
