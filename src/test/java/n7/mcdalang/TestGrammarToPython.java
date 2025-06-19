@@ -131,6 +131,37 @@ class TestGrammarToPython {
         }
     }
 
+    @Test
+    void logicalExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var bool res = a || b", "res = a or b"),
+                Pair.of("var bool res = x OR y", "res = x or y"),
+                Pair.of("var bool res = a && b", "res = a and b"),
+                Pair.of("var bool res = x AND y", "res = x and y"),
+                Pair.of("var bool res = !a", "res = not a"),
+                Pair.of("var bool res = !(x || y)", "res = not (x or y)"),
+                Pair.of("var bool res = !a && b", "res = not a and b"),
+                Pair.of("var bool res = a || b && !c", "res = a or b and not c")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void ternaryExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var entier x = a ? b : c", "x = b if a else c"),
+                Pair.of("var flottant y = a + b > 10 ? 1.0 : 0.0", "y = 1.0 if a + b > 10 else 0.0"),
+                Pair.of("var chaine res = ok ? \"oui\" : \"non\"", "res = \"oui\" if ok else \"non\"")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
     private static String superTest(String input) {
         return Translate.translateToOther(input, Languages.PYTHON);
     }
