@@ -1,45 +1,38 @@
 package n7.mcdalang.views;
 
 import n7.mcdalang.controllers.MainController;
-import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.components.mcdabot.MenuTab;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class McdaBotMainView extends View {
-    private JPanel menuTab;
-    private MainController mainViewController;
+
+    //#region Fields
+
+    private final MenuTab menuTab;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public McdaBotMainView() {
         this.setLayout(new BorderLayout());
         menuTab = new MenuTab();
-        this.show(menuTab);
+        show(menuTab);
     }
 
-    public JPanel getMenuTab(){
+    //#endregion Constructor
+
+    //#region Getters
+
+    public MenuTab getMenuTab(){
         return menuTab;
     }
 
-    public void setMainViewController(MainController mainViewController) {
-        this.mainViewController = mainViewController;
-    }
+    //#endregion Getters
 
-    public MainController getMainViewController() {
-        return mainViewController;
-    }
-
-    public void showMainView() {
-        this.mainViewController.show();
-    }
-
-    public void runTraduction() {
-        this.mainViewController.run();
-    }
-
-    public void showMenuTab() {
-        this.show(menuTab);
-    }
+    //#region Public Methods
 
     public void show(JPanel tab) {
         assert tab != null;
@@ -48,4 +41,6 @@ public class McdaBotMainView extends View {
         this.revalidate();
         this.repaint();
     }
+
+    //#region Public Methods
 }

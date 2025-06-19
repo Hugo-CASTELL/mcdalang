@@ -33,6 +33,10 @@ public class McdalangToPython extends OutputBaseListener {
 
     @Override
     public void exitStatement(McdalangParser.StatementContext ctx) {
+        if (ctx.NEWLINE() != null && ctx.getChildCount() == 1) {
+            values.put(ctx, "\n");
+            return;
+        }
         for (int i = 0; i < ctx.getChildCount(); i++) {
             String val = values.get(ctx.getChild(i));
             if (val != null) {
@@ -119,8 +123,6 @@ public class McdalangToPython extends OutputBaseListener {
                 String block3 = values.get(ctx.block(2));
                 result.append("\nelse:\n").append(indent(block3));
             }
-
-            result.append("\n");
         } else {
             // Cas simple : si + (sinon) ?
             String cond = values.get(ctx.expr(0));
@@ -131,8 +133,6 @@ public class McdalangToPython extends OutputBaseListener {
                 String elseBlock = values.get(ctx.block(1));
                 result.append("\nelse:\n").append(indent(elseBlock));
             }
-
-            result.append("\n");
         }
 
         values.put(ctx, result.toString());
@@ -144,11 +144,11 @@ public class McdalangToPython extends OutputBaseListener {
         if (ctx.getStart().getText().equals("tantque")) {
             String cond = values.get(ctx.expr());
             String body = values.get(ctx.block());
-            result = "while " + cond + ":\n" + indent(body) + "\n";
+            result = "while " + cond + ":\n" + indent(body);
         } else if (ctx.getStart().getText().equals("faire")) {
             String body = values.get(ctx.block());
             String cond = values.get(ctx.expr());
-            result = "while True:\n" + indent(body) + "\n" + indent("if not (" + cond + "): break\n") + "\n";
+            result = "while True:\n" + indent(body) + "\n" + indent("if not (" + cond + "): break\n");
         } else { // pour
             String init = values.get(ctx.assignment(0)).strip();
             String cond = values.get(ctx.expr()).strip();
@@ -166,7 +166,7 @@ public class McdalangToPython extends OutputBaseListener {
 
             String body = values.get(ctx.block());
 
-            result = "for " + var + " in range(" + start + ", " + end + "):\n" + indent(body) + "\n";
+            result = "for " + var + " in range(" + start + ", " + end + "):\n" + indent(body);
         }
         values.put(ctx, result);
     }
@@ -183,7 +183,42 @@ public class McdalangToPython extends OutputBaseListener {
 
     @Override
     public void exitExpr(McdalangParser.ExprContext ctx) {
-        values.put(ctx, values.get(ctx.concatenationExpr()));
+        if (ctx.getChildCount() == 1) {
+            values.put(ctx, values.get(ctx.orExpr()));
+        } else {
+            String condition = values.get(ctx.orExpr());
+            String trueExpr = values.get(ctx.getChild(2));
+            String falseExpr = values.get(ctx.getChild(4));
+            values.put(ctx, trueExpr + " if " + condition + " else " + falseExpr);
+        }
+    }
+
+
+    @Override
+    public void exitOrExpr(McdalangParser.OrExprContext ctx) {
+        StringBuilder result = new StringBuilder(values.get(ctx.andExpr(0)));
+        for (int i = 1; i < ctx.andExpr().size(); i++) {
+            result.append(" or ").append(values.get(ctx.andExpr(i)));
+        }
+        values.put(ctx, result.toString());
+    }
+
+    @Override
+    public void exitAndExpr(McdalangParser.AndExprContext ctx) {
+        StringBuilder result = new StringBuilder(values.get(ctx.notExpr(0)));
+        for (int i = 1; i < ctx.notExpr().size(); i++) {
+            result.append(" and ").append(values.get(ctx.notExpr(i)));
+        }
+        values.put(ctx, result.toString());
+    }
+
+    @Override
+    public void exitNotExpr(McdalangParser.NotExprContext ctx) {
+        if (ctx.getChildCount() == 2) {
+            values.put(ctx, "not " + values.get(ctx.notExpr()));
+        } else {
+            values.put(ctx, values.get(ctx.concatenationExpr()));
+        }
     }
 
     @Override

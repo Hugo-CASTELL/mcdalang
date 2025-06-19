@@ -1,4 +1,4 @@
-package n7.mcdalang.input.mcdabot;
+package n7.mcdalang.listeners.mcdabot;
 
 import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.controllers.McdaBotController;

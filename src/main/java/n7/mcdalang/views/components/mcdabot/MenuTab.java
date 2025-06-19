@@ -2,9 +2,7 @@ package n7.mcdalang.views.components.mcdabot;
 
 import n7.mcdalang.input.mcdabot.ExampleTabListener;
 import n7.mcdalang.input.mcdabot.LeaveListener;
-import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
-import n7.mcdalang.util.font.Fonts;
 import n7.mcdalang.views.View;
 import n7.mcdalang.views.components.mcdabot.example.*;
 import n7.mcdalang.views.components.util.RoundButton;
@@ -12,30 +10,20 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 public class MenuTab extends View {
-    private Font font = new Font("Arial", Font.PLAIN, 12);
 
+    //#region Fields
 
+    private final JButton btnLeave;
+    private final JPanel bodyPanel;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public MenuTab() {
-        this.setMainTutoFrame();
-    }
-
-    /*
-    headerPanel
-        btnLeave
-    scrollPane
-        bodyPanel
-            options
-    */
-
-    private void setMainTutoFrame() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new MigLayout("fill, insets 20", "[grow]", "[][grow]"));
 
 
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -46,59 +34,46 @@ public class MenuTab extends View {
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
-        JPanel topButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        JButton btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
-        btnLeave.addActionListener(new LeaveListener(this));
-        topButtonPanel.add(btnLeave);
+        btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
 
+        headerPanel.add(btnLeave, "pos 0 0, h 30!");
         headerPanel.add(topButtonPanel, BorderLayout.NORTH);
         headerPanel.add(panelDialog, BorderLayout.CENTER);
 
-        // Création du corps code avec les options cliquables
-        JPanel bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 10 0 0 0", "[]20[]", "[]"));
+        // Création du corps avec les options cliquables
+        bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 0", "[]20[]", "[]"));
 
         // ScrollPane
         JScrollPane scrollPane = new JScrollPane(bodyPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        // Ajout des cases cliquables
-        this.createOPtion("Variable et types\n", bodyPanel, new VarTab());
-        this.createOPtion("Boucles", bodyPanel,new LoopTab());
-        this.createOPtion("Conditions", bodyPanel,new ConditionTab());
-        this.createOPtion("Fonctions", bodyPanel,new FuncTab());
-        this.createOPtion("Blocs", bodyPanel,new BaseSyntaxTab());
-        this.createOPtion("Commentaires", bodyPanel,new CommentTab());
-        this.createOPtion("Operations", bodyPanel,new OperationTab());
-        this.createOPtion("Exemple complet", bodyPanel,new CodeCompleteTab());
-
-
         // Ajout au panel principal
-        this.add(headerPanel, BorderLayout.NORTH);
-        this.add(scrollPane, BorderLayout.CENTER);
-
-
+        this.add(headerPanel, "grow, wrap");
+        this.add(scrollPane, "grow");
     }
 
-    private void createOPtion(String titre, JPanel container, ExampleTab frame) {
-        RoundButton option = new RoundButton(titre, new Color(180, 220, 255), 20);
-        option.addActionListener(new ExampleTabListener(frame, this));
-        container.add(option, "grow, h 100!, w 300!");
-        Fonts font = GlobalInstances.getAppSettings().getFont();
-        int size = GlobalInstances.getAppSettings().getFontSize();
-        this.setFont(font, size, option);
+    //#endregion Constructor
+
+    //#region Getters
+
+    public JButton getBtnLeave() {
+        return btnLeave;
     }
 
-    public void setFont(Fonts font, int size, JComponent component)  {
-        try{
-            Font newFont = Font.createFont(Font.TRUETYPE_FONT, new File(AppConfig.FONT_ADAPTERS.get(font).toURI())).deriveFont(Font.PLAIN, size);
-            component.setFont(newFont);
+    //#endregion Getters
+
+    //#region Public Methods
+
+    public void createOption(String titre, ExampleTabListener listener) {
+        if(bodyPanel != null) {
+            RoundButton option = new RoundButton(titre, new Color(180, 220, 255), 20);
+            option.addActionListener(listener);
+            bodyPanel.add(option, "grow, h 100!, w 300!");
         }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-
     }
+
+    //#region Public Methods
 }

@@ -1,4 +1,4 @@
-package n7.mcdalang.input;
+package n7.mcdalang.listeners;
 
 import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.controllers.OptionsPopupController;
@@ -10,11 +10,21 @@ import java.awt.event.ActionListener;
 
 public class OptionActionListener implements ActionListener {
 
-    private MainController mainController;
+    //#region Fields
+
+    private final MainController mainController;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public OptionActionListener(MainController mainController) {
         this.mainController = mainController;
     }
+
+    //#endregion Constructor
+
+    //#region Listener Methods
 
     /**
      * Invoked when an action occurs.
@@ -32,4 +42,6 @@ public class OptionActionListener implements ActionListener {
             mainController.setFontSize(optionsPopupController.selectFontSize());
         }
     }
+
+    //#endregion Listener Methods
 }

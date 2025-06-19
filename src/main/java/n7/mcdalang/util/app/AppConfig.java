@@ -29,19 +29,18 @@ public final class AppConfig {
         Fonts.JETBRAINS_LIGHT, getURL("/fonts/JetBrainsMono-Light.ttf"),
         Fonts.JETBRAINS_MEDIUM, getURL("/fonts/JetBrainsMono-Medium.ttf"),
         Fonts.JETBRAINS_BOLD, getURL("/fonts/JetBrainsMono-Bold.ttf"),
-
+      
         Fonts.FIRACODE_LIGHT, getURL("/fonts/FiraCode-Light.ttf"),
         Fonts.FIRACODE_MEDIUM, getURL("/fonts/FiraCode-Medium.ttf"),
-
         Fonts.FIRACODE_BOLD, getURL("/fonts/FiraCode-Bold.ttf"),
+      
         Fonts.CONSOLAS_LIGHT, getURL("/fonts/ConsolasMono-Light.ttf"),
         Fonts.CONSOLAS_BOLD, getURL("/fonts/ConsolasMono-Bold.ttf")
     );
 
     public static final URL MCDABOT_HEAD_PATH = getURL("/images/mcdala_tete_grand.png");
-
     public static final Dimension DEFAULT_SIZE = new Dimension(1080, 720);
-    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST);
+    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST, Languages.POWERSHELL, Languages.JAVA, Languages.JavaScript, Languages.ADA);
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
     public static final boolean DEFAULT_AUTORUN_MODE = false;
     public static final int DEFAULT_FONT_SIZE = 12;

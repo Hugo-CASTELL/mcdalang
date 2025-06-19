@@ -2,8 +2,9 @@ package n7.mcdalang.util.app;
 
 import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.controllers.SplashController;
-import n7.mcdalang.input.EasterEggListener;
-import n7.mcdalang.input.MainFrameWindowListener;
+import n7.mcdalang.listeners.MainFrameWindowListener;
+import n7.mcdalang.listeners.EasterEggListener;
+import n7.mcdalang.listeners.MainFrameWindowListener;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.SplashView;
@@ -12,6 +13,7 @@ import n7.mcdalang.views.View;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
@@ -87,8 +89,8 @@ public class AppManager {
         // Icon application
         try {
             mainFrame.setIconImage(ImageIO.read(AppConfig.MCDA_ICON));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ignored) {
+            // If the icon cannot be loaded, we just ignore it
         }
     }
 

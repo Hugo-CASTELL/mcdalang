@@ -31,7 +31,7 @@ public class Translate {
         OutputBaseListener translator = null;
 
         switch (languages) {
-            case JAVA -> translator = new McdalangToJava();
+            case JAVA -> translator = new McdalangToJava(true);
             case C ->  translator = new McdalangToC();
             case POWERSHELL -> translator = new McdalangToPowershell();
             case ADA -> translator = new McdalangToAda();
@@ -40,6 +40,7 @@ public class Translate {
             case RUST ->  translator = new McdalangToRust();
             case GO ->  translator = new McdalangToGo();
             case CPlusPlus ->  translator = new McdalangToCPlusPlus();
+            case JavaScript ->  translator = new McdalangToJavaScript();
 
             default -> new RuntimeException("Language not supported");
         }

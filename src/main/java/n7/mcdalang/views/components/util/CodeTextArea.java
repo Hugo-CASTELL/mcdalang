@@ -1,6 +1,6 @@
-package n7.mcdalang.views.components.main;
+package n7.mcdalang.views.components.util;
 
-import n7.mcdalang.input.CodeKeyListener;
+import n7.mcdalang.listeners.CodeKeyListener;
 import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.util.app.AppConfig;
 import net.miginfocom.swing.MigLayout;
@@ -9,23 +9,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.net.URL;
+import java.util.logging.Logger;
 
 public class CodeTextArea extends JPanel {
 
-    private Languages name;
-    private JTextArea codeArea;
-    private JTextArea lineNumbers;
-    private JLabel nameLabel;
-    private JPanel contentPane;
-    private JScrollPane scrollPane;
-    private JPanel labelPanel;
+    //#region Fields
+
+    private final Languages name;
+    private final JTextArea codeArea;
+    private final JTextArea lineNumbers;
+    private final JScrollPane scrollPane;
     private Font fontCode;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public CodeTextArea(Languages name, boolean editable) {
         this.name = name;
 
         // Add content pane
-        contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
 
         // Add line numbers
@@ -50,9 +54,9 @@ public class CodeTextArea extends JPanel {
         setFont(this.createFont(AppConfig.FONT_ADAPTERS.get(AppConfig.DEFAULT_FONT)));
 
         // Add label
-        nameLabel = new JLabel(name.toString(), SwingConstants.CENTER);
+        JLabel nameLabel = new JLabel(name.toString(), SwingConstants.CENTER);
 
-        labelPanel = new JPanel(new BorderLayout());
+        JPanel labelPanel = new JPanel(new BorderLayout());
         labelPanel.add(nameLabel, BorderLayout.CENTER);
 
         contentPane.add(codeArea, BorderLayout.CENTER);
@@ -64,35 +68,12 @@ public class CodeTextArea extends JPanel {
         this.add(scrollPane, "cell 0 1,grow");
     }
 
-    public void focusCode() {
-        codeArea.requestFocusInWindow();
-    }
+    //#region Constructor
+
+    //#region Getters
 
     public String getCode() {
         return codeArea.getText();
-    }
-
-    public void setCode(String code) {
-        this.codeArea.setText(code);
-        this.updateLineNumbers();
-    }
-
-    public void setCode(String code, Color color) {
-        this.codeArea.setForeground(color);
-        this.setCode(code);
-    }
-
-    public void updateLineNumbers() {
-        int scrollPosition = scrollPane.getVerticalScrollBar().getValue();
-
-        int lines = codeArea.getLineCount();
-        StringBuilder lineNumbersText = new StringBuilder();
-        for (int i = 1; i <= lines; i++) {
-            lineNumbersText.append(i).append("\n");
-        }
-        lineNumbers.setText(lineNumbersText.toString());
-
-        SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(scrollPosition));
     }
 
     @Override
@@ -108,10 +89,22 @@ public class CodeTextArea extends JPanel {
         return name;
     }
 
-    public void setSizeFont(int fontSize) {
-        Font newFont = fontCode.deriveFont(fontCode.getStyle(), fontSize);
-        codeArea.setFont(newFont);
-        lineNumbers.setFont(newFont);
+    //#endregion Getters
+
+    //#region Setters
+
+    public void focusCode() {
+        codeArea.requestFocusInWindow();
+    }
+
+    public void setCode(String code) {
+        this.codeArea.setText(code);
+        this.updateLineNumbers();
+    }
+
+    public void setCode(String code, Color color) {
+        this.codeArea.setForeground(color);
+        this.setCode(code);
     }
 
     @Override
@@ -124,17 +117,40 @@ public class CodeTextArea extends JPanel {
         }
     }
 
+    public void setSizeFont(int fontSize) {
+        Font newFont = fontCode.deriveFont(fontCode.getStyle(), fontSize);
+        codeArea.setFont(newFont);
+        lineNumbers.setFont(newFont);
+    }
+
+    //#endregion Setters
+
+    //#region Public Methods
+
+    public void registerListener(CodeKeyListener listener) {
+        codeArea.addKeyListener(listener);
+    }
+
+    public void updateLineNumbers() {
+        int scrollPosition = scrollPane.getVerticalScrollBar().getValue();
+
+        int lines = codeArea.getLineCount();
+        StringBuilder lineNumbersText = new StringBuilder();
+        for (int i = 1; i <= lines; i++) {
+            lineNumbersText.append(i).append("\n");
+        }
+        lineNumbers.setText(lineNumbersText.toString());
+
+        SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(scrollPosition));
+    }
+
     public Font createFont(URL fontUrl) {
         try {
             return Font.createFont(Font.TRUETYPE_FONT, new File(fontUrl.toURI())).deriveFont(Font.PLAIN, 12);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(CodeTextArea.class.getName()).warning("Could not load font from URL: " + fontUrl + ". Using default font instead.");
             return new Font("Arial", Font.PLAIN, 12);
         }
-    }
-
-    public void registerListener(CodeKeyListener listener) {
-        codeArea.addKeyListener(listener);
     }
 
     public void completePreviousCharWith(char character) {
@@ -164,4 +180,6 @@ public class CodeTextArea extends JPanel {
         codeArea.setText(text.substring(0, pos) + insert + text.substring(pos));
         codeArea.setCaretPosition(pos + indent.length() + 1 + (extra.isEmpty() ? 0 : 4));
     }
+
+    //#endregion Public Methods
 }

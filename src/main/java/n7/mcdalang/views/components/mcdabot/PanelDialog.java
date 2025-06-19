@@ -8,7 +8,14 @@ import java.awt.*;
 import java.net.URL;
 
 public class PanelDialog extends JPanel {
-    private JTextArea dialogue;
+
+    //#region Fields
+
+    private final JTextArea dialogue;
+
+    //#endregion Fields
+
+    //#region Constructor
 
     public PanelDialog(String message, URL image) {
         super(new MigLayout("alignx center, aligny top", "[]20[]", "[grow]"));
@@ -18,22 +25,23 @@ public class PanelDialog extends JPanel {
                 new ImageIcon(image).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)
         ));
 
-        // Zone de texte dans JScrollPane
+        // Boîte de dialogue (style moderne avec bordure arrondie)
         dialogue = new JTextArea(message);
         dialogue.setEditable(false);
         dialogue.setLineWrap(true);
         dialogue.setWrapStyleWord(true);
         dialogue.setBackground(new Color(220, 240, 255));
         dialogue.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(180, 220, 255), 2),
-                new EmptyBorder(10, 15, 10, 15)
+            BorderFactory.createLineBorder(new Color(180, 220, 255), 2),
+            new EmptyBorder(10, 15, 10, 15)
         ));
         dialogue.setFont(new Font("Arial", Font.PLAIN, 14));
         dialogue.setOpaque(true);
 
+        // Scrollpane
         JScrollPane scrollPane = new JScrollPane(dialogue);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
@@ -42,8 +50,14 @@ public class PanelDialog extends JPanel {
         this.add(scrollPane, "w 500!, growy");
     }
 
+    //#endregion Constructor
+
+    //#region Setters
+
     public void setDialogue(String message) {
         this.dialogue.setText(message);
     }
+
+    //#region Setters
 
 }

@@ -1,12 +1,12 @@
 package n7.mcdalang.controllers;
 
-import n7.mcdalang.input.*;
-import n7.mcdalang.input.mcdabot.mcdaBotActionListener;
+import n7.mcdalang.listeners.*;
+import n7.mcdalang.listeners.mcdabot.McdaBotActionListener;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
 import n7.mcdalang.views.MainView;
-import n7.mcdalang.views.components.main.CodeTextArea;
+import n7.mcdalang.views.components.util.CodeTextArea;
 
 import java.awt.*;
 import java.util.logging.Level;
@@ -15,10 +15,6 @@ import java.util.logging.Logger;
 import static n7.mcdalang.models.antlr.Translate.translateToOther;
 
 public class MainController extends Controller<MainView> {
-
-    //#region Fields
-
-    //#endregion Fields
 
     //#region Constructor
 
@@ -31,7 +27,7 @@ public class MainController extends Controller<MainView> {
 
     //#endregion Constructor
 
-    //#region Implemented Methods
+    //#region Overriden Methods
 
     @Override
     protected void updateView() {
@@ -45,43 +41,28 @@ public class MainController extends Controller<MainView> {
         view.getRunButton().addActionListener(new RunActionListener(this));
         view.getSwitchButton().addActionListener(new SwitchActionListener());
         view.getOptionsButton().addActionListener(new OptionActionListener(this));
-        view.getMcdaBotButton().addActionListener(new mcdaBotActionListener(this));
+        view.getMcdaBotButton().addActionListener(new McdaBotActionListener(this));
         view.getOriginTextArea().registerListener(new CodeKeyListener(this, view.getOriginTextArea()));
         view.getImportButton().addActionListener(new ImportActionListener(this));
         view.getExportButton().addActionListener(new ExportActionListener());
     }
 
-    //#endregion Implemented Methods
+    //#endregion Overriden Methods
+
+    //#region Public Methods
 
     public void triggerChangeForOriginCode(String code) {
         changeOriginCode(code);
-    }
-
-    private void changeOriginCode(String newCode){
-        if(newCode != null){
-            view.getOriginTextArea().setCode(newCode);
-        }
     }
 
     public void triggerAutoRun() {
         autoRun();
     }
 
-    private void autoRun() {
-        if (GlobalInstances.getAppSettings().getAutoRun()) {
-            run();
-        }
-    }
-
     public void run() {
         try {
             for (CodeTextArea textArea : view.getCodeTextAreas()) {
-                try {
-                    String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
-                    textArea.setCode(code, Color.BLACK);
-                } catch (Exception e) {
-                    textArea.setCode(e.getMessage(), Color.RED);
-                }
+                runTranslation(textArea);
             }
         } catch (Exception e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, e.getMessage());
@@ -108,4 +89,31 @@ public class MainController extends Controller<MainView> {
         }
         view.getOriginTextArea().setFont(view.getOriginTextArea().createFont(AppConfig.FONT_ADAPTERS.get(font)));
     }
+
+    //#endregion Public Methods
+
+    //#region Private Methods
+
+    private void changeOriginCode(String newCode){
+        if(newCode != null){
+            view.getOriginTextArea().setCode(newCode);
+        }
+    }
+
+    private void autoRun() {
+        if (GlobalInstances.getAppSettings().getAutoRun()) {
+            run();
+        }
+    }
+
+    private void runTranslation(CodeTextArea textArea) {
+        try {
+            String code = translateToOther(view.getOriginTextArea().getCode(), textArea.getLanguage());
+            textArea.setCode(code, Color.BLACK);
+        } catch (Exception e) {
+            textArea.setCode(e.getMessage(), Color.RED);
+        }
+    }
+
+    //#region Private Methods
 }
