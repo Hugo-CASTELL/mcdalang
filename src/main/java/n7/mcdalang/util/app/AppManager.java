@@ -12,11 +12,8 @@ import n7.mcdalang.views.View;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.EventListener;
 import java.util.Timer;
 import java.util.TimerTask;
 

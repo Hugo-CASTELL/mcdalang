@@ -2,6 +2,7 @@ package n7.mcdalang.input;
 
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.app.AppManager;
+import n7.mcdalang.util.audio.AudioPlayer;
 import n7.mcdalang.views.EasterEggView;
 import n7.mcdalang.views.View;
 
@@ -12,7 +13,7 @@ import java.awt.event.KeyEvent;
 public class EasterEggListener implements KeyEventDispatcher {
 
     private int index = 0;
-    private boolean animationIsRunning = false;
+    private static boolean animationIsRunning = false;
     private final String keyWord = "MC-DALA";
     private final AppManager appManager;
     private final EasterEggView easterEggPanel;
@@ -41,19 +42,22 @@ public class EasterEggListener implements KeyEventDispatcher {
     }
 
     private void runEasterEgg() {
-        if (!this.animationIsRunning) {
+        if (!EasterEggListener.animationIsRunning) {
             View actualView = this.appManager.getMainFrameCurrentView();
 
             this.easterEggPanel.setBackground(actualView);
-            this.easterEggPanel.refreshGif();
             this.appManager.display(this.easterEggPanel);
 
             Timer timer = new Timer(AppConfig.TOTEM_DURATION, null);
             timer.setRepeats(false);
+            AudioPlayer.play(AppConfig.TOTEM_AUDIO);
+            EasterEggListener.animationIsRunning = true;
             timer.addActionListener(e -> {
-                //this.appManager.display(this.appManager.getMainFrameCurrentView());
-                this.appManager.display(actualView);
-                this.animationIsRunning = false;
+                View newActualView = this.appManager.getMainFrameCurrentView();
+                if (newActualView == easterEggPanel) {
+                    this.appManager.display(actualView);
+                }
+                EasterEggListener.animationIsRunning = false;
             });
             timer.start();
         }

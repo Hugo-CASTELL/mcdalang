@@ -32,19 +32,5 @@ public class EasterEggView extends View{
         view.setAlignmentX(0.5f);
         view.setAlignmentY(0.5f);
         this.layeredPane.add(view, JLayeredPane.DEFAULT_LAYER);
-        System.out.println("Nb composants dans layeredPane : " + layeredPane.getComponentCount());
-    }
-
-    public void refreshGif() {
-        if (this.easterEggGif != null) {
-            this.layeredPane.remove(this.easterEggGif);
-        }
-
-        this.easterEggGif = new JLabel(new ImageIcon(AppConfig.TOTEM_GIF));
-        this.easterEggGif.setAlignmentX(0.5f);
-        this.easterEggGif.setAlignmentY(0.5f);
-        this.layeredPane.add(this.easterEggGif, JLayeredPane.PALETTE_LAYER);
-        this.layeredPane.revalidate();
-        this.layeredPane.repaint();
     }
 }

@@ -20,7 +20,8 @@ public final class AppConfig {
     public static final URL SPLASH_AUDIO = getURL("/audio/splash.wav");
     public static final int SPLASH_DURATION_MS = 3300;
 
-    public static final URL TOTEM_GIF = getURL("/images/totem2-without_all.gif");
+    public static final URL TOTEM_GIF = getURL("/images/totem_without_bg.gif");
+    public static final URL TOTEM_AUDIO = getURL("/audio/totem_sound.wav");
     public static final int TOTEM_DURATION = 2200;
 
     // FontAdapters
