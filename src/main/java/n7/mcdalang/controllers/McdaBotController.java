@@ -5,7 +5,7 @@ import n7.mcdalang.listeners.mcdabot.ExampleTabListener;
 import n7.mcdalang.listeners.mcdabot.LeaveListener;
 import n7.mcdalang.views.McdaBotMainView;
 import n7.mcdalang.views.components.mcdabot.ExampleTab;
-import n7.mcdalang.views.components.mcdabot.example.CodeCompleteTab;
+import n7.mcdalang.views.components.mcdabot.examples.CodeCompleteTab;
 import n7.mcdalang.views.components.mcdabot.examples.*;
 
 import java.util.List;

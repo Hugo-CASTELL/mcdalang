@@ -1,4 +1,4 @@
-package n7.mcdalang.views.components.mcdabot.example;
+package n7.mcdalang.views.components.mcdabot.examples;
 
 import n7.mcdalang.views.components.mcdabot.ExampleTab;
 
