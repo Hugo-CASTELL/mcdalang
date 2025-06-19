@@ -147,7 +147,7 @@ public class CodeTextArea extends JPanel {
 
     public Font createFont(URL fontUrl) {
         try {
-            return Font.createFont(Font.TRUETYPE_FONT, new File(fontUrl.toURI())).deriveFont(Font.PLAIN, 12);
+            return Font.createFont(Font.TRUETYPE_FONT, new File(fontUrl.toURI())).deriveFont(Font.PLAIN, GlobalInstances.getAppSettings().getFontSize());
         } catch (Exception e) {
             Logger.getLogger(CodeTextArea.class.getName()).warning("Could not load font from URL: " + fontUrl + ". Using default font instead.");
             return new Font("Arial", Font.PLAIN, 12);

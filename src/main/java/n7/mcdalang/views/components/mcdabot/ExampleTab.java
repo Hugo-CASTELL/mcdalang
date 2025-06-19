@@ -1,6 +1,5 @@
 package n7.mcdalang.views.components.mcdabot;
 
-import n7.mcdalang.listeners.CodeKeyListener;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.views.View;
 import n7.mcdalang.views.components.util.CodeTextArea;
@@ -25,33 +24,37 @@ public class ExampleTab extends View {
     //#region Constructor
 
     public ExampleTab() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout()); // on change ici pour BorderLayout
 
-        dialogue = new PanelDialog("", AppConfig.MCDABOT_HEAD_PATH);
-
+        // bouton au top
+        JPanel topButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         leaveButton = new RoundButton("Retour", new Color(100, 200, 100), 50);
-        dialogue.add(leaveButton, "pos 0 0, h 30!");
+        topButtonPanel.add(leaveButton);
+        this.add(topButtonPanel, BorderLayout.NORTH);
 
-        codeArea = new CodeTextArea(Languages.MCDALANG, true);
-        codeArea.registerListener(new CodeKeyListener(null, codeArea));
+        // headerPanel
+        PanelDialog headerPanel = new PanelDialog("", AppConfig.MCDABOT_HEAD_PATH);
+        this.dialogue = headerPanel;
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        tryCodeButton = new RoundButton("Essayer la traduction", new Color(100, 200, 100), 10);
-        buttonPanel.add(tryCodeButton);
-
+        // mainContent
         JPanel mainContent = new JPanel(new BorderLayout());
-        mainContent.add(buttonPanel, BorderLayout.NORTH);
+
+        // zone de code
+        codeArea = new CodeTextArea(Languages.MCDALANG, true);
         mainContent.add(codeArea, BorderLayout.CENTER);
 
-        // split pane
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, dialogue, mainContent);
-        splitPane.setResizeWeight(0.3); // 30% pour le haut, 70% pour le bas
-        splitPane.setOneTouchExpandable(true); // petit bouton pour replier/déplier
+        //zone bouton code
+        JPanel codeButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        tryCodeButton = new RoundButton("Essayer la traduction", new Color(100, 200, 100), 10);
+        codeButtonPanel.add(tryCodeButton);
+        mainContent.add(codeButtonPanel, BorderLayout.NORTH);
 
-        this.add(splitPane, BorderLayout.CENTER);
-        this.add(dialogue, BorderLayout.NORTH);
-        this.add(mainContent, BorderLayout.CENTER);
-    }
+
+        // split pane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, headerPanel, mainContent);
+        splitPane.setResizeWeight(0.3); // 30% pour le haut, 70% pour le bas
+        splitPane.setOneTouchExpandable(true); // petit bouton pour replier/dÃ©plier
+        this.add(splitPane, BorderLayout.CENTER);    }
 
     //#endregion Constructor
 

@@ -51,6 +51,7 @@ public class McdaBotController extends Controller<McdaBotMainView> {
             ExampleTab tab = exampleTabPair.second;
             tab.getTryCodeButton().addActionListener(new LeaveListener(() -> {
                 mainController.triggerChangeForOriginCode(tab.getCode());
+                mainController.run();
                 mainController.show();
             }));
             tab.getLeaveButton().addActionListener(new LeaveListener(() -> this.view.show(this.view.getMenuTab())));
