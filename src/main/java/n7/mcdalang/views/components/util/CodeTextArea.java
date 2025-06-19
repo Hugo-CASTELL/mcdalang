@@ -2,6 +2,7 @@ package n7.mcdalang.views.components.util;
 
 import n7.mcdalang.listeners.CodeKeyListener;
 import n7.mcdalang.models.antlr.Languages;
+import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import net.miginfocom.swing.MigLayout;
 
@@ -50,8 +51,8 @@ public class CodeTextArea extends JPanel {
         inputMap.put(KeyStroke.getKeyStroke("ENTER"), "none");
 
         // Create font
-        fontCode = new Font("Arial", Font.PLAIN, 12);
-        setFont(this.createFont(AppConfig.FONT_ADAPTERS.get(AppConfig.DEFAULT_FONT)));
+        fontCode = this.createFont(AppConfig.FONT_ADAPTERS.get(GlobalInstances.getAppSettings().getFont()));
+        setFont(fontCode);
 
         // Add label
         JLabel nameLabel = new JLabel(name.toString(), SwingConstants.CENTER);
