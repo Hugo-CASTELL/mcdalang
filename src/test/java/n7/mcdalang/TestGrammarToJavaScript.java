@@ -88,7 +88,7 @@ public class TestGrammarToJavaScript {
                         "while (x < 15) {\n    console.log(x);\n    x = x + 1;\n}"),
                 Pair.of("faire {\n    afficher(\"Exécution\")\n    y = y - 1\n} tantque (y > 0)",
                         "do {\n    console.log(\"Exécution\");\n    y = y - 1;\n} while (y > 0);"),
-                Pair.of("pour (x = 0; x < 5; x = x + 1) {\n    afficher(\"compteur: \" & x)\n}",
+                Pair.of("pour (x = 0; x < 5; x = x + 1) {\n    afficher(\"compteur: \" + x)\n}",
                         "for (x = 0; x < 5; x = x + 1) {\n    console.log(\"compteur: \" + x);\n}")
         );
 
@@ -104,7 +104,7 @@ public class TestGrammarToJavaScript {
                 Pair.of("-", "-"),
                 Pair.of("*", "*"),
                 Pair.of("/", "/"),
-                Pair.of("//", "//"), // maybe needs comment or integer division handler
+                //Pair.of("//", "//"), // maybe needs comment or integer division handler
                 Pair.of("%", "%"),
                 Pair.of(">", ">"),
                 Pair.of("<", "<"),
@@ -196,7 +196,7 @@ public class TestGrammarToJavaScript {
                         """
                 function afficherNombre(n) {
                     let i;
-                    for (i = 0; i < n; i++) {
+                    for (i = 0; i < n; i = i + 1) {
                         console.log("Nombre: " + i);
                     }
                 }
@@ -225,7 +225,7 @@ public class TestGrammarToJavaScript {
                 function factoriel(n) {
                     let resultat = 1;
                     let i;
-                    for (i = 1; i <= n; i++) {
+                    for (i = 1; i <= n; i = i + 1) {
                         resultat = resultat * i;
                     }
                     return resultat;

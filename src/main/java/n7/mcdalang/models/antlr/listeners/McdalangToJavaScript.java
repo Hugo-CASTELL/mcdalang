@@ -163,7 +163,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
             StringBuilder sb = new StringBuilder(values.get(ctx.equalityExpr(0)));
             for (int i = 1; i < ctx.equalityExpr().size(); i++) {
                 String val = values.get(ctx.equalityExpr(i));
-                if (val != null) sb.append(" & ").append(val);
+                if (val != null) sb.append(" + ").append(val);
             }
             values.put(ctx, sb.toString());
         }
