@@ -74,7 +74,7 @@ public class McdalangToC extends OutputBaseListener {
     public void exitAssignment(McdalangParser.AssignmentContext ctx) {
         String id = ctx.ID().getText();
         String expr = values.get(ctx.expr());
-        values.put(ctx, id + " = " + expr + ";" + "\n");
+        values.put(ctx, id + " = " + expr + ";\n");
     }
 
     @Override
@@ -163,9 +163,9 @@ public class McdalangToC extends OutputBaseListener {
             String cond = values.get(ctx.expr());
             result = "do {\n" + indent(body) + "\n} while (" + cond + ");";
         } else {
-            String init = values.get(ctx.assignment(0)).replace(";", "");
+            String init = values.get(ctx.assignment(0)).replace(";\n", "");
             String cond = values.get(ctx.expr()).replace(";", "");
-            String update = values.get(ctx.assignment(1)).replace(";", "");
+            String update = values.get(ctx.assignment(1)).replace(";\n", "");
             String body = values.get(ctx.block());
             result = "for (" + init + "; " + cond + "; " + update + ") {\n" + indent(body) + "\n}";
         }
