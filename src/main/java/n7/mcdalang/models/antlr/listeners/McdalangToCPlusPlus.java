@@ -162,7 +162,41 @@ public class McdalangToCPlusPlus extends OutputBaseListener {
 
     @Override
     public void exitExpr(McdalangParser.ExprContext ctx) {
-        values.put(ctx, values.get(ctx.concatenationExpr()));
+        if (ctx.getChildCount() == 1) {
+            values.put(ctx, values.get(ctx.orExpr()));
+        } else {
+            String condition = values.get(ctx.orExpr());
+            String trueExpr = values.get(ctx.expr(0));
+            String falseExpr = values.get(ctx.expr(1));
+            values.put(ctx, condition + " ? " + trueExpr + " : " + falseExpr);
+        }
+    }
+
+    @Override
+    public void exitOrExpr(McdalangParser.OrExprContext ctx) {
+        StringBuilder result = new StringBuilder(values.get(ctx.andExpr(0)));
+        for (int i = 1; i < ctx.andExpr().size(); i++) {
+            result.append(" || ").append(values.get(ctx.andExpr(i)));
+        }
+        values.put(ctx, result.toString());
+    }
+
+    @Override
+    public void exitAndExpr(McdalangParser.AndExprContext ctx) {
+        StringBuilder result = new StringBuilder(values.get(ctx.notExpr(0)));
+        for (int i = 1; i < ctx.notExpr().size(); i++) {
+            result.append(" && ").append(values.get(ctx.notExpr(i)));
+        }
+        values.put(ctx, result.toString());
+    }
+
+    @Override
+    public void exitNotExpr(McdalangParser.NotExprContext ctx) {
+        if (ctx.getChildCount() == 2) {
+            values.put(ctx, "!" + values.get(ctx.notExpr()));
+        } else {
+            values.put(ctx, values.get(ctx.concatenationExpr()));
+        }
     }
 
     @Override

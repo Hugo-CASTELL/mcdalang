@@ -159,6 +159,36 @@ public interface McdalangListener extends ParseTreeListener {
 	 */
 	void exitExpr(McdalangParser.ExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link McdalangParser#orExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterOrExpr(McdalangParser.OrExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link McdalangParser#orExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitOrExpr(McdalangParser.OrExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link McdalangParser#andExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAndExpr(McdalangParser.AndExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link McdalangParser#andExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAndExpr(McdalangParser.AndExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link McdalangParser#notExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotExpr(McdalangParser.NotExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link McdalangParser#notExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotExpr(McdalangParser.NotExprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link McdalangParser#concatenationExpr}.
 	 * @param ctx the parse tree
 	 */

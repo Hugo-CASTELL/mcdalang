@@ -134,6 +134,24 @@ class TestGrammarToAda {
         }
     }
 
+    @Test
+    void logicalExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var bool res = a || b", "res : Boolean := a or b;"),
+                Pair.of("var bool res = x OR y", "res : Boolean := x or y;"),
+                Pair.of("var bool res = a && b", "res : Boolean := a and b;"),
+                Pair.of("var bool res = x AND y", "res : Boolean := x and y;"),
+                Pair.of("var bool res = !a", "res : Boolean := not a;"),
+                Pair.of("var bool res = !(x || y)", "res : Boolean := not (x or y);"),
+                Pair.of("var bool res = !a && b", "res : Boolean := not a and b;"),
+                Pair.of("var bool res = a || b && !c", "res : Boolean := a or b and not c;")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
     private static String superTest(String input) {
         return Translate.translateToOther(input, Languages.ADA).replace("with Ada.Text_IO; use Ada.Text_IO;\n\n", "");
     }

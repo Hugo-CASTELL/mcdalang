@@ -126,6 +126,37 @@ class TestGrammarToJava {
         }
     }
 
+    @Test
+    void logicalExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var bool res = a || b", "boolean res = a || b;"),
+                Pair.of("var bool res = x OR y", "boolean res = x || y;"),
+                Pair.of("var bool res = a && b", "boolean res = a && b;"),
+                Pair.of("var bool res = x AND y", "boolean res = x && y;"),
+                Pair.of("var bool res = !a", "boolean res = !a;"),
+                Pair.of("var bool res = !(x || y)", "boolean res = !(x || y);"),
+                Pair.of("var bool res = !a && b", "boolean res = !a && b;"),
+                Pair.of("var bool res = a || b && !c", "boolean res = a || b && !c;")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void ternaryExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var entier x = a ? b : c", "int x = (a) ? (b) : (c);"),
+                Pair.of("var flottant y = a + b > 10 ? 1.0 : 0.0", "float y = (a + b > 10) ? (1.0) : (0.0);"),
+                Pair.of("var chaine res = ok ? \"oui\" : \"non\"", "String res = (ok) ? (\"oui\") : (\"non\");")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
     private static String superTest(String inputText) {
         CharStream input = CharStreams.fromString(inputText);
         McdalangLexer lexer = new McdalangLexer(input);

@@ -100,7 +100,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
 
     @Override
     public void exitExpr(McdalangParser.ExprContext ctx) {
-        values.put(ctx, values.get(ctx.concatenationExpr()));
+        values.put(ctx, values.get(ctx.orExpr()));
     }
 
     @Override

@@ -15,7 +15,7 @@ statement
     | incrStmt NEWLINE
     | returnStmt NEWLINE
     | printStmt NEWLINE
-    | funcCall NEWLINE
+    | funcCall NEWLINE?
     | expr NEWLINE
     | ifStmt
     | loopStmt
@@ -94,7 +94,7 @@ block
 
 // Expression avec ordre de précédence
 expr
-    : orExpr
+    : orExpr ('?' expr ':' expr)?
     ;
 
 orExpr
@@ -157,4 +157,4 @@ CHAR    : '\'' . '\'' ;
 NEWLINE     : '\r'? '\n' ;
 WS          : [ \t]+ -> skip ;
 COMMENT_ML  : '/**' .*? '*/' -> skip ;
-COMMENT_SL  : '#' ~[\r\n]* ;
+COMMENT_SL  : '#' ~[\r\n]* -> skip;
