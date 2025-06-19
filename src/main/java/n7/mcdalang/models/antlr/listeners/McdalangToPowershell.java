@@ -108,8 +108,18 @@ public class McdalangToPowershell extends OutputBaseListener {
 
     @Override
     public void exitExpr(McdalangParser.ExprContext ctx) {
-        values.put(ctx, values.get(ctx.orExpr()));
+        if (ctx.getChildCount() > 0) {
+            ParseTree child = ctx.getChild(0);
+            if (child instanceof McdalangParser.ConcatenationExprContext) {
+                values.put(ctx, values.get((McdalangParser.ConcatenationExprContext) child));
+            } else {
+                values.put(ctx, values.get(child));
+            }
+        } else {
+            values.put(ctx, "");
+        }
     }
+
 
     @Override
     public void exitConcatenationExpr(McdalangParser.ConcatenationExprContext ctx) {
@@ -264,6 +274,45 @@ public class McdalangToPowershell extends OutputBaseListener {
             values.put(ctx, "return " + expr + "\n");
         }
     }
+
+    @Override
+    public void exitOrExpr(McdalangParser.OrExprContext ctx) {
+        if (ctx.andExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.andExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.andExpr(0)));
+            for (int i = 1; i < ctx.andExpr().size(); i++) {
+                String val = values.get(ctx.andExpr(i));
+                sb.append(" -or ").append(val);
+            }
+            values.put(ctx, "(" + sb.toString() + ")");
+        }
+    }
+
+    @Override
+    public void exitAndExpr(McdalangParser.AndExprContext ctx) {
+        if (ctx.notExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.notExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.notExpr(0)));
+            for (int i = 1; i < ctx.notExpr().size(); i++) {
+                String val = values.get(ctx.notExpr(i));
+                sb.append(" -and ").append(val);
+            }
+            values.put(ctx, "(" + sb.toString() + ")");
+        }
+    }
+
+    @Override
+    public void exitNotExpr(McdalangParser.NotExprContext ctx) {
+        if (ctx.getChildCount() == 2 && ctx.getChild(0).getText().equals("!")) {
+            String val = values.get(ctx.notExpr());
+            values.put(ctx, "(-not " + val + ")");
+        } else {
+            values.put(ctx, values.get(ctx.concatenationExpr()));
+        }
+    }
+
 
     @Override
     public void exitMethodDecl(McdalangParser.MethodDeclContext ctx) {

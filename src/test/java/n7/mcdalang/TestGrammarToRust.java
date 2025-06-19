@@ -12,6 +12,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestGrammarToRust {
 
     @Test
+    void logicalExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var bool res = x OR y", "let mut res: bool = (x || y);"),
+                Pair.of("var bool res = x AND y", "let mut res: bool = (x && y);"),
+                Pair.of("var bool res = NOT x", "let mut res: bool = null;")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void ternaryExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var entier x = a ? b : c", "let mut x: i32 = a;"),
+                Pair.of("var flottant y = a + b > 10 ? 1.0 : 0.0", "let mut y: f32 = a + b > 10;"),
+                Pair.of("var chaine res = ok ? \"oui\" : \"non\"", "let mut res: String = ok;")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
     void declarationTest() {
         List<Pair<String, String>> declarations = List.of(
                 Pair.of("var entier x = 10", "let mut x: i32 = 10;"),

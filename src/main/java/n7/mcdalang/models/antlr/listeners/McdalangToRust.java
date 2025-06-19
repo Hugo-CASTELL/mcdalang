@@ -178,8 +178,13 @@ public class McdalangToRust extends OutputBaseListener {
 
     @Override
     public void exitExpr(McdalangParser.ExprContext ctx) {
+        // Instead of:
+        // values.put(ctx, values.get(ctx.concatenationExpr()));
+
+        // Use the correct method that exists, e.g.:
         values.put(ctx, values.get(ctx.orExpr()));
     }
+
 
     @Override
     public void exitConcatenationExpr(McdalangParser.ConcatenationExprContext ctx) {
@@ -191,6 +196,45 @@ public class McdalangToRust extends OutputBaseListener {
                 sb.append(" + ").append(values.get(ctx.equalityExpr(i)));
             }
             values.put(ctx, sb.toString());
+        }
+    }
+
+
+    @Override
+    public void exitOrExpr(McdalangParser.OrExprContext ctx) {
+        if (ctx.andExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.andExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.andExpr(0)));
+            for (int i = 1; i < ctx.andExpr().size(); i++) {
+                String val = values.get(ctx.andExpr(i));
+                sb.append(" || ").append(val);
+            }
+            values.put(ctx, "(" + sb.toString() + ")");
+        }
+    }
+
+    @Override
+    public void exitAndExpr(McdalangParser.AndExprContext ctx) {
+        if (ctx.notExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.notExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.notExpr(0)));
+            for (int i = 1; i < ctx.notExpr().size(); i++) {
+                String val = values.get(ctx.notExpr(i));
+                sb.append(" && ").append(val);
+            }
+            values.put(ctx, "(" + sb.toString() + ")");
+        }
+    }
+
+    @Override
+    public void exitNotExpr(McdalangParser.NotExprContext ctx) {
+        if (ctx.getChildCount() == 2 && ctx.getChild(0).getText().equals("!")) {
+            String val = values.get(ctx.notExpr());
+            values.put(ctx, "(!" + val + ")");
+        } else {
+            values.put(ctx, values.get(ctx.concatenationExpr()));
         }
     }
 

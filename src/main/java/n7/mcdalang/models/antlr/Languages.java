@@ -13,7 +13,7 @@ public enum Languages implements Serializable {
     PYTHON,
     RUST,
     POWERSHELL,
-    JavaScript;
+    JavaScript, RUBY;
 
     @Override
     public String toString() {

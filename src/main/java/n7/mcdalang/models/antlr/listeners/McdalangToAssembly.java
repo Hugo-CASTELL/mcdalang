@@ -219,8 +219,10 @@ public class McdalangToAssembly extends OutputBaseListener {
 
     @Override
     public void exitExpr(McdalangParser.ExprContext ctx) {
+        // Replace concatenationExpr() by the actual child rule, e.g. orExpr()
         values.put(ctx, values.get(ctx.orExpr()));
     }
+
 
     @Override
     public void exitConcatenationExpr(McdalangParser.ConcatenationExprContext ctx) {

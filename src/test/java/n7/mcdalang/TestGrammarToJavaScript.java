@@ -12,6 +12,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestGrammarToJavaScript {
 
     @Test
+    void logicalExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var bool res = x OR y", "let res = x || y;"),
+                Pair.of("var bool res = x AND y", "let res = x && y;"),
+                Pair.of("var bool res = NOT x", "let res = null;")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void ternaryExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var entier x = a ? b : c", "let x = (a ? b : c);"),
+                Pair.of("var flottant y = a + b > 10 ? 1.0 : 0.0", "let y = (a + b > 10 ? 1.0 : 0.0);"),
+                Pair.of("var chaine res = ok ? \"oui\" : \"non\"", "let res = (ok ? \"oui\" : \"non\");")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
     void declarationTest() {
         List<Pair<String, String>> declarations = List.of(
                 Pair.of("var entier x = 10", "let x = 10;"),

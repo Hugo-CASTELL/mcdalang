@@ -22,7 +22,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
     }
 
     private String translateType(String type) {
-        return "let";
+        return "let";  // you can adjust if needed
     }
 
     @Override
@@ -51,7 +51,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
     @Override
     public void exitVarDecl(McdalangParser.VarDeclContext ctx) {
         String id = ctx.ID().getText();
-        boolean isConst = ctx.getText().contains("const"); // Adjust based on grammar
+        boolean isConst = ctx.getText().startsWith("const");
         String declKeyword = isConst ? "const" : "let";
         String expr = ctx.expr() != null ? " = " + values.get(ctx.expr()) : "";
         values.put(ctx, declKeyword + " " + id + expr + ";\n");
@@ -81,9 +81,9 @@ public class McdalangToJavaScript extends OutputBaseListener {
             String update = values.get(ctx.assignment(1));
             init = init != null ? init.replace(";\n", "") : "";
             cond = cond != null ? cond : "true";
-            update = update != null ? update.replace(";\n", "").replace(" = i + 1", "++") : "";
+            update = update != null ? update.replace(";\n", "") : "";
             String body = indent(values.get(ctx.block()));
-            result = "for (" + init + "; " + cond + "; " + (update.isEmpty() ? "" : update) + ") {\n" + body + "\n}\n";
+            result = "for (" + init + "; " + cond + "; " + update + ") {\n" + body + "\n}\n";
         }
         values.put(ctx, result);
     }
@@ -100,7 +100,59 @@ public class McdalangToJavaScript extends OutputBaseListener {
 
     @Override
     public void exitExpr(McdalangParser.ExprContext ctx) {
-        values.put(ctx, values.get(ctx.orExpr()));
+        if (ctx.getChildCount() == 5 && "?".equals(ctx.getChild(1).getText())) {
+            // Ternary: orExpr '?' expr ':' expr
+            String cond = values.get(ctx.orExpr());
+            String trueExpr = values.get(ctx.expr(0));
+            String falseExpr = values.get(ctx.expr(1));
+            values.put(ctx, "(" + cond + " ? " + trueExpr + " : " + falseExpr + ")");
+        } else {
+            values.put(ctx, values.get(ctx.orExpr()));
+        }
+    }
+
+    @Override
+    public void exitOrExpr(McdalangParser.OrExprContext ctx) {
+        if (ctx.andExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.andExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.andExpr(0)));
+            for (int i = 1; i < ctx.andExpr().size(); i++) {
+                String op = ctx.getChild(2*i - 1).getText();
+                String val = values.get(ctx.andExpr(i));
+                if (val != null) {
+                    sb.append(" ").append(op.equals("OR") ? "||" : op).append(" ").append(val);
+                }
+            }
+            values.put(ctx, sb.toString());
+        }
+    }
+
+    @Override
+    public void exitAndExpr(McdalangParser.AndExprContext ctx) {
+        if (ctx.notExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.notExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.notExpr(0)));
+            for (int i = 1; i < ctx.notExpr().size(); i++) {
+                String op = ctx.getChild(2*i - 1).getText();
+                String val = values.get(ctx.notExpr(i));
+                if (val != null) {
+                    sb.append(" ").append(op.equals("AND") ? "&&" : op).append(" ").append(val);
+                }
+            }
+            values.put(ctx, sb.toString());
+        }
+    }
+
+    @Override
+    public void exitNotExpr(McdalangParser.NotExprContext ctx) {
+        if (ctx.getChildCount() == 2 && "!".equals(ctx.getChild(0).getText())) {
+            String val = values.get(ctx.notExpr());
+            values.put(ctx, "!" + val);
+        } else {
+            values.put(ctx, values.get(ctx.concatenationExpr()));
+        }
     }
 
     @Override
@@ -111,7 +163,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
             StringBuilder sb = new StringBuilder(values.get(ctx.equalityExpr(0)));
             for (int i = 1; i < ctx.equalityExpr().size(); i++) {
                 String val = values.get(ctx.equalityExpr(i));
-                if (val != null) sb.append(" + ").append(val);
+                if (val != null) sb.append(" & ").append(val);
             }
             values.put(ctx, sb.toString());
         }
@@ -174,7 +226,12 @@ public class McdalangToJavaScript extends OutputBaseListener {
             String right = values.get(ctx.powExpr(1));
             String op = ctx.getChild(1).getText();
             if (left != null && right != null) {
-                values.put(ctx, left + " " + op + " " + right);
+                if ("//".equals(op)) {
+                    // Integer division in JS (Math.floor)
+                    values.put(ctx, "Math.floor(" + left + " / " + right + ")");
+                } else {
+                    values.put(ctx, left + " " + op + " " + right);
+                }
             } else {
                 values.put(ctx, left != null ? left : right != null ? right : "");
             }
@@ -186,13 +243,13 @@ public class McdalangToJavaScript extends OutputBaseListener {
         if (ctx.atom().size() == 1) {
             values.put(ctx, values.get(ctx.atom(0)));
         } else {
-            String left = values.get(ctx.atom(0));
-            String right = values.get(ctx.atom(1));
-            if (left != null && right != null) {
-                values.put(ctx, "Math.pow(" + left + ", " + right + ")");
-            } else {
-                values.put(ctx, left != null ? left : right != null ? right : "");
+            // Support multiple '^' as nested Math.pow
+            String base = values.get(ctx.atom(0));
+            for (int i = 1; i < ctx.atom().size(); i++) {
+                String exponent = values.get(ctx.atom(i));
+                base = "Math.pow(" + base + ", " + exponent + ")";
             }
+            values.put(ctx, base);
         }
     }
 
@@ -274,7 +331,7 @@ public class McdalangToJavaScript extends OutputBaseListener {
         int exprIdx = 1;
         int blockIdx = 1;
         for (int i = 0; i < ctx.getChildCount(); i++) {
-            if (ctx.getChild(i).getText().equals("snsi")) {
+            if ("snsi".equals(ctx.getChild(i).getText())) {
                 cond = values.get(ctx.expr(exprIdx++));
                 block = values.get(ctx.block(blockIdx++));
                 sb.append(" else if (").append(cond != null ? cond : "false").append(") {\n");

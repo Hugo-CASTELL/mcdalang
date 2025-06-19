@@ -38,7 +38,7 @@ public class Translate {
             case ASSEMBLY ->  translator = new McdalangToAssembly();
             case PYTHON ->  translator = new McdalangToPython();
             case RUST ->  translator = new McdalangToRust();
-            case GO ->  translator = new McdalangToGo();
+            case RUBY ->  translator = new McdalangToRuby();
             case CPlusPlus ->  translator = new McdalangToCPlusPlus();
             case JavaScript ->  translator = new McdalangToJavaScript();
 

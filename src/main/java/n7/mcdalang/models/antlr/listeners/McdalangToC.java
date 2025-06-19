@@ -1,5 +1,6 @@
 package n7.mcdalang.models.antlr.listeners;
 
+
 import n7.mcdalang.models.antlr.generated.McdalangParser;
 import org.antlr.v4.runtime.tree.*;
 import java.util.*;
@@ -73,7 +74,7 @@ public class McdalangToC extends OutputBaseListener {
     public void exitAssignment(McdalangParser.AssignmentContext ctx) {
         String id = ctx.ID().getText();
         String expr = values.get(ctx.expr());
-        values.put(ctx, id + " = " + expr + ";");
+        values.put(ctx, id + " = " + expr + ";" + "\n");
     }
 
     @Override
@@ -181,10 +182,6 @@ public class McdalangToC extends OutputBaseListener {
         values.put(ctx, sb.toString());
     }
 
-    @Override
-    public void exitExpr(McdalangParser.ExprContext ctx) {
-        values.put(ctx, values.get(ctx.orExpr()));
-    }
 
     @Override
     public void exitConcatenationExpr(McdalangParser.ConcatenationExprContext ctx) {
@@ -257,6 +254,64 @@ public class McdalangToC extends OutputBaseListener {
             values.put(ctx, "pow(" + left + ", " + right + ")");
         }
     }
+
+    @Override
+    public void exitExpr(McdalangParser.ExprContext ctx) {
+        if (ctx.getChildCount() == 1) {
+            values.put(ctx, values.get(ctx.orExpr()));
+        } else if (ctx.getChildCount() == 5 && ctx.getChild(1).getText().equals("?")) {
+            // Ternary expression: condition ? then : else
+            String cond = values.get(ctx.orExpr());
+            String thenExpr = values.get(ctx.expr(0));
+            String elseExpr = values.get(ctx.expr(1));
+            values.put(ctx, cond + " ? " + thenExpr + " : " + elseExpr);
+        }
+    }
+
+    @Override
+    public void exitOrExpr(McdalangParser.OrExprContext ctx) {
+        if (ctx.andExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.andExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.andExpr(0)));
+            for (int i = 1; i < ctx.andExpr().size(); i++) {
+                String op = ctx.getChild(2 * i - 1).getText(); // Get '||' or 'OR'
+                if (op.equals("OR")) op = "||";
+                sb.append(" ").append(op).append(" ").append(values.get(ctx.andExpr(i)));
+            }
+            values.put(ctx, sb.toString());
+        }
+    }
+
+    @Override
+    public void exitAndExpr(McdalangParser.AndExprContext ctx) {
+        if (ctx.notExpr().size() == 1) {
+            values.put(ctx, values.get(ctx.notExpr(0)));
+        } else {
+            StringBuilder sb = new StringBuilder(values.get(ctx.notExpr(0)));
+            for (int i = 1; i < ctx.notExpr().size(); i++) {
+                String op = ctx.getChild(2 * i - 1).getText(); // Get '&&' or 'AND'
+                if (op.equals("AND")) op = "&&";
+                sb.append(" ").append(op).append(" ").append(values.get(ctx.notExpr(i)));
+            }
+            values.put(ctx, sb.toString());
+        }
+    }
+
+    @Override
+    public void exitNotExpr(McdalangParser.NotExprContext ctx) {
+        if (ctx.getChildCount() == 2) {
+            String op = ctx.getChild(0).getText();
+            if (op.equals("!") || op.equalsIgnoreCase("NOT")) {
+                values.put(ctx, "!" + values.get(ctx.notExpr()));
+                return;
+            }
+        }
+        values.put(ctx, values.get(ctx.concatenationExpr()));
+    }
+
+
+
 
     @Override
     public void exitAtom(McdalangParser.AtomContext ctx) {

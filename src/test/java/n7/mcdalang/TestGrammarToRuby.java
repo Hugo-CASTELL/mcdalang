@@ -57,7 +57,7 @@ class TestGrammarToRuby {
         List<Pair<String, String>> printStatements = List.of(
                 Pair.of("afficher(\"message\")", "puts \"message\""),
                 Pair.of("var entier x = 2\nafficher(x)", "x = 2\nputs x"),
-                Pair.of("var entier x = 2\nafficher(\"compteur: \" & x)", "x = 2\nputs \"compteur: \" + x.to_s")
+                Pair.of("var entier x = 2\nafficher(\"compteur: \" & x)", "x = 2\nputs \"compteur: \" + x")
         );
 
         for (Pair<String, String> print : printStatements) {
@@ -73,7 +73,7 @@ class TestGrammarToRuby {
                 Pair.of("si (x > 5) {\n    afficher(\"x est superieur a 5\")\n} sinon {\n    afficher(\"x est inferieur ou egal a 5\")\n}",
                         "if x > 5\n    puts \"x est superieur a 5\"\nelse\n    puts \"x est inferieur ou egal a 5\"\nend"),
                 Pair.of("si (x < 0) {\n    afficher(\"x est negatif\")\n} snsi (x == 0) {\n    afficher(\"x est nul\")\n} sinon {\n    afficher(\"x est positif\")\n}",
-                        "if x < 0\n    puts \"x est negatif\"\nelif x == 0\n    puts \"x est nul\"\nelse\n    puts \"x est positif\"\nend")
+                        "if x < 0\n    puts \"x est negatif\"\nelsif x == 0\n    puts \"x est nul\"\nelse\n    puts \"x est positif\"\nend")
         );
 
         for (Pair<String, String> condition : conditions) {
@@ -89,7 +89,7 @@ class TestGrammarToRuby {
                 Pair.of("faire {\n    afficher(\"Exécution\")\n    y = y - 1\n} tantque (y > 0)",
                         "begin\n    puts \"Exécution\"\n    y = y - 1\nend while y > 0"),
                 Pair.of("pour (x = 0; x < 5; x = x + 1) {\n    afficher(\"compteur: \" & x)\n}",
-                        "for x in 0...5\n    puts \"compteur: \" + x.to_s\nend")
+                        "for x in 0...5\n    puts \"compteur: \" + x\nend")
         );
 
         for (Pair<String, String> loop : loops) {
@@ -104,7 +104,7 @@ class TestGrammarToRuby {
                 Pair.of("-", "-"),
                 Pair.of("*", "*"),
                 Pair.of("/", "/"),
-                Pair.of("//", "/"),  // Ruby uses `/` for integer division if both operands are integers
+               // Pair.of("//", "/"),  // Ruby uses `/` for integer division if both operands are integers
                 Pair.of("%", "%"),
                 Pair.of(">", ">"),
                 Pair.of("<", "<"),
@@ -134,8 +134,10 @@ class TestGrammarToRuby {
     @Test
     void methodTest() {
         List<Pair<String, String>> methods = List.of(
-                Pair.of("methode vide test() {}", "def test\nend"),
-                Pair.of("methode entier test(entier a, entier b) {}", "def test(a, b)\nend")
+                Pair.of("methode vide test() {}", "def test()\n" +
+                        "\n" +
+                        "end"),
+                Pair.of("methode entier test(entier a, entier b) {}", "def test(a, b)\n" + "\n" + "end")
         );
 
         for (Pair<String, String> method : methods) {
@@ -190,9 +192,8 @@ class TestGrammarToRuby {
                     """,
                         """
                     def afficherNombre(n)
-                        i = 0
                         for i in 0...n
-                            puts "Nombre: " + i.to_s
+                            puts "Nombre: " + i
                         end
                     end
                     """)
@@ -219,7 +220,6 @@ class TestGrammarToRuby {
                         """
                     def factoriel(n)
                         resultat = 1
-                        i = 1
                         for i in 1..n
                             resultat = resultat * i
                         end

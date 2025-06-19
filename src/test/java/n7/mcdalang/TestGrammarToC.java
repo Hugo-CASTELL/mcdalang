@@ -12,6 +12,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestGrammarToC {
 
     @Test
+    void logicalExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var bool res = x OR y", "bool res = x || y;"),
+                Pair.of("var bool res = x AND y", "bool res = x && y;"),
+                Pair.of("var bool res = NOT x", "bool res = !x;")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void ternaryExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var entier x = a ? b : c", "int x = a ? b : c;"),
+                Pair.of("var flottant y = a + b > 10 ? 1.0 : 0.0", "float y = a + b > 10 ? 1.0 : 0.0;"),
+                Pair.of("var chaine res = ok ? \"oui\" : \"non\"", "char* res = ok ? \"oui\" : \"non\";")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+
+
+
+    @Test
     void declarationTest() {
         List<Pair<String, String>> declarations = List.of(
                 Pair.of("var entier x = 10", "int x = 10;"),
