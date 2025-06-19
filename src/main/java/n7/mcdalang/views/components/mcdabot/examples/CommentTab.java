@@ -11,11 +11,10 @@ public class CommentTab extends ExampleTab {
                          Il existe deux types de commentaires :
                           - Les commentaires sur une ligne
                           - Les commentaires multilignes
-                         Les commentaires sont pour l'instant ignorés par le traducteur.
                          """);
 
         this.setCode("""
-                     || Ceci est un commentaire sur une ligne
+                     # Ceci est un commentaire sur une ligne
 
                      /**
                      Ceci est un

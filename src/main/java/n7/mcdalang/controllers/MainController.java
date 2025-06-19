@@ -93,7 +93,6 @@ public class MainController extends Controller<MainView> {
 
     public void setTheme(Themes theme) {
         GlobalInstances.getAppSettings().setTheme(theme);
-
     }
 
     //#endregion Public Methods

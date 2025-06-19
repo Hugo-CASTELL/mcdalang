@@ -14,17 +14,10 @@ import java.util.Map;
 
 public class OptionsPopupController extends Controller<OptionsPopupView> {
 
-    //#region Fields
-
-    private final MainController mainController;
-
-    //#endregion Fields
-
     //#region Constructor
 
-    public OptionsPopupController(OptionsPopupView view, MainController mainController) {
+    public OptionsPopupController(OptionsPopupView view) {
         super(view);
-        this.mainController = mainController;
     }
 
     //#endregion Constructor
@@ -62,11 +55,11 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
         return view.getAutoRunCheckBox().isSelected();
     }
 
-    public int selectFontSize() {
+    public int getSelectedFontSize() {
         return (Integer) view.getFontSizeSpinner().getValue();
     }
 
-    public Fonts selectFont() {
+    public Fonts getSelectedFont() {
         Enumeration<AbstractButton> buttonsIterator = view.getFontGroup().getElements();
         while (buttonsIterator.hasMoreElements()) {
             AbstractButton button = buttonsIterator.nextElement();
@@ -82,7 +75,7 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
         return AppConfig.DEFAULT_FONT;
     }
 
-    public Themes selectTheme() {
+    public Themes getSelectedTheme() {
         Enumeration<AbstractButton> buttonsIterator = view.getThemeGroup().getElements();
         while (buttonsIterator.hasMoreElements()) {
             AbstractButton button = buttonsIterator.nextElement();
@@ -96,10 +89,6 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
             }
         }
         return AppConfig.DEFAULT_THEME;
-    }
-
-    public void triggerChangeForOriginCode(String code){
-        this.mainController.triggerChangeForOriginCode(code);
     }
 
     //#endregion Public Methods

@@ -14,8 +14,8 @@ public class OperationTab extends ExampleTab {
                          Comparaisons :
                          égal à (==), différent de (!=),
                          inférieur strict (<), inférieur ou égal (<=),
-                         supérieur strict (>), supérieur ou égal (>=)
-                         Le et, ou et non ne sont pas supportés pour l'instant
+                         supérieur strict (>), supérieur ou égal (>=),
+                         le et (AND), le ou (OU), le non (NOT)
 
                          Chaînes de caractères :
                          concaténation de chaînes (&)
@@ -28,7 +28,7 @@ public class OperationTab extends ExampleTab {
                      const flottant n = 1.23456789
                      var entier y = x // pi
 
-                     var bool test = y < x
+                     var bool test = NOT (y < x OR y == x)
                      var chaine msg = "hello " & "world " & "!"
                      """);
     }

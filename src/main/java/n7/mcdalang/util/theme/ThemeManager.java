@@ -4,12 +4,16 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import n7.mcdalang.util.GlobalInstances;
 
 import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class ThemeManager {
+
+    private ThemeManager() {}
+
     public static void apply(Themes theme) {
         try {
             LookAndFeel lookAndFeel = null;
@@ -21,6 +25,7 @@ public final class ThemeManager {
             }
             if (lookAndFeel != null) {
                 UIManager.setLookAndFeel(lookAndFeel);
+                GlobalInstances.getAppManager().onUIUpdate();
             }
         } catch (Exception ex) {
             Logger.getLogger(ThemeManager.class.getName()).log(Level.SEVERE, ex.getMessage());
