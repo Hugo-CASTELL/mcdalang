@@ -5,6 +5,7 @@ import n7.mcdalang.listeners.mcdabot.McdaBotActionListener;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
+import n7.mcdalang.util.theme.Themes;
 import n7.mcdalang.views.MainView;
 import n7.mcdalang.views.components.util.CodeTextArea;
 
@@ -88,6 +89,11 @@ public class MainController extends Controller<MainView> {
             textArea.setFont(textArea.createFont(AppConfig.FONT_ADAPTERS.get(font)));
         }
         view.getOriginTextArea().setFont(view.getOriginTextArea().createFont(AppConfig.FONT_ADAPTERS.get(font)));
+    }
+
+    public void setTheme(Themes theme) {
+        GlobalInstances.getAppSettings().setTheme(theme);
+
     }
 
     //#endregion Public Methods

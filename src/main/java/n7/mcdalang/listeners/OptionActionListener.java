@@ -40,6 +40,7 @@ public class OptionActionListener implements ActionListener {
             mainController.enableAutoRun(optionsPopupController.hasSelectedAutoRun());
             mainController.setFont(optionsPopupController.selectFont());
             mainController.setFontSize(optionsPopupController.selectFontSize());
+            mainController.setTheme(optionsPopupController.selectTheme());
         }
     }
 

@@ -3,6 +3,7 @@ package n7.mcdalang.controllers;
 import n7.mcdalang.util.GlobalInstances;
 import n7.mcdalang.util.app.AppConfig;
 import n7.mcdalang.util.font.Fonts;
+import n7.mcdalang.util.theme.Themes;
 import n7.mcdalang.views.OptionsPopupView;
 
 import javax.swing.*;
@@ -40,6 +41,12 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
                 button.setSelected(true);
             }
         });
+
+        Collections.list(view.getThemeGroup().getElements()).forEach(button -> {
+            if  (button.getText().equals(GlobalInstances.getAppSettings().getTheme().toString())) {
+                button.setSelected(true);
+            }
+        });
     }
 
     @Override
@@ -73,6 +80,22 @@ public class OptionsPopupController extends Controller<OptionsPopupView> {
             }
         }
         return AppConfig.DEFAULT_FONT;
+    }
+
+    public Themes selectTheme() {
+        Enumeration<AbstractButton> buttonsIterator = view.getThemeGroup().getElements();
+        while (buttonsIterator.hasMoreElements()) {
+            AbstractButton button = buttonsIterator.nextElement();
+            if (button.isSelected()) {
+                for (Themes theme : Themes.values()) {
+                    if (theme.toString().equals(button.getText())) {
+                        return theme;
+                    }
+                }
+                return AppConfig.DEFAULT_THEME;
+            }
+        }
+        return AppConfig.DEFAULT_THEME;
     }
 
     public void triggerChangeForOriginCode(String code){
