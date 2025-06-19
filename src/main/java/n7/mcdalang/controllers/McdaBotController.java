@@ -8,6 +8,7 @@ import n7.mcdalang.views.SplashView;
 public class McdaBotController extends Controller<McdaBotMainView> {
 
     public McdaBotController(McdaBotMainView view) {
+
         super(view);
     }
 

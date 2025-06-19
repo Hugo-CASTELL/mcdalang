@@ -30,40 +30,46 @@ public class ExampleTab extends View {
             btnRun
         codeArea
     */
-    
-    public ExampleTab() {
-        this.setLayout(new MigLayout("fill, insets 20", "[grow]", "[][grow]"));
 
-        // bouton retour
+    public ExampleTab() {
+        this.setLayout(new BorderLayout()); // on change ici pour BorderLayout
+
+        // bouton au top
+        JPanel topButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         JButton btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
         btnLeave.addActionListener(new LeaveListener(this));
+        topButtonPanel.add(btnLeave);
+        this.add(topButtonPanel, BorderLayout.NORTH);
 
-        // dialogue
-        PanelDialog headerPanel = new PanelDialog("",
-                AppConfig.MCDABOT_HEAD_PATH
-        );
+        // headerPanel
+        PanelDialog headerPanel = new PanelDialog("", AppConfig.MCDABOT_HEAD_PATH);
         this.dialogue = headerPanel;
 
+        // mainContent
         JPanel mainContent = new JPanel(new BorderLayout());
 
-        // Code
+        // zone de code
         CodeTextArea codeArea = new CodeTextArea(Languages.MCDALANG, true);
         codeArea.registerListener(new CodeKeyListener(new MainController(new MainView()), codeArea));
         codeArea.setFont(codeArea.createFont(AppConfig.FONT_ADAPTERS.get(GlobalInstances.getAppSettings().getFont())));
         codeArea.setSizeFont(GlobalInstances.getAppSettings().getFontSize());
         this.codeArea = codeArea;
+        mainContent.add(codeArea, BorderLayout.CENTER);
 
-        // liste de boutons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        //zone bouton code
+        JPanel codeButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         JButton btnRun = new RoundButton("Essayer la traduction", new Color(100, 200, 100), 10);
         btnRun.addActionListener(new TryCodeListener(this, codeArea));
-        buttonPanel.add(btnRun);
+        codeButtonPanel.add(btnRun);
+        mainContent.add(codeButtonPanel, BorderLayout.NORTH);
 
-        headerPanel.add(btnLeave, "pos 0 0, h 30!");
-        this.add(headerPanel, "grow, wrap");
-        this.add(mainContent, "grow");
-        mainContent.add(buttonPanel, BorderLayout.NORTH);
-        mainContent.add(codeArea, BorderLayout.CENTER);
+
+
+        // split pane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, headerPanel, mainContent);
+        splitPane.setResizeWeight(0.3); // 30% pour le haut, 70% pour le bas
+        splitPane.setOneTouchExpandable(true); // petit bouton pour replier/déplier
+        this.add(splitPane, BorderLayout.CENTER);
     }
     
     protected void setCode(String code){

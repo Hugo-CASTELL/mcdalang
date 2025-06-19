@@ -9,16 +9,19 @@ import java.awt.event.ActionListener;
 
 public class mcdaBotActionListener implements ActionListener {
     private MainController mainController;
+    private McdaBotController mcdaBotController;
 
     public mcdaBotActionListener(MainController mainController) {
+        System.out.println("new mcdaBotActionListener");
         this.mainController = mainController;
+        McdaBotMainView mcdaBotMainView = new McdaBotMainView();
+        this.mcdaBotController = new McdaBotController(mcdaBotMainView);
+        mcdaBotMainView.setMainViewController(this.mainController);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        McdaBotMainView mcdaBotMainView = new McdaBotMainView();
-        new McdaBotController(mcdaBotMainView).show();
-        mcdaBotMainView.setMainViewController(this.mainController);
+        this.mcdaBotController.show();
     }
 
 

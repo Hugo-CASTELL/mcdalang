@@ -35,22 +35,27 @@ public class MenuTab extends View {
     */
 
     private void setMainTutoFrame() {
-        this.setLayout(new MigLayout("fill, insets 20", "[grow]", "[][grow]"));
+        this.setLayout(new BorderLayout());
 
+
+        JPanel headerPanel = new JPanel(new BorderLayout());
         // Création de l'en-tête
-        PanelDialog headerPanel = new PanelDialog(
+        PanelDialog panelDialog = new PanelDialog(
                 "Bonjour ! Je suis Mc-Dala, votre guide pour vous apprendre le McDalang. " +
                         "Veuillez sélectionner une option ci-dessous pour en apprendre davantage sur la syntaxe.",
                 AppConfig.MCDABOT_HEAD_PATH
         );
 
+        JPanel topButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         JButton btnLeave = new RoundButton("Retour", new Color(100, 200, 100), 50);
         btnLeave.addActionListener(new LeaveListener(this));
+        topButtonPanel.add(btnLeave);
 
-        headerPanel.add(btnLeave, "pos 0 0, h 30!");
+        headerPanel.add(topButtonPanel, BorderLayout.NORTH);
+        headerPanel.add(panelDialog, BorderLayout.CENTER);
 
-        // Création du corps avec les options cliquables
-        JPanel bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 0", "[]20[]", "[]"));
+        // Création du corps code avec les options cliquables
+        JPanel bodyPanel = new JPanel(new MigLayout("wrap 2, align center, insets 10 0 0 0", "[]20[]", "[]"));
 
         // ScrollPane
         JScrollPane scrollPane = new JScrollPane(bodyPanel);
@@ -67,11 +72,12 @@ public class MenuTab extends View {
         this.createOPtion("Blocs", bodyPanel,new BaseSyntaxTab());
         this.createOPtion("Commentaires", bodyPanel,new CommentTab());
         this.createOPtion("Operations", bodyPanel,new OperationTab());
+        this.createOPtion("Exemple complet", bodyPanel,new CodeCompleteTab());
 
 
         // Ajout au panel principal
-        this.add(headerPanel, "grow, wrap");
-        this.add(scrollPane, "grow");
+        this.add(headerPanel, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
 
 
     }
