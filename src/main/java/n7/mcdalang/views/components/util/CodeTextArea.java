@@ -36,6 +36,7 @@ public class CodeTextArea extends JPanel {
         // Add line numbers
         lineNumbers = new JTextArea("1");
         lineNumbers.setBackground(Color.LIGHT_GRAY);
+        lineNumbers.setForeground(Color.DARK_GRAY);
         lineNumbers.setEditable(false);
         lineNumbers.setFocusable(false);
 
