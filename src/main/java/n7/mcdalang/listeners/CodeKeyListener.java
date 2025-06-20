@@ -37,7 +37,6 @@ public class CodeKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         SwingUtilities.invokeLater(() -> {
-            if(mainController != null) mainController.triggerAutoRun();
             switch (e.getKeyChar()) {
                 case '{' -> codeTextArea.completePreviousCharWith('}');
                 case '[' -> codeTextArea.completePreviousCharWith(']');
@@ -48,6 +47,7 @@ public class CodeKeyListener implements KeyListener {
                 case '\n' -> codeTextArea.addNewLine();
                 default -> { /* No action for other characters */ }
             }
+            if(mainController != null) mainController.triggerAutoRun();
             codeTextArea.updateLineNumbers();
         });
     }
