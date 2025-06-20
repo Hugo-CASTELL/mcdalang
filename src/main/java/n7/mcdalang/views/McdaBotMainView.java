@@ -1,6 +1,5 @@
 package n7.mcdalang.views;
 
-import n7.mcdalang.controllers.MainController;
 import n7.mcdalang.views.components.mcdabot.MenuTab;
 
 import javax.swing.*;
@@ -35,11 +34,12 @@ public class McdaBotMainView extends View {
     //#region Public Methods
 
     public void show(JPanel tab) {
-        assert tab != null;
-        this.removeAll();
-        this.add(tab, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint();
+        if(tab != null) {
+            this.removeAll();
+            this.add(tab, BorderLayout.CENTER);
+            this.revalidate();
+            this.repaint();
+        }
     }
 
     //#region Public Methods

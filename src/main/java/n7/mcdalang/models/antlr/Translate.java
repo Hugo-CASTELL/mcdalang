@@ -10,7 +10,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-public class Translate {
+public final class Translate {
+
+    private Translate() { }
 
     public static String translateToOther(String inputText, Languages languages) throws ParserErrorException {
         // Utiliser CharStreams au lieu de ANTLRInputStream
@@ -39,10 +41,10 @@ public class Translate {
             case PYTHON ->  translator = new McdalangToPython();
             case RUST ->  translator = new McdalangToRust();
             case RUBY ->  translator = new McdalangToRuby();
-            case CPlusPlus ->  translator = new McdalangToCPlusPlus();
-            case JavaScript ->  translator = new McdalangToJavaScript();
+            case CPLUSPLUS ->  translator = new McdalangToCPlusPlus();
+            case JAVASCRIPT ->  translator = new McdalangToJavaScript();
 
-            default -> new RuntimeException("Language not supported");
+            default -> throw new IllegalArgumentException("Language not supported");
         }
 
         walker.walk(translator, tree);

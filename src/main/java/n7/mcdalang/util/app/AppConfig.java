@@ -40,7 +40,7 @@ public final class AppConfig {
 
     public static final URL MCDABOT_HEAD_PATH = getURL("/images/mcdala_tete_grand.png");
     public static final Dimension DEFAULT_SIZE = new Dimension(1080, 720);
-    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPlusPlus, Languages.RUST, Languages.POWERSHELL, Languages.JAVA, Languages.JavaScript, Languages.ADA, Languages.RUBY);
+    public static final List<Languages> DEFAULT_LANGUAGES = List.of(Languages.PYTHON, Languages.C, Languages.CPLUSPLUS, Languages.RUST, Languages.POWERSHELL, Languages.JAVA, Languages.JAVASCRIPT, Languages.ADA, Languages.RUBY);
     public static final Themes DEFAULT_THEME = Themes.LIGHT;
     public static final boolean DEFAULT_AUTORUN_MODE = false;
     public static final int DEFAULT_FONT_SIZE = 12;

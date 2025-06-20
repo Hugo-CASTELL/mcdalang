@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestGrammarToJavaScript {
+class TestGrammarToJavaScript {
 
     @Test
     void logicalExprTest() {
@@ -279,6 +279,6 @@ public class TestGrammarToJavaScript {
     }
 
     private static String superTest(String input) {
-        return Translate.translateToOther(input, Languages.JavaScript); // Ensure Languages.JAVASCRIPT is implemented
+        return Translate.translateToOther(input, Languages.JAVASCRIPT); // Ensure Languages.JAVASCRIPT is implemented
     }
 }

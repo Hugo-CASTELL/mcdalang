@@ -8,12 +8,12 @@ public enum Languages implements Serializable {
     ADA,
     ASSEMBLY,
     C,
-    CPlusPlus,
-    GO,
+    CPLUSPLUS,
     PYTHON,
     RUST,
     POWERSHELL,
-    JavaScript, RUBY;
+    JAVASCRIPT,
+    RUBY;
 
     @Override
     public String toString() {

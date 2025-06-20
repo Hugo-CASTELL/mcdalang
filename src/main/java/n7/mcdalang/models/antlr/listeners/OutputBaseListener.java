@@ -8,5 +8,5 @@ public abstract class OutputBaseListener extends McdalangBaseListener {
     // Retourne le code généré
     public String getCode(){
         return output.toString();
-    };
+    }
 }

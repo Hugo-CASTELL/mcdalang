@@ -79,7 +79,7 @@ public class CodeTextArea extends JPanel {
 
     @Override
     public String getName() {
-        if (name == Languages.CPlusPlus) {
+        if (name == Languages.CPLUSPLUS) {
             return "C++";
         } else {
             return name.toString();

@@ -123,7 +123,6 @@ class TestGrammarToC {
         for(Pair<String, String> expression : expressions) {
             String input = "a " + expression.first + " b";
             String expected = "a " + expression.second + " b";
-            //expected = expected + ";";
             assertEquals(expected.strip(), superTest(input + "\n").strip());
         }
 

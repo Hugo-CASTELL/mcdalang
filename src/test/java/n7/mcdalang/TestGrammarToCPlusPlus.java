@@ -149,6 +149,6 @@ class TestGrammarToCPlusPlus {
     }
 
     private static String superTest(String input) {
-        return Translate.translateToOther(input, Languages.CPlusPlus).replaceAll("#include.*\n", "").replaceAll("using namespace std;", "");
+        return Translate.translateToOther(input, Languages.CPLUSPLUS).replaceAll("#include.*\n", "").replaceAll("using namespace std;", "");
     }
 }
