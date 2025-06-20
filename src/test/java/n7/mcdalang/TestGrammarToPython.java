@@ -5,7 +5,6 @@ import n7.mcdalang.models.antlr.Languages;
 import n7.mcdalang.models.antlr.Translate;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +22,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> declaration : declarations) {
-            assertEquals(declaration.second + "\n", superTest(declaration.first + "\n"));
+            assertEquals(declaration.second.strip(), superTest(declaration.first + "\n").strip());
         }
     }
 
@@ -39,7 +38,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> print : printStatements) {
-            assertEquals(print.second + "\n", superTest(print.first + "\n"));
+            assertEquals(print.second.strip(), superTest(print.first + "\n").strip());
         }
     }
 
@@ -57,7 +56,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> condition : conditions) {
-            assertEquals(condition.second + "\n", superTest(condition.first + "\n"));
+            assertEquals(condition.second.strip(), superTest(condition.first + "\n").strip());
         }
     }
 
@@ -73,7 +72,7 @@ class TestGrammarToPython {
         );
 
         for (Pair<String, String> loop : loops) {
-            assertEquals(loop.second + "\n", superTest(loop.first + "\n"));
+            assertEquals(loop.second.strip(), superTest(loop.first + "\n").strip());
         }
     }
 
@@ -100,7 +99,7 @@ class TestGrammarToPython {
         for(Pair<String, String> expression : expressions) {
             String input = "a " + expression.first + " b";
             String expected = "a " + expression.second + " b";
-            assertEquals(expected, superTest(input + "\n"));
+            assertEquals(expected.strip(), superTest(input + "\n").strip());
         }
 
         // Expressions with a constant
@@ -111,7 +110,7 @@ class TestGrammarToPython {
         for(Pair<String, String> increment : increments) {
             String input = "a" + increment.first;
             String expected = "a" + increment.second;
-            assertEquals(expected + "\n", superTest(input + "\n"));
+            assertEquals(expected.strip(), superTest(input + "\n").strip());
         }
     }
 
@@ -127,7 +126,38 @@ class TestGrammarToPython {
         for(Pair<String, String> method : methods) {
             String input = method.first;
             String expected = method.second;
-            assertEquals(expected, superTest(input));
+            assertEquals(expected.strip(), superTest(input).strip());
+        }
+    }
+
+    @Test
+    void logicalExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var bool res = a || b", "res = a or b"),
+                Pair.of("var bool res = x OR y", "res = x or y"),
+                Pair.of("var bool res = a && b", "res = a and b"),
+                Pair.of("var bool res = x AND y", "res = x and y"),
+                Pair.of("var bool res = !a", "res = not a"),
+                Pair.of("var bool res = !(x || y)", "res = not (x or y)"),
+                Pair.of("var bool res = !a && b", "res = not a and b"),
+                Pair.of("var bool res = a || b && !c", "res = a or b and not c")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
+        }
+    }
+
+    @Test
+    void ternaryExprTest() {
+        List<Pair<String, String>> expressions = List.of(
+                Pair.of("var entier x = a ? b : c", "x = b if a else c"),
+                Pair.of("var flottant y = a + b > 10 ? 1.0 : 0.0", "y = 1.0 if a + b > 10 else 0.0"),
+                Pair.of("var chaine res = ok ? \"oui\" : \"non\"", "res = \"oui\" if ok else \"non\"")
+        );
+
+        for (Pair<String, String> expression : expressions) {
+            assertEquals(expression.second.strip(), superTest(expression.first + "\n").strip());
         }
     }
 

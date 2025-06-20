@@ -6,9 +6,15 @@ import n7.mcdalang.views.SplashView;
 
 public class SplashController extends Controller<SplashView> {
 
+    //#region Constructor
+
     public SplashController(SplashView view) {
         super(view);
     }
+
+    //#endregion Constructor
+
+    //#region Overriden Methods
 
     @Override
     protected void updateView() {
@@ -21,8 +27,11 @@ public class SplashController extends Controller<SplashView> {
     }
 
     @Override
-    public void showView() {
-        super.showView();
-        AudioPlayer.play(AppConfig.SPLASH_AUDIO_PATH);
+    public void show() {
+        super.show();
+        AudioPlayer.play(AppConfig.SPLASH_AUDIO);
     }
+
+    //#endregion Overriden Methods
+
 }

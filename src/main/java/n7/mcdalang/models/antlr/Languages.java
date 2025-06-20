@@ -1,19 +1,26 @@
 package n7.mcdalang.models.antlr;
 
-public enum Languages {
-    MACDALANG,
+import java.io.Serializable;
+
+public enum Languages implements Serializable {
+    MCDALANG,
     JAVA,
     ADA,
     ASSEMBLY,
     C,
-    CPlusPlus,
-    GO,
+    CPLUSPLUS,
     PYTHON,
     RUST,
-    POWERSHELL;
+    POWERSHELL,
+    JAVASCRIPT,
+    RUBY;
 
     @Override
     public String toString() {
-        return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+        String capitalizedName = name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+        if (capitalizedName.endsWith("plusplus")) {
+            return capitalizedName.replace("plusplus", "++");
+        }
+        return capitalizedName;
     }
 }

@@ -3,10 +3,10 @@ package n7.mcdalang.util.exception;
 import java.util.List;
 
 public class ParserErrorException extends RuntimeException {
-    private List<String> stack;
-    private Object offendingSymbol;
-    private int line;
-    private int charPositionInLine;
+    private final List<String> stack;
+    private final Object offendingSymbol;
+    private final int line;
+    private final int charPositionInLine;
 
     private int var;
 
