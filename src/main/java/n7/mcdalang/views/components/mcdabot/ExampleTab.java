@@ -42,7 +42,7 @@ public class ExampleTab extends View {
         JPanel mainContent = new JPanel(new BorderLayout());
 
         // zone de code
-        codeArea = new CodeTextArea(Languages.MCDALANG, true);
+        codeArea = new CodeTextArea(Languages.MCDALANG, false);
         mainContent.add(codeArea, BorderLayout.CENTER);
 
         //zone bouton code
